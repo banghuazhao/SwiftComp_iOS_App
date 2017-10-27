@@ -97,8 +97,6 @@ class test: UIViewController, UITextFieldDelegate, UIPopoverPresentationControll
         
         changeMaterialDataField()
         
-
-        
     }
     
     
