@@ -515,7 +515,7 @@ class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationCon
             let cell = laminaMaterialCard.dequeueReusableCell(withIdentifier: "cell1", for: indexPath) as! MaterialCardCell1
             cell.materialpropertyLabel.text = materialCardModel[indexPath.row].materialPropertyName
             cell.materialpropertyTextField.placeholder = materialCardModel[indexPath.row].materialPropertyPlaceHolder
-            cell.materialpropertyTextField.keyboardType = UIKeyboardType.decimalPad
+            cell.materialpropertyTextField.keyboardType = UIKeyboardType.decimalPad 
             return cell
         }
         fatalError("Unknown row")
