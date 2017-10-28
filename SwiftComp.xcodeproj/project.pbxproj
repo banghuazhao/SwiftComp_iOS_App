@@ -13,6 +13,8 @@
 		990F76CB1F85BFCF0073E459 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 990F76CA1F85BFCF0073E459 /* Assets.xcassets */; };
 		990F76CE1F85BFCF0073E459 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */; };
 		990F76D61F85C0280073E459 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76D51F85C0280073E459 /* Home.swift */; };
+		9945CF801FA40D1D002F2F30 /* MaterialCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF7F1FA40D1D002F2F30 /* MaterialCardCell.swift */; };
+		9945CF821FA40FAC002F2F30 /* MaterialCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF811FA40FAC002F2F30 /* MaterialCardModel.swift */; };
 		998655431F8680800004876A /* UnidirectionalFiberReinforcedComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998655421F8680800004876A /* UnidirectionalFiberReinforcedComposite.swift */; };
 		999C88771F92F1E7006003B3 /* Laminate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C88761F92F1E7006003B3 /* Laminate.swift */; };
 		999C88791F92F202006003B3 /* LaminateResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C88781F92F202006003B3 /* LaminateResults.swift */; };
@@ -31,6 +33,8 @@
 		990F76CD1F85BFCF0073E459 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		990F76CF1F85BFCF0073E459 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		990F76D51F85C0280073E459 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		9945CF7F1FA40D1D002F2F30 /* MaterialCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialCardCell.swift; sourceTree = "<group>"; };
+		9945CF811FA40FAC002F2F30 /* MaterialCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialCardModel.swift; sourceTree = "<group>"; };
 		998655421F8680800004876A /* UnidirectionalFiberReinforcedComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnidirectionalFiberReinforcedComposite.swift; sourceTree = "<group>"; };
 		999C88761F92F1E7006003B3 /* Laminate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laminate.swift; sourceTree = "<group>"; };
 		999C88781F92F202006003B3 /* LaminateResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaminateResults.swift; sourceTree = "<group>"; };
@@ -84,6 +88,7 @@
 			children = (
 				99B508C41F86872200B6BC47 /* MaterialDataModel.swift */,
 				99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */,
+				9945CF811FA40FAC002F2F30 /* MaterialCardModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -94,6 +99,7 @@
 				990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */,
 				990F76C71F85BFCF0073E459 /* Main.storyboard */,
 				99C5BF801F9CD57600D87360 /* CompositeModelCell.swift */,
+				9945CF7F1FA40D1D002F2F30 /* MaterialCardCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -184,6 +190,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9945CF821FA40FAC002F2F30 /* MaterialCardModel.swift in Sources */,
+				9945CF801FA40D1D002F2F30 /* MaterialCardCell.swift in Sources */,
 				99C5BF811F9CD57600D87360 /* CompositeModelCell.swift in Sources */,
 				990D98841F8815CB00329881 /* UIFiberResults.swift in Sources */,
 				990F76D61F85C0280073E459 /* Home.swift in Sources */,

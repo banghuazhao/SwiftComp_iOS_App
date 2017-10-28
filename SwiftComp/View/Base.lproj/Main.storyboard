@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -26,7 +25,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="SE3-UR-ACn"/>
                     <connections>
-                        <segue destination="p8a-U2-g8C" kind="show" identifier="test" id="2xE-fu-hZ2"/>
+                        <segue destination="0A7-R2-if1" kind="show" identifier="test" id="vyx-4k-We1"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pki-nD-uGI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -34,19 +33,22 @@
             <point key="canvasLocation" x="135.19999999999999" y="-196.55172413793105"/>
         </scene>
         <!--Test-->
-        <scene sceneID="njR-Xj-ia0">
+        <scene sceneID="L2j-nc-6li">
             <objects>
-                <viewController id="p8a-U2-g8C" customClass="test" customModule="SwiftComp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Ba6-FR-DxB">
+                <tableViewController id="0A7-R2-if1" customClass="test" customModule="SwiftComp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="yBc-Qe-SoQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="YVd-ef-OA9"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="meN-9T-Fte" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <connections>
+                            <outlet property="dataSource" destination="0A7-R2-if1" id="y0A-UW-Rzg"/>
+                            <outlet property="delegate" destination="0A7-R2-if1" id="iOw-fY-rRp"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7JE-dY-f3v" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1680" y="-560"/>
+            <point key="canvasLocation" x="1745" y="-606"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="RIN-Iy-ATW">

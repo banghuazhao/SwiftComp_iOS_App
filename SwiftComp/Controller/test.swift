@@ -8,12 +8,15 @@
 
 import UIKit
 
-class test: UIViewController, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
+class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
     
-    var scrollView = UIScrollView(frame: UIScreen.main.bounds)
     
-    var stackingSequenceSection: UIView = UIView()
-
+    // first cell
+    
+    var stackingSequenceCell: UITableViewCell = UITableViewCell()
+    
+    var stackingSequenceLabel: UILabel = UILabel()
+    
     var stackingSequenceDataBase: UIButton = UIButton()
     
     var stackingSequenceDataBaseAlterController : UIAlertController!
@@ -23,13 +26,19 @@ class test: UIViewController, UITextFieldDelegate, UIPopoverPresentationControll
     var stackingSequenceExplain : UIButton = UIButton()
     
     
-    var laminaMaterialSection: UIView = UIView()
+    // second cell
+    
+    var laminaMaterialCell: UITableViewCell = UITableViewCell()
+    
+    var laminaMaterialLabel: UILabel = UILabel()
     
     var laminaMaterialDataBase: UIButton = UIButton()
     
     var laminaMaterialDataBaseAlterController : UIAlertController!
     
-    var laminaMaterialCard: UIView = UIView()
+    var laminaMaterialCard: UITableView = UITableView()
+    
+    var materialCardModel: [MaterialCardModel] = []
     
     var laminaMaterialNameLabel: UILabel = UILabel()
     var laminaMaterialName : String = "IM7/8552"
@@ -73,24 +82,24 @@ class test: UIViewController, UITextFieldDelegate, UIPopoverPresentationControll
         v13TextField.delegate = self
         v23TextField.delegate = self
         
+        stackingSequenceTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
+        
+        materialCardModel.append(MaterialCardModel(name: "Young's Modulus E1", placeHolder: "E1"))
+        materialCardModel.append(MaterialCardModel(name: "Young's Modulus E2", placeHolder: "E2"))
+        materialCardModel.append(MaterialCardModel(name: "Young's Modulus E3", placeHolder: "E3"))
+        materialCardModel.append(MaterialCardModel(name: "Shear Modulus G12", placeHolder: "G12"))
+        materialCardModel.append(MaterialCardModel(name: "Shear Modulus G13", placeHolder: "G13"))
+        materialCardModel.append(MaterialCardModel(name: "Shear Modulus G23", placeHolder: "G23"))
+        materialCardModel.append(MaterialCardModel(name: "Poisson's Ratio ν12", placeHolder: "ν12"))
+        materialCardModel.append(MaterialCardModel(name: "Poisson's Ratio ν13", placeHolder: "ν13"))
+        materialCardModel.append(MaterialCardModel(name: "Poisson's Ratio ν23", placeHolder: "ν23"))
+        
         navigationItem.title = "Laminate"
         
         createLayout()
         
         createActionSheet()
     
-        stackingSequenceTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
-        E1TextField.keyboardType = UIKeyboardType.decimalPad
-        E2TextField.keyboardType = UIKeyboardType.decimalPad
-        E3TextField.keyboardType = UIKeyboardType.decimalPad
-        G12TextField.keyboardType = UIKeyboardType.decimalPad
-        G13TextField.keyboardType = UIKeyboardType.decimalPad
-        G23TextField.keyboardType = UIKeyboardType.decimalPad
-        v12TextField.keyboardType = UIKeyboardType.decimalPad
-        v13TextField.keyboardType = UIKeyboardType.decimalPad
-        v23TextField.keyboardType = UIKeyboardType.decimalPad
-
-        
         hideKeyboardWhenTappedAround()
         
         keyboardToolBarForEngineeringConstant()
@@ -109,426 +118,90 @@ class test: UIViewController, UITextFieldDelegate, UIPopoverPresentationControll
     func createLayout() {
         
         // first section
-        self.view.addSubview(scrollView)
         
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 1000)
+        stackingSequenceCell.selectionStyle = UITableViewCellSelectionStyle.none
+        stackingSequenceCell.addSubview(stackingSequenceLabel)
+        stackingSequenceCell.addSubview(stackingSequenceDataBase)
+        stackingSequenceCell.addSubview(stackingSequenceTextField)
+        stackingSequenceCell.addSubview(stackingSequenceExplain)
         
-        scrollView.addSubview(stackingSequenceSection)
-       
-        stackingSequenceSection.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            stackingSequenceSection.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1.0),
-            stackingSequenceSection.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0),
-            stackingSequenceSection.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
-        ])
-        
-        
-        let stackingSequenceSectionTitle = UILabel()
-        
-        stackingSequenceSection.addSubview(stackingSequenceSectionTitle)
-        
-        stackingSequenceSectionTitle.translatesAutoresizingMaskIntoConstraints = false
-        stackingSequenceSectionTitle.text = "Stacking Sequence"
-        stackingSequenceSectionTitle.font = UIFont.boldSystemFont(ofSize: 18)
-        
-        NSLayoutConstraint.activate([
-            stackingSequenceSectionTitle.heightAnchor.constraint(equalToConstant: 40),
-            stackingSequenceSectionTitle.widthAnchor.constraint(equalTo: stackingSequenceSection.widthAnchor, multiplier: 1.0),
-            stackingSequenceSectionTitle.topAnchor.constraint(equalTo: stackingSequenceSection.topAnchor, constant: 8),
-            stackingSequenceSectionTitle.leftAnchor.constraint(equalTo: stackingSequenceSection.leftAnchor, constant: 8),
-            stackingSequenceSectionTitle.centerXAnchor.constraint(equalTo: stackingSequenceSection.centerXAnchor)
-            ])
-        
-        
-        
-        stackingSequenceSection.addSubview(stackingSequenceDataBase)
+        stackingSequenceLabel.translatesAutoresizingMaskIntoConstraints = false
+        stackingSequenceLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        stackingSequenceLabel.text = "Stacking Sequence"
+        stackingSequenceLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        stackingSequenceLabel.topAnchor.constraint(equalTo: stackingSequenceCell.topAnchor, constant: 0).isActive = true
+        stackingSequenceLabel.leftAnchor.constraint(equalTo: stackingSequenceCell.leftAnchor, constant: 8).isActive = true
+        stackingSequenceLabel.rightAnchor.constraint(equalTo: stackingSequenceCell.rightAnchor, constant: -8).isActive = true
         
         stackingSequenceDataBase.translatesAutoresizingMaskIntoConstraints = false
         stackingSequenceDataBase.setTitle("Stacking Sequence Database", for: UIControlState.normal)
         stackingSequenceDataBase.titleLabel?.textAlignment = .center
         stackingSequenceDataBase.addTarget(self, action: #selector(changeStackingSequence(_:)), for: .touchUpInside)
         stackingSequenceDataBase.applyDesign()
-        
-        NSLayoutConstraint.activate([
-            stackingSequenceDataBase.heightAnchor.constraint(equalToConstant: 40),
-            stackingSequenceDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: stackingSequenceDataBase.intrinsicContentSize.width + 40),
-            stackingSequenceDataBase.topAnchor.constraint(equalTo: stackingSequenceSectionTitle.bottomAnchor, constant: 8),
-            stackingSequenceDataBase.centerXAnchor.constraint(equalTo: stackingSequenceSection.centerXAnchor)
-        ])
-        
-        
-        
-        stackingSequenceSection.addSubview(stackingSequenceTextField)
+        stackingSequenceDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        stackingSequenceDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: stackingSequenceDataBase.intrinsicContentSize.width + 40).isActive = true
+        stackingSequenceDataBase.topAnchor.constraint(equalTo: stackingSequenceLabel.bottomAnchor, constant: 8).isActive = true
+        stackingSequenceDataBase.centerXAnchor.constraint(equalTo: stackingSequenceCell.centerXAnchor).isActive = true
         
         stackingSequenceTextField.translatesAutoresizingMaskIntoConstraints = false
         stackingSequenceTextField.text = "[0/90/45/-45]s"
         stackingSequenceTextField.borderStyle = .roundedRect
         stackingSequenceTextField.textAlignment = .center
         stackingSequenceTextField.placeholder = "[xx/xx/xx/xx/..]msn"
-
-        NSLayoutConstraint.activate([
-            stackingSequenceTextField.heightAnchor.constraint(equalToConstant: 40),
-            stackingSequenceTextField.widthAnchor.constraint(equalTo: stackingSequenceSection.widthAnchor, multiplier: 0.8),
-            stackingSequenceTextField.topAnchor.constraint(equalTo: stackingSequenceDataBase.bottomAnchor, constant: 8),
-            stackingSequenceTextField.centerXAnchor.constraint(equalTo: stackingSequenceSection.centerXAnchor)
-        ])
-        
-        
-        stackingSequenceSection.addSubview(stackingSequenceExplain)
+        stackingSequenceTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        stackingSequenceTextField.widthAnchor.constraint(equalTo: stackingSequenceCell.widthAnchor, multiplier: 0.8).isActive = true
+        stackingSequenceTextField.topAnchor.constraint(equalTo: stackingSequenceDataBase.bottomAnchor, constant: 8).isActive = true
+        stackingSequenceTextField.centerXAnchor.constraint(equalTo: stackingSequenceCell.centerXAnchor).isActive = true
         
         stackingSequenceExplain.translatesAutoresizingMaskIntoConstraints = false
         stackingSequenceExplain.setTitle("What is stacking sequence?", for: .normal)
         stackingSequenceExplain.setTitleColor(self.view.tintColor, for: .normal)
         stackingSequenceExplain.titleLabel?.textAlignment = .center
         stackingSequenceExplain.addTarget(self, action: #selector(explainStackingSequence(_:)), for: .touchUpInside)
-        
-        NSLayoutConstraint.activate([
-            stackingSequenceExplain.heightAnchor.constraint(equalToConstant: 40),
-            stackingSequenceExplain.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
-            stackingSequenceExplain.topAnchor.constraint(equalTo: stackingSequenceTextField.bottomAnchor, constant: 8),
-            stackingSequenceExplain.bottomAnchor.constraint(equalTo: stackingSequenceSection.bottomAnchor, constant: -8),
-            stackingSequenceExplain.centerXAnchor.constraint(equalTo: stackingSequenceSection.centerXAnchor)
-        ])
-        
-        
-        
+        stackingSequenceExplain.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        stackingSequenceExplain.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        stackingSequenceExplain.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
+        stackingSequenceExplain.topAnchor.constraint(equalTo: stackingSequenceTextField.bottomAnchor, constant: 8).isActive = true
+        stackingSequenceExplain.bottomAnchor.constraint(equalTo: stackingSequenceCell.bottomAnchor, constant: -40).isActive = true
+        stackingSequenceExplain.centerXAnchor.constraint(equalTo: stackingSequenceCell.centerXAnchor).isActive = true
+
         
         
         // second section
+
+        laminaMaterialCell.selectionStyle = UITableViewCellSelectionStyle.none
+        laminaMaterialCell.addSubview(laminaMaterialLabel)
+        laminaMaterialCell.addSubview(laminaMaterialDataBase)
+        laminaMaterialCell.addSubview(laminaMaterialCard)
         
-        scrollView.addSubview(laminaMaterialSection)
-        
-        laminaMaterialSection.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            laminaMaterialSection.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1.0),
-            laminaMaterialSection.topAnchor.constraint(equalTo: stackingSequenceSection.bottomAnchor, constant: 20),
-            laminaMaterialSection.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
-        ])
-        
-        
-        let laminaMaterialSectionTitle = UILabel()
-        
-        laminaMaterialSection.addSubview(laminaMaterialSectionTitle)
-        
-        laminaMaterialSectionTitle.translatesAutoresizingMaskIntoConstraints = false
-        laminaMaterialSectionTitle.text = "Lamina Material"
-        laminaMaterialSectionTitle.font = UIFont.boldSystemFont(ofSize: 18)
-        
-        NSLayoutConstraint.activate([
-            laminaMaterialSectionTitle.heightAnchor.constraint(equalToConstant: 40),
-            laminaMaterialSectionTitle.widthAnchor.constraint(equalTo: laminaMaterialSection.widthAnchor, multiplier: 1.0),
-            laminaMaterialSectionTitle.topAnchor.constraint(equalTo: laminaMaterialSection.topAnchor, constant: 8),
-            laminaMaterialSectionTitle.leftAnchor.constraint(equalTo: laminaMaterialSection.leftAnchor, constant: 8),
-            laminaMaterialSectionTitle.centerXAnchor.constraint(equalTo: laminaMaterialSection.centerXAnchor)
-            ])
-        
-        laminaMaterialSection.addSubview(laminaMaterialDataBase)
+        laminaMaterialLabel.translatesAutoresizingMaskIntoConstraints = false
+        laminaMaterialLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        laminaMaterialLabel.text = "Lamina Material"
+        laminaMaterialLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        laminaMaterialLabel.topAnchor.constraint(equalTo: laminaMaterialCell.topAnchor, constant: 0).isActive = true
+        laminaMaterialLabel.leftAnchor.constraint(equalTo: laminaMaterialCell.leftAnchor, constant: 8).isActive = true
+        laminaMaterialLabel.rightAnchor.constraint(equalTo: laminaMaterialCell.rightAnchor, constant: -8).isActive = true
         
         laminaMaterialDataBase.translatesAutoresizingMaskIntoConstraints = false
         laminaMaterialDataBase.setTitle("Laminate Material Database", for: UIControlState.normal)
         laminaMaterialDataBase.titleLabel?.textAlignment = .center
         laminaMaterialDataBase.addTarget(self, action: #selector(changeLaminateMaterial(_:)), for: .touchUpInside)
         laminaMaterialDataBase.applyDesign()
-        
-        NSLayoutConstraint.activate([
-            laminaMaterialDataBase.heightAnchor.constraint(equalToConstant: 40),
-            laminaMaterialDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: laminaMaterialDataBase.intrinsicContentSize.width + 40),
-            laminaMaterialDataBase.topAnchor.constraint(equalTo: laminaMaterialSectionTitle.bottomAnchor, constant: 8),
-            laminaMaterialDataBase.centerXAnchor.constraint(equalTo: laminaMaterialSection.centerXAnchor)
-        ])
-        
-        
-        laminaMaterialSection.addSubview(laminaMaterialCard)
+        laminaMaterialDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        laminaMaterialDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: laminaMaterialDataBase.intrinsicContentSize.width + 40).isActive = true
+        laminaMaterialDataBase.topAnchor.constraint(equalTo: laminaMaterialLabel.bottomAnchor, constant: 8).isActive = true
+        laminaMaterialDataBase.centerXAnchor.constraint(equalTo: laminaMaterialCell.centerXAnchor).isActive = true
         
         laminaMaterialCard.translatesAutoresizingMaskIntoConstraints = false
         laminaMaterialCard.cardViewDesign()
-        
-        NSLayoutConstraint.activate([
-            laminaMaterialCard.widthAnchor.constraint(equalTo: laminaMaterialSection.widthAnchor, multiplier: 0.8),
-            laminaMaterialCard.topAnchor.constraint(equalTo: laminaMaterialDataBase.bottomAnchor, constant: 8),
-            laminaMaterialCard.centerXAnchor.constraint(equalTo: laminaMaterialSection.centerXAnchor),
-            laminaMaterialCard.bottomAnchor.constraint(equalTo: laminaMaterialSection.bottomAnchor, constant: -8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(laminaMaterialNameLabel)
-        
-        laminaMaterialNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        laminaMaterialNameLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        laminaMaterialNameLabel.textColor = UIColor(red: 155/255, green: 152/255, blue: 140/255, alpha: 1.0)
-        laminaMaterialNameLabel.text = "Name: IM7/8552"
-        laminaMaterialNameLabel.textAlignment = .center
-        laminaMaterialNameLabel.backgroundColor = UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
-        
-        NSLayoutConstraint.activate([
-            laminaMaterialNameLabel.heightAnchor.constraint(equalToConstant: 40),
-            laminaMaterialNameLabel.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 1.0),
-            laminaMaterialNameLabel.centerXAnchor.constraint(equalTo: laminaMaterialCard.centerXAnchor),
-            laminaMaterialNameLabel.topAnchor.constraint(equalTo: laminaMaterialCard.topAnchor, constant: 0)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(laminaMaterialUnitLabel)
-        
-        laminaMaterialUnitLabel.translatesAutoresizingMaskIntoConstraints = false
-        laminaMaterialUnitLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        laminaMaterialUnitLabel.textColor = UIColor(red: 155/255, green: 152/255, blue: 140/255, alpha: 1.0)
-        laminaMaterialUnitLabel.text = "Unit: GPa"
-        laminaMaterialUnitLabel.textAlignment = .center
-        laminaMaterialUnitLabel.backgroundColor = UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
-        
-        NSLayoutConstraint.activate([
-            laminaMaterialUnitLabel.heightAnchor.constraint(equalToConstant: 40),
-            laminaMaterialUnitLabel.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 1.0),
-            laminaMaterialUnitLabel.centerXAnchor.constraint(equalTo: laminaMaterialCard.centerXAnchor),
-            laminaMaterialUnitLabel.topAnchor.constraint(equalTo: laminaMaterialNameLabel.bottomAnchor, constant: 0),
-        ])
-        
-        
-        laminaMaterialCard.addSubview(E1Label)
-        
-        E1Label.translatesAutoresizingMaskIntoConstraints = false
-        E1Label.text = "Young's Modulus E1"
-        E1Label.cardViewDesignForLabel()
-        
-        NSLayoutConstraint.activate([
-            E1Label.heightAnchor.constraint(equalToConstant: 40),
-            E1Label.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.6),
-            E1Label.topAnchor.constraint(equalTo: laminaMaterialUnitLabel.bottomAnchor, constant: 0),
-            E1Label.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(E2Label)
-        
-        E2Label.translatesAutoresizingMaskIntoConstraints = false
-        E2Label.text = "Young's Modulus E2"
-        E2Label.cardViewDesignForLabel()
-        
-        NSLayoutConstraint.activate([
-            E2Label.heightAnchor.constraint(equalToConstant: 40),
-            E2Label.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.6),
-            E2Label.topAnchor.constraint(equalTo: E1Label.bottomAnchor, constant: 0),
-            E2Label.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(E3Label)
-        
-        E3Label.translatesAutoresizingMaskIntoConstraints = false
-        E3Label.text = "Young's Modulus E3"
-        E3Label.cardViewDesignForLabel()
-        
-        NSLayoutConstraint.activate([
-            E3Label.heightAnchor.constraint(equalToConstant: 40),
-            E3Label.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.6),
-            E3Label.topAnchor.constraint(equalTo: E2Label.bottomAnchor, constant: 0),
-            E3Label.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(G12Label)
-        
-        G12Label.translatesAutoresizingMaskIntoConstraints = false
-        G12Label.text = "Shear Modulus G12"
-        G12Label.cardViewDesignForLabel()
-        
-        NSLayoutConstraint.activate([
-            G12Label.heightAnchor.constraint(equalToConstant: 40),
-            G12Label.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.6),
-            G12Label.topAnchor.constraint(equalTo: E3Label.bottomAnchor, constant: 0),
-            G12Label.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(G13Label)
-        
-        G13Label.translatesAutoresizingMaskIntoConstraints = false
-        G13Label.text = "Shear Modulus G13"
-        G13Label.cardViewDesignForLabel()
-        
-        NSLayoutConstraint.activate([
-            G13Label.heightAnchor.constraint(equalToConstant: 40),
-            G13Label.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.6),
-            G13Label.topAnchor.constraint(equalTo: G12Label.bottomAnchor, constant: 0),
-            G13Label.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(G23Label)
-        
-        G23Label.translatesAutoresizingMaskIntoConstraints = false
-        G23Label.text = "Shear Modulus G23"
-        G23Label.cardViewDesignForLabel()
-        
-        NSLayoutConstraint.activate([
-            G23Label.heightAnchor.constraint(equalToConstant: 40),
-            G23Label.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.6),
-            G23Label.topAnchor.constraint(equalTo: G13Label.bottomAnchor, constant: 0),
-            G23Label.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(v12Label)
-        
-        v12Label.translatesAutoresizingMaskIntoConstraints = false
-        v12Label.text = "Poisson's Ratio ν12"
-        v12Label.cardViewDesignForLabel()
-        
-        NSLayoutConstraint.activate([
-            v12Label.heightAnchor.constraint(equalToConstant: 40),
-            v12Label.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.6),
-            v12Label.topAnchor.constraint(equalTo: G23Label.bottomAnchor, constant: 0),
-            v12Label.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(v13Label)
-        
-        v13Label.translatesAutoresizingMaskIntoConstraints = false
-        v13Label.text = "Poisson's Ratio ν13"
-        v13Label.cardViewDesignForLabel()
-        
-        NSLayoutConstraint.activate([
-            v13Label.heightAnchor.constraint(equalToConstant: 40),
-            v13Label.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.6),
-            v13Label.topAnchor.constraint(equalTo: v12Label.bottomAnchor, constant: 0),
-            v13Label.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(v23Label)
-        
-        v23Label.translatesAutoresizingMaskIntoConstraints = false
-        v23Label.text = "Poisson's Ratio ν23"
-        v23Label.cardViewDesignForLabel()
-        
-        NSLayoutConstraint.activate([
-            v23Label.widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.6),
-            v23Label.topAnchor.constraint(equalTo: v13Label.bottomAnchor, constant: 0),
-            v23Label.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8),
-            v23Label.bottomAnchor.constraint(equalTo: laminaMaterialCard.bottomAnchor, constant: 0)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(E1TextField)
-        
-        E1TextField.translatesAutoresizingMaskIntoConstraints = false
-        E1TextField.placeholder = "E1"
-        E1TextField.cardViewDesignForTextView()
-        
-        NSLayoutConstraint.activate([
-            E1TextField.centerYAnchor.constraint(equalTo: E1Label.centerYAnchor, constant: 0),
-            E1TextField.leftAnchor.constraint(equalTo: E1Label.rightAnchor, constant: 0),
-            E1TextField.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(E2TextField)
-        
-        E2TextField.translatesAutoresizingMaskIntoConstraints = false
-        E2TextField.placeholder = "E2"
-        E2TextField.cardViewDesignForTextView()
-        
-        NSLayoutConstraint.activate([
-            E2TextField.centerYAnchor.constraint(equalTo: E2Label.centerYAnchor, constant: 0),
-            E2TextField.leftAnchor.constraint(equalTo: E2Label.rightAnchor, constant: 0),
-            E2TextField.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(E3TextField)
-        
-        E3TextField.translatesAutoresizingMaskIntoConstraints = false
-        E3TextField.placeholder = "E3"
-        E3TextField.cardViewDesignForTextView()
-        
-        NSLayoutConstraint.activate([
-            E3TextField.centerYAnchor.constraint(equalTo: E3Label.centerYAnchor, constant: 0),
-            E3TextField.leftAnchor.constraint(equalTo: E3Label.rightAnchor, constant: 0),
-            E3TextField.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(G12TextField)
-        
-        G12TextField.translatesAutoresizingMaskIntoConstraints = false
-        G12TextField.placeholder = "G12"
-        G12TextField.cardViewDesignForTextView()
-        
-        NSLayoutConstraint.activate([
-            G12TextField.centerYAnchor.constraint(equalTo: G12Label.centerYAnchor, constant: 0),
-            G12TextField.leftAnchor.constraint(equalTo: G12Label.rightAnchor, constant: 0),
-            G12TextField.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(G13TextField)
-        
-        G13TextField.translatesAutoresizingMaskIntoConstraints = false
-        G13TextField.placeholder = "G13"
-        G13TextField.cardViewDesignForTextView()
-        
-        NSLayoutConstraint.activate([
-            G13TextField.centerYAnchor.constraint(equalTo: G13Label.centerYAnchor, constant: 0),
-            G13TextField.leftAnchor.constraint(equalTo: G13Label.rightAnchor, constant: 0),
-            G13TextField.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(G23TextField)
-        
-        G23TextField.translatesAutoresizingMaskIntoConstraints = false
-        G23TextField.placeholder = "G23"
-        G23TextField.cardViewDesignForTextView()
-        
-        NSLayoutConstraint.activate([
-            G23TextField.centerYAnchor.constraint(equalTo: G23Label.centerYAnchor, constant: 0),
-            G23TextField.leftAnchor.constraint(equalTo: G23Label.rightAnchor, constant: 0),
-            G23TextField.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(v12TextField)
-        
-        v12TextField.translatesAutoresizingMaskIntoConstraints = false
-        v12TextField.placeholder = "ν12"
-        v12TextField.cardViewDesignForTextView()
-        
-        NSLayoutConstraint.activate([
-            v12TextField.centerYAnchor.constraint(equalTo: v12Label.centerYAnchor, constant: 0),
-            v12TextField.leftAnchor.constraint(equalTo: v12Label.rightAnchor, constant: 0),
-            v12TextField.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8)
-        ])
-        
-        
-        laminaMaterialCard.addSubview(v13TextField)
-        
-        v13TextField.translatesAutoresizingMaskIntoConstraints = false
-        v13TextField.placeholder = "ν13"
-        v13TextField.cardViewDesignForTextView()
-        
-        NSLayoutConstraint.activate([
-            v13TextField.centerYAnchor.constraint(equalTo: v13Label.centerYAnchor, constant: 0),
-            v13TextField.leftAnchor.constraint(equalTo: v13Label.rightAnchor, constant: 0),
-            v13TextField.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8)
-        ])
-        
-        laminaMaterialCard.addSubview(v23TextField)
-            
-        v23TextField.translatesAutoresizingMaskIntoConstraints = false
-        v23TextField.placeholder = "ν23"
-        v23TextField.cardViewDesignForTextView()
-            
-        NSLayoutConstraint.activate([
-            v23TextField.centerYAnchor.constraint(equalTo: v23Label.centerYAnchor, constant: 0),
-            v23TextField.leftAnchor.constraint(equalTo: v23Label.rightAnchor, constant: 0),
-            v23TextField.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8)
-        ])
-        
-        
+        laminaMaterialCard.register(MaterialCardCell1.self, forCellReuseIdentifier: "cell1")
+        laminaMaterialCard.delegate = self
+        laminaMaterialCard.dataSource = self
+        laminaMaterialCard.widthAnchor.constraint(equalTo: laminaMaterialCell.widthAnchor, multiplier: 0.8).isActive = true
+        laminaMaterialCard.topAnchor.constraint(equalTo: laminaMaterialDataBase.bottomAnchor, constant: 8).isActive = true
+        laminaMaterialCard.centerXAnchor.constraint(equalTo: laminaMaterialCell.centerXAnchor).isActive = true
+        laminaMaterialCard.bottomAnchor.constraint(equalTo: laminaMaterialCell.bottomAnchor, constant: -20).isActive = true
+        laminaMaterialCard.heightAnchor.constraint(equalToConstant: 700).isActive = true
         
         
     }
@@ -540,7 +213,7 @@ class test: UIViewController, UITextFieldDelegate, UIPopoverPresentationControll
     @objc func changeStackingSequence(_ sender: UIButton) {
         sender.flash()
         self.present(stackingSequenceDataBaseAlterController, animated: true, completion: nil)
-        
+        self.laminaMaterialCard.frame = CGRect(x: laminaMaterialCard.frame.origin.x, y: laminaMaterialCard.frame.origin.y, width: laminaMaterialCard.frame.width, height: laminaMaterialCard.contentSize.height)
     }
     
     @objc func explainStackingSequence(_ sender: UIButton) {
@@ -757,7 +430,7 @@ class test: UIViewController, UITextFieldDelegate, UIPopoverPresentationControll
         v12TextField.inputAccessoryView = toolBar
         v13TextField.inputAccessoryView = toolBar
         v23TextField.inputAccessoryView = toolBar
-
+        
     }
     
     @objc func doneClicked() {
@@ -808,6 +481,44 @@ class test: UIViewController, UITextFieldDelegate, UIPopoverPresentationControll
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    // MARK: Table view
+    
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == self.tableView {
+            return 2
+        }
+        if tableView == laminaMaterialCard {
+            return materialCardModel.count
+        }
+        fatalError("Unknown row")
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if tableView == self.tableView {
+            switch indexPath.row {
+            case 0:
+                return stackingSequenceCell
+            case 1:
+                return laminaMaterialCell
+            default:
+                fatalError("Unknown row")
+            }
+        }
+        if tableView == self.laminaMaterialCard {
+            let cell = laminaMaterialCard.dequeueReusableCell(withIdentifier: "cell1", for: indexPath) as! MaterialCardCell1
+            cell.materialpropertyLabel.text = materialCardModel[indexPath.row].materialPropertyName
+            cell.materialpropertyTextField.placeholder = materialCardModel[indexPath.row].materialPropertyPlaceHolder
+            cell.materialpropertyTextField.keyboardType = UIKeyboardType.decimalPad
+            return cell
+        }
+        fatalError("Unknown row")
     }
 
 }

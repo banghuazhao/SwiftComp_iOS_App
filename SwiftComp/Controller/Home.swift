@@ -125,19 +125,17 @@ extension UILabel {
     func cardViewDesignForLabel() {
         self.backgroundColor = UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
         self.textColor = UIColor(red: 130/255, green: 138/255, blue: 145/255, alpha: 1.0)
-        self.textAlignment = .center
-        self.heightAnchor.constraint(equalToConstant: 40).isActive = true
         self.font = UIFont.systemFont(ofSize: 14)
+        self.adjustsFontSizeToFitWidth = true
     
     }
 }
 extension UITextField {
-    func cardViewDesignForTextView() {
+    func cardViewDesignForTextField() {
         self.backgroundColor = UIColor.white
         self.borderStyle = .roundedRect
-        self.heightAnchor.constraint(equalToConstant: 30).isActive = true
         self.font = UIFont.systemFont(ofSize: 14)
-        
+        self.adjustsFontSizeToFitWidth = true
     }
 }
 
