@@ -1,5 +1,5 @@
 //
-//  testResult.swift
+//  LaminateResult.swift
 //  SwiftComp
 //
 //  Created by Banghua Zhao on 10/28/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class testResult: UIViewController {
+class LaminateResult: UIViewController {
     
     var effective3DProperties = [Double](repeating: 0, count: 9)
     var effectiveInPlaneProperties = [Double](repeating: 0, count: 6)
@@ -51,6 +51,8 @@ class testResult: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = .white
 
         createLayout()
         
@@ -70,7 +72,7 @@ class testResult: UIViewController {
         scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
         scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 1200)
+        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 1000)
         scrollView.addSubview(threeDPropertiesCard)
         scrollView.addSubview(inPlanePropertiesCard)
         scrollView.addSubview(flexuralPropertiesCard)
@@ -79,13 +81,11 @@ class testResult: UIViewController {
         // first section
         
         threeDPropertiesCard.resultCardViewDesign()
-        threeDPropertiesCard.translatesAutoresizingMaskIntoConstraints = false
         threeDPropertiesCard.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20).isActive = true
         threeDPropertiesCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
         threeDPropertiesCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
         threeDPropertiesCard.addSubview(threeDPropertiesTitleLabel)
         
-        threeDPropertiesTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         threeDPropertiesTitleLabel.resultCardTitleDesign()
         threeDPropertiesTitleLabel.text = "3D Properties"
         threeDPropertiesTitleLabel.topAnchor.constraint(equalTo: threeDPropertiesCard.topAnchor, constant: 0).isActive = true
@@ -119,10 +119,9 @@ class testResult: UIViewController {
             default:
                 break
             }
-            threeDPropertiesLabel[i].translatesAutoresizingMaskIntoConstraints = false
             threeDPropertiesLabel[i].leftAnchor.constraint(equalTo: threeDPropertiesCard.leftAnchor, constant: 8).isActive = true
             threeDPropertiesLabel[i].widthAnchor.constraint(equalTo: threeDPropertiesCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            threeDPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 30).isActive = true
+            threeDPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             switch i {
             case 0:
                 threeDPropertiesLabel[i].topAnchor.constraint(equalTo: threeDPropertiesTitleLabel.bottomAnchor, constant: 8).isActive = true
@@ -160,10 +159,9 @@ class testResult: UIViewController {
             default:
                 break
             }
-            threeDPropertiesResultLabel[i].translatesAutoresizingMaskIntoConstraints = false
             threeDPropertiesResultLabel[i].rightAnchor.constraint(equalTo: threeDPropertiesCard.rightAnchor, constant: -8).isActive = true
             threeDPropertiesResultLabel[i].widthAnchor.constraint(equalTo: threeDPropertiesCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            threeDPropertiesResultLabel[i].heightAnchor.constraint(equalToConstant: 30).isActive = true
+            threeDPropertiesResultLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             threeDPropertiesResultLabel[i].centerYAnchor.constraint(equalTo: threeDPropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
         }
         
@@ -172,13 +170,11 @@ class testResult: UIViewController {
         // second section
         
         inPlanePropertiesCard.resultCardViewDesign()
-        inPlanePropertiesCard.translatesAutoresizingMaskIntoConstraints = false
         inPlanePropertiesCard.topAnchor.constraint(equalTo: threeDPropertiesCard.bottomAnchor, constant: 40).isActive = true
         inPlanePropertiesCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
         inPlanePropertiesCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
         inPlanePropertiesCard.addSubview(inPlanePropertiesTitleLabel)
         
-        inPlanePropertiesTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         inPlanePropertiesTitleLabel.resultCardTitleDesign()
         inPlanePropertiesTitleLabel.text = "In-plane Properties"
         inPlanePropertiesTitleLabel.topAnchor.constraint(equalTo: inPlanePropertiesCard.topAnchor, constant: 0).isActive = true
@@ -206,10 +202,9 @@ class testResult: UIViewController {
             default:
                 break
             }
-            inPlanePropertiesLabel[i].translatesAutoresizingMaskIntoConstraints = false
             inPlanePropertiesLabel[i].leftAnchor.constraint(equalTo: inPlanePropertiesCard.leftAnchor, constant: 8).isActive = true
             inPlanePropertiesLabel[i].widthAnchor.constraint(equalTo: inPlanePropertiesCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            inPlanePropertiesLabel[i].heightAnchor.constraint(equalToConstant: 30).isActive = true
+            inPlanePropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             switch i {
             case 0:
                 inPlanePropertiesLabel[i].topAnchor.constraint(equalTo: inPlanePropertiesTitleLabel.bottomAnchor, constant: 8).isActive = true
@@ -241,10 +236,9 @@ class testResult: UIViewController {
             default:
                 break
             }
-            inPlanePropertiesResultLabel[i].translatesAutoresizingMaskIntoConstraints = false
             inPlanePropertiesResultLabel[i].rightAnchor.constraint(equalTo: inPlanePropertiesCard.rightAnchor, constant: -8).isActive = true
             inPlanePropertiesResultLabel[i].widthAnchor.constraint(equalTo: inPlanePropertiesCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            inPlanePropertiesResultLabel[i].heightAnchor.constraint(equalToConstant: 30).isActive = true
+            inPlanePropertiesResultLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             inPlanePropertiesResultLabel[i].centerYAnchor.constraint(equalTo: inPlanePropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
         }
         
@@ -252,13 +246,11 @@ class testResult: UIViewController {
         // third section
         
         flexuralPropertiesCard.resultCardViewDesign()
-        flexuralPropertiesCard.translatesAutoresizingMaskIntoConstraints = false
         flexuralPropertiesCard.topAnchor.constraint(equalTo: inPlanePropertiesCard.bottomAnchor, constant: 40).isActive = true
         flexuralPropertiesCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
         flexuralPropertiesCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
         flexuralPropertiesCard.addSubview(flexuralPropertiesTitleLabel)
         
-        flexuralPropertiesTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         flexuralPropertiesTitleLabel.resultCardTitleDesign()
         flexuralPropertiesTitleLabel.text = "Flexural Properties"
         flexuralPropertiesTitleLabel.topAnchor.constraint(equalTo: flexuralPropertiesCard.topAnchor, constant: 0).isActive = true
@@ -286,10 +278,9 @@ class testResult: UIViewController {
             default:
                 break
             }
-            flexuralPropertiesLabel[i].translatesAutoresizingMaskIntoConstraints = false
             flexuralPropertiesLabel[i].leftAnchor.constraint(equalTo: flexuralPropertiesCard.leftAnchor, constant: 8).isActive = true
             flexuralPropertiesLabel[i].widthAnchor.constraint(equalTo: flexuralPropertiesCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            flexuralPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 30).isActive = true
+            flexuralPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             switch i {
             case 0:
                 flexuralPropertiesLabel[i].topAnchor.constraint(equalTo: flexuralPropertiesTitleLabel.bottomAnchor, constant: 8).isActive = true
@@ -321,10 +312,9 @@ class testResult: UIViewController {
             default:
                 break
             }
-            flexuralPropertiesResultLabel[i].translatesAutoresizingMaskIntoConstraints = false
             flexuralPropertiesResultLabel[i].rightAnchor.constraint(equalTo: flexuralPropertiesCard.rightAnchor, constant: -8).isActive = true
             flexuralPropertiesResultLabel[i].widthAnchor.constraint(equalTo: flexuralPropertiesCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            flexuralPropertiesResultLabel[i].heightAnchor.constraint(equalToConstant: 30).isActive = true
+            flexuralPropertiesResultLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             flexuralPropertiesResultLabel[i].centerYAnchor.constraint(equalTo: flexuralPropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
         }
         

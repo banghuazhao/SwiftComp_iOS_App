@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -25,49 +24,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="SE3-UR-ACn"/>
-                    <connections>
-                        <segue destination="0A7-R2-if1" kind="show" identifier="test" id="vyx-4k-We1"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pki-nD-uGI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="135.19999999999999" y="-196.55172413793105"/>
-        </scene>
-        <!--Test-->
-        <scene sceneID="L2j-nc-6li">
-            <objects>
-                <tableViewController id="0A7-R2-if1" customClass="test" customModule="SwiftComp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="yBc-Qe-SoQ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <connections>
-                            <outlet property="dataSource" destination="0A7-R2-if1" id="y0A-UW-Rzg"/>
-                            <outlet property="delegate" destination="0A7-R2-if1" id="iOw-fY-rRp"/>
-                        </connections>
-                    </tableView>
-                    <connections>
-                        <segue destination="rfs-78-XvG" kind="show" identifier="testResultSegue" id="Pcp-Ov-zwe"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7JE-dY-f3v" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1745" y="-606"/>
-        </scene>
-        <!--Test Result-->
-        <scene sceneID="yiM-lR-Tmw">
-            <objects>
-                <viewController id="rfs-78-XvG" customClass="testResult" customModule="SwiftComp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="pEN-T0-ggc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="0LB-IC-jFm"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="apF-27-ydu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2843" y="-625"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="RIN-Iy-ATW">

@@ -1,5 +1,5 @@
 //
-//  test.swift
+//  Laminate.swift
 //  SwiftComp
 //
 //  Created by Banghua Zhao on 10/22/17.
@@ -9,7 +9,7 @@
 import UIKit
 import Accelerate
 
-class test: UITableViewController, UIPopoverPresentationControllerDelegate {
+class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, UITextFieldDelegate {
     
     var effective3DProperties = [Double](repeating: 0.0, count: 9)
     var effectiveInplaneProperties = [Double](repeating: 0.0, count: 6)
@@ -18,8 +18,6 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
     // first cell
     
     var stackingSequenceCell: UITableViewCell = UITableViewCell()
-    
-    var stackingSequenceLabel: UILabel = UILabel()
     
     var stackingSequenceDataBase: UIButton = UIButton()
     
@@ -33,8 +31,6 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
     // second cell
     
     var laminaMaterialCell: UITableViewCell = UITableViewCell()
-    
-    var laminaMaterialLabel: UILabel = UILabel()
     
     var laminaMaterialDataBase: UIButton = UIButton()
     
@@ -54,6 +50,9 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.register(TableHeader.self, forHeaderFooterViewReuseIdentifier: "headerID")
+        tableView.tableFooterView = UIView()
+        
         createLayout()
         
         createActionSheet()
@@ -66,6 +65,10 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+    }
+    
     
     // MARK: Create layout
     
@@ -74,27 +77,16 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
         // first section
         
         stackingSequenceCell.selectionStyle = UITableViewCellSelectionStyle.none
-        stackingSequenceCell.addSubview(stackingSequenceLabel)
         stackingSequenceCell.addSubview(stackingSequenceDataBase)
         stackingSequenceCell.addSubview(stackingSequenceTextField)
         stackingSequenceCell.addSubview(stackingSequenceExplain)
         
-        stackingSequenceLabel.translatesAutoresizingMaskIntoConstraints = false
-        stackingSequenceLabel.font = UIFont.boldSystemFont(ofSize: 18)
-        stackingSequenceLabel.text = "Stacking Sequence"
-        stackingSequenceLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        stackingSequenceLabel.topAnchor.constraint(equalTo: stackingSequenceCell.topAnchor, constant: 0).isActive = true
-        stackingSequenceLabel.leftAnchor.constraint(equalTo: stackingSequenceCell.leftAnchor, constant: 8).isActive = true
-        stackingSequenceLabel.rightAnchor.constraint(equalTo: stackingSequenceCell.rightAnchor, constant: -8).isActive = true
-        
-        stackingSequenceDataBase.translatesAutoresizingMaskIntoConstraints = false
         stackingSequenceDataBase.setTitle("Stacking Sequence Database", for: UIControlState.normal)
-        stackingSequenceDataBase.titleLabel?.textAlignment = .center
         stackingSequenceDataBase.addTarget(self, action: #selector(changeStackingSequence(_:)), for: .touchUpInside)
         stackingSequenceDataBase.dataBaseButtonDesign()
         stackingSequenceDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
         stackingSequenceDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: stackingSequenceDataBase.intrinsicContentSize.width + 40).isActive = true
-        stackingSequenceDataBase.topAnchor.constraint(equalTo: stackingSequenceLabel.bottomAnchor, constant: 8).isActive = true
+        stackingSequenceDataBase.topAnchor.constraint(equalTo: stackingSequenceCell.topAnchor, constant: 8).isActive = true
         stackingSequenceDataBase.centerXAnchor.constraint(equalTo: stackingSequenceCell.centerXAnchor).isActive = true
         
         stackingSequenceTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -102,8 +94,8 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
         stackingSequenceTextField.borderStyle = .roundedRect
         stackingSequenceTextField.textAlignment = .center
         stackingSequenceTextField.placeholder = "[xx/xx/xx/xx/..]msn"
-        stackingSequenceTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        stackingSequenceTextField.widthAnchor.constraint(equalTo: stackingSequenceCell.widthAnchor, multiplier: 0.8).isActive = true
+        stackingSequenceTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        stackingSequenceTextField.widthAnchor.constraint(equalTo: stackingSequenceCell.widthAnchor, multiplier: 0.6).isActive = true
         stackingSequenceTextField.topAnchor.constraint(equalTo: stackingSequenceDataBase.bottomAnchor, constant: 8).isActive = true
         stackingSequenceTextField.centerXAnchor.constraint(equalTo: stackingSequenceCell.centerXAnchor).isActive = true
         
@@ -124,29 +116,17 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
         // second section
 
         laminaMaterialCell.selectionStyle = UITableViewCellSelectionStyle.none
-        laminaMaterialCell.addSubview(laminaMaterialLabel)
         laminaMaterialCell.addSubview(laminaMaterialDataBase)
         laminaMaterialCell.addSubview(laminaMaterialCard)
         
-        laminaMaterialLabel.translatesAutoresizingMaskIntoConstraints = false
-        laminaMaterialLabel.font = UIFont.boldSystemFont(ofSize: 18)
-        laminaMaterialLabel.text = "Lamina Material"
-        laminaMaterialLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        laminaMaterialLabel.topAnchor.constraint(equalTo: laminaMaterialCell.topAnchor, constant: 0).isActive = true
-        laminaMaterialLabel.leftAnchor.constraint(equalTo: laminaMaterialCell.leftAnchor, constant: 8).isActive = true
-        laminaMaterialLabel.rightAnchor.constraint(equalTo: laminaMaterialCell.rightAnchor, constant: -8).isActive = true
-        
-        laminaMaterialDataBase.translatesAutoresizingMaskIntoConstraints = false
         laminaMaterialDataBase.setTitle("Laminate Material Database", for: UIControlState.normal)
-        laminaMaterialDataBase.titleLabel?.textAlignment = .center
         laminaMaterialDataBase.addTarget(self, action: #selector(changeLaminateMaterial(_:)), for: .touchUpInside)
         laminaMaterialDataBase.dataBaseButtonDesign()
         laminaMaterialDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
         laminaMaterialDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: laminaMaterialDataBase.intrinsicContentSize.width + 40).isActive = true
-        laminaMaterialDataBase.topAnchor.constraint(equalTo: laminaMaterialLabel.bottomAnchor, constant: 8).isActive = true
+        laminaMaterialDataBase.topAnchor.constraint(equalTo: laminaMaterialCell.topAnchor, constant: 8).isActive = true
         laminaMaterialDataBase.centerXAnchor.constraint(equalTo: laminaMaterialCell.centerXAnchor).isActive = true
         
-        laminaMaterialCard.translatesAutoresizingMaskIntoConstraints = false
         laminaMaterialCard.materialCardViewDesign()
         laminaMaterialCard.widthAnchor.constraint(equalTo: laminaMaterialCell.widthAnchor, multiplier: 0.8).isActive = true
         laminaMaterialCard.topAnchor.constraint(equalTo: laminaMaterialDataBase.bottomAnchor, constant: 8).isActive = true
@@ -155,31 +135,24 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
         laminaMaterialCard.addSubview(laminaMaterialNameLabel)
         laminaMaterialCard.addSubview(laminaMaterialUnitLabel)
         
-        laminaMaterialNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        laminaMaterialNameLabel.materialCardLabelDesign()
-        laminaMaterialNameLabel.textAlignment = .center
-        laminaMaterialNameLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        laminaMaterialNameLabel.materialCardTitleDesign()
         laminaMaterialNameLabel.text = "Name: IM7/8552"
         laminaMaterialNameLabel.topAnchor.constraint(equalTo: laminaMaterialCard.topAnchor, constant: 8).isActive = true
         laminaMaterialNameLabel.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8).isActive = true
         laminaMaterialNameLabel.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
-        laminaMaterialNameLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        laminaMaterialNameLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
-        laminaMaterialUnitLabel.translatesAutoresizingMaskIntoConstraints = false
-        laminaMaterialUnitLabel.materialCardLabelDesign()
-        laminaMaterialUnitLabel.textAlignment = .center
-        laminaMaterialUnitLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        laminaMaterialUnitLabel.materialCardTitleDesign()
         laminaMaterialUnitLabel.text = "Unit: GPa"
         laminaMaterialUnitLabel.topAnchor.constraint(equalTo: laminaMaterialNameLabel.bottomAnchor, constant: 8).isActive = true
         laminaMaterialUnitLabel.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8).isActive = true
         laminaMaterialUnitLabel.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
-        laminaMaterialUnitLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        laminaMaterialUnitLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
         for i in 0...8 {
             laminaMaterialPropertiesLabel.append(UILabel())
             laminaMaterialCard.addSubview(laminaMaterialPropertiesLabel[i])
             laminaMaterialPropertiesLabel[i].materialCardLabelDesign()
-            laminaMaterialPropertiesLabel[i].textAlignment = .right
             switch i {
             case 0:
                 laminaMaterialPropertiesLabel[i].text = "Young's Modulus E1"
@@ -202,10 +175,9 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
             default:
                 break
             }
-            laminaMaterialPropertiesLabel[i].translatesAutoresizingMaskIntoConstraints = false
             laminaMaterialPropertiesLabel[i].leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8).isActive = true
             laminaMaterialPropertiesLabel[i].widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            laminaMaterialPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 30).isActive = true
+            laminaMaterialPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             switch i {
             case 0:
                 laminaMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: laminaMaterialUnitLabel.bottomAnchor, constant: 8).isActive = true
@@ -221,7 +193,6 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
             laminaMaterialPropertiesTextField.append(UITextField())
             laminaMaterialCard.addSubview(laminaMaterialPropertiesTextField[i])
             laminaMaterialPropertiesTextField[i].materialCardTextFieldDesign()
-            laminaMaterialPropertiesTextField[i].textAlignment = .left
             switch i {
             case 0:
                 laminaMaterialPropertiesTextField[i].placeholder = "E1"
@@ -244,10 +215,9 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
             default:
                 break
             }
-            laminaMaterialPropertiesTextField[i].translatesAutoresizingMaskIntoConstraints = false
             laminaMaterialPropertiesTextField[i].rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
             laminaMaterialPropertiesTextField[i].widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            laminaMaterialPropertiesTextField[i].heightAnchor.constraint(equalToConstant: 30).isActive = true
+            laminaMaterialPropertiesTextField[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             laminaMaterialPropertiesTextField[i].centerYAnchor.constraint(equalTo: laminaMaterialPropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
         }
         
@@ -493,13 +463,21 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
         stackingSequenceTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
         
         for i in 0...8 {
+            laminaMaterialPropertiesTextField[i].delegate = self
             laminaMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
         }
         
         hideKeyboardWhenTappedAround()
         
         keyboardToolBarForEngineeringConstant()
+        
+        
     }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y - 100), animated: true)
+    }
+    
 
     
     // Add done button to keyboard
@@ -540,6 +518,7 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
         let button = UIButton()
         button.calculateButtonDesign()
         button.addTarget(self, action: #selector(calculate), for: .touchUpInside)
+        button.widthAnchor.constraint(equalToConstant: button.intrinsicContentSize.width + 20).isActive = true
         let item = UIBarButtonItem(customView: button)
         self.navigationItem.setRightBarButtonItems([item], animated: true)
     }
@@ -548,8 +527,20 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
         
         sender.flash()
         
+        let laminateResultViewController = LaminateResult()
+        
         if calculateResult() {
-            performSegue(withIdentifier: "testResultSegue", sender: self)
+            
+            for i in 0...8 {
+                laminateResultViewController.effective3DProperties[i] = effective3DProperties[i]
+            }
+            
+            for i in 0...5 {
+                laminateResultViewController.effectiveInPlaneProperties[i] = effectiveInplaneProperties[i]
+                laminateResultViewController.effectiveFlexuralProperties[i] = effectiveFlexuralProperties[i]
+            }
+            
+            self.navigationController?.pushViewController(laminateResultViewController, animated: true)
         }
         
     }
@@ -882,41 +873,46 @@ class test: UITableViewController, UIPopoverPresentationControllerDelegate {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "headerID") as! TableHeader
+        switch section {
+        case 0:
+            headerView.headerLabel.text = "Stacking Sequence"
+        case 1:
+            headerView.headerLabel.text = "Lamina Material"
+        default:
+            fatalError("Unknown")
+        }
+        return headerView
+    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
+        
+        switch indexPath.section {
         case 0:
             return stackingSequenceCell
         case 1:
             return laminaMaterialCell
         default:
-            fatalError("Unknown row")
+            fatalError("Unknown")
         }
 
     }
     
     
-    // MARK: Prepare for segue
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "testResultSegue" {
-            let destination = segue.destination as! testResult
-            
-            for i in 0...8 {
-                destination.effective3DProperties[i] = effective3DProperties[i]
-            }
-            
-            for i in 0...5 {
-                destination.effectiveInPlaneProperties[i] = effectiveInplaneProperties[i]
-                destination.effectiveFlexuralProperties[i] = effectiveFlexuralProperties[i]
-            }
-            
-        }
-    }
 
 }
 
