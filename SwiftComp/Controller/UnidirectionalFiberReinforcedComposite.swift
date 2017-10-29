@@ -37,10 +37,10 @@ class UnidirectionalFiberReinforcedComposite: UITableViewController {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         
-        calculateButton.applyDesign()
-        methodName.applyDesign()
-        fiberName.applyDesign()
-        matrixName.applyDesign()
+        calculateButton.dataBaseButtonDesign()
+        methodName.dataBaseButtonDesign()
+        fiberName.dataBaseButtonDesign()
+        matrixName.dataBaseButtonDesign()
         
         createActionSheet()
         

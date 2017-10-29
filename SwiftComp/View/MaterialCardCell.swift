@@ -14,7 +14,7 @@ class MaterialCardCell1: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .right
-        label.cardViewDesignForLabel()
+        label.materialCardLabelDesign()
         return label
     }()
     
@@ -22,7 +22,7 @@ class MaterialCardCell1: UITableViewCell {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textAlignment = .left
-        textField.cardViewDesignForTextField()
+        textField.materialCardTextFieldDesign()
         return textField
     }()
     
@@ -30,6 +30,7 @@ class MaterialCardCell1: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.backgroundColor = UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
+        self.selectionStyle = UITableViewCellSelectionStyle.none
         
         addSubview(materialpropertyLabel)
         materialpropertyLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 8).isActive = true

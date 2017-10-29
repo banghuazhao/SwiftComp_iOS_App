@@ -14,10 +14,8 @@
 		990F76CE1F85BFCF0073E459 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */; };
 		990F76D61F85C0280073E459 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76D51F85C0280073E459 /* Home.swift */; };
 		9945CF801FA40D1D002F2F30 /* MaterialCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF7F1FA40D1D002F2F30 /* MaterialCardCell.swift */; };
-		9945CF821FA40FAC002F2F30 /* MaterialCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF811FA40FAC002F2F30 /* MaterialCardModel.swift */; };
+		9945CF861FA565C7002F2F30 /* testResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF851FA565C7002F2F30 /* testResult.swift */; };
 		998655431F8680800004876A /* UnidirectionalFiberReinforcedComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998655421F8680800004876A /* UnidirectionalFiberReinforcedComposite.swift */; };
-		999C88771F92F1E7006003B3 /* Laminate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C88761F92F1E7006003B3 /* Laminate.swift */; };
-		999C88791F92F202006003B3 /* LaminateResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999C88781F92F202006003B3 /* LaminateResults.swift */; };
 		99B508C51F86872200B6BC47 /* MaterialDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B508C41F86872200B6BC47 /* MaterialDataModel.swift */; };
 		99C5BF7F1F9CD54E00D87360 /* CompositeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */; };
 		99C5BF811F9CD57600D87360 /* CompositeModelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5BF801F9CD57600D87360 /* CompositeModelCell.swift */; };
@@ -34,10 +32,8 @@
 		990F76CF1F85BFCF0073E459 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		990F76D51F85C0280073E459 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		9945CF7F1FA40D1D002F2F30 /* MaterialCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialCardCell.swift; sourceTree = "<group>"; };
-		9945CF811FA40FAC002F2F30 /* MaterialCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialCardModel.swift; sourceTree = "<group>"; };
+		9945CF851FA565C7002F2F30 /* testResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testResult.swift; sourceTree = "<group>"; };
 		998655421F8680800004876A /* UnidirectionalFiberReinforcedComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnidirectionalFiberReinforcedComposite.swift; sourceTree = "<group>"; };
-		999C88761F92F1E7006003B3 /* Laminate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laminate.swift; sourceTree = "<group>"; };
-		999C88781F92F202006003B3 /* LaminateResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaminateResults.swift; sourceTree = "<group>"; };
 		99B508C41F86872200B6BC47 /* MaterialDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialDataModel.swift; sourceTree = "<group>"; };
 		99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeModel.swift; sourceTree = "<group>"; };
 		99C5BF801F9CD57600D87360 /* CompositeModelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeModelCell.swift; sourceTree = "<group>"; };
@@ -88,7 +84,6 @@
 			children = (
 				99B508C41F86872200B6BC47 /* MaterialDataModel.swift */,
 				99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */,
-				9945CF811FA40FAC002F2F30 /* MaterialCardModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -110,8 +105,7 @@
 				990F76C31F85BFCF0073E459 /* AppDelegate.swift */,
 				990F76D51F85C0280073E459 /* Home.swift */,
 				99C5BF821F9CD78400D87360 /* test.swift */,
-				999C88761F92F1E7006003B3 /* Laminate.swift */,
-				999C88781F92F202006003B3 /* LaminateResults.swift */,
+				9945CF851FA565C7002F2F30 /* testResult.swift */,
 				998655421F8680800004876A /* UnidirectionalFiberReinforcedComposite.swift */,
 				990D98831F8815CB00329881 /* UIFiberResults.swift */,
 			);
@@ -190,7 +184,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9945CF821FA40FAC002F2F30 /* MaterialCardModel.swift in Sources */,
 				9945CF801FA40D1D002F2F30 /* MaterialCardCell.swift in Sources */,
 				99C5BF811F9CD57600D87360 /* CompositeModelCell.swift in Sources */,
 				990D98841F8815CB00329881 /* UIFiberResults.swift in Sources */,
@@ -199,8 +192,7 @@
 				998655431F8680800004876A /* UnidirectionalFiberReinforcedComposite.swift in Sources */,
 				99C5BF7F1F9CD54E00D87360 /* CompositeModel.swift in Sources */,
 				990F76C41F85BFCF0073E459 /* AppDelegate.swift in Sources */,
-				999C88771F92F1E7006003B3 /* Laminate.swift in Sources */,
-				999C88791F92F202006003B3 /* LaminateResults.swift in Sources */,
+				9945CF861FA565C7002F2F30 /* testResult.swift in Sources */,
 				99B508C51F86872200B6BC47 /* MaterialDataModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

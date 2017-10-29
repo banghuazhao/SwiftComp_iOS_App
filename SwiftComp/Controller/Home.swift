@@ -77,13 +77,25 @@ class Home: UITableViewController {
 
 
 extension UIButton {
-    func applyDesign() {
+    
+    func dataBaseButtonDesign() {
         self.setTitleColor(self.tintColor, for: .normal)
         self.layer.borderWidth = 1
         self.backgroundColor = UIColor(red: 226/255, green: 234/255, blue: 240/255, alpha: 1.0)
         self.layer.borderColor = self.tintColor.cgColor
         self.layer.cornerRadius = self.intrinsicContentSize.height / 2
         
+    }
+    
+    func calculateButtonDesign() {
+        self.backgroundColor = UIColor(red: 129/255, green: 197/255, blue: 72/255, alpha: 1.0)
+        self.setTitle("Calculate", for: UIControlState.normal)
+        self.tintColor = .white
+        self.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        self.frame = CGRect(x: 0, y: 0, width: self.intrinsicContentSize.width + 30, height: 30)
+        self.layer.cornerRadius = self.intrinsicContentSize.height / 2
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor(red: 34/255, green: 128/255, blue: 43/255, alpha: 1.0).cgColor
     }
     
     func flash() {
@@ -97,6 +109,7 @@ extension UIButton {
         layer.add(flash, forKey: nil)
     }
 }
+
 
 
 extension UIViewController {
@@ -115,28 +128,62 @@ extension UIViewController {
 
 
 extension UIView {
-    func cardViewDesign() {
+    
+    func materialCardViewDesign() {
         self.backgroundColor = UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor(red: 223/255, green: 220/255, blue: 194/255, alpha: 1.0).cgColor
     }
+    
+    func resultCardViewDesign() {
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor(red: 166/255, green: 197/255, blue: 172/255, alpha: 1.0).cgColor
+    }
 }
+
+
+
+
 extension UILabel {
-    func cardViewDesignForLabel() {
+    
+    func materialCardLabelDesign() {
         self.backgroundColor = UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
         self.textColor = UIColor(red: 130/255, green: 138/255, blue: 145/255, alpha: 1.0)
         self.font = UIFont.systemFont(ofSize: 14)
         self.adjustsFontSizeToFitWidth = true
+    }
     
+    func resultCardTitleDesign() {
+        self.backgroundColor = UIColor(red: 118/255, green: 184/255, blue: 130/255, alpha: 1.0)
+        self.adjustsFontForContentSizeCategory = true
+        self.font = UIFont.boldSystemFont(ofSize: 18)
+        self.textColor = .white
+        self.textAlignment = .center
+    }
+    
+    func resultCardLabelLeftDesign() {
+        self.textColor = UIColor(red: 134/255, green: 140/255, blue: 146/255, alpha: 1.0)
+        self.font = UIFont.systemFont(ofSize: 14)
+        self.textAlignment = .right
+        self.adjustsFontSizeToFitWidth = true
+    }
+    
+    func resultCardLabelRightDesign() {
+        self.font = UIFont.systemFont(ofSize: 14)
+        self.textAlignment = .left
+        self.adjustsFontSizeToFitWidth = true
     }
 }
+
 extension UITextField {
-    func cardViewDesignForTextField() {
+    
+    func materialCardTextFieldDesign() {
         self.backgroundColor = UIColor.white
         self.borderStyle = .roundedRect
         self.font = UIFont.systemFont(ofSize: 14)
         self.adjustsFontSizeToFitWidth = true
     }
+    
 }
 
 

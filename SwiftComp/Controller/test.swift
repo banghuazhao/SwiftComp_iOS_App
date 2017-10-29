@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import Accelerate
 
-class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
+class test: UITableViewController, UIPopoverPresentationControllerDelegate {
     
+    var effective3DProperties = [Double](repeating: 0.0, count: 9)
+    var effectiveInplaneProperties = [Double](repeating: 0.0, count: 6)
+    var effectiveFlexuralProperties = [Double](repeating: 0.0, count: 6)
     
     // first cell
     
@@ -36,84 +40,34 @@ class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationCon
     
     var laminaMaterialDataBaseAlterController : UIAlertController!
     
-    var laminaMaterialCard: UITableView = UITableView()
-    
-    var materialCardModel: [MaterialCardModel] = []
-    
+    var laminaMaterialCard: UIView = UIView()
+        
     var laminaMaterialNameLabel: UILabel = UILabel()
-    var laminaMaterialName : String = "IM7/8552"
     
     var laminaMaterialUnitLabel: UILabel = UILabel()
-    var laminaMaterialUnit : String = "GPa"
     
-    var E1Label: UILabel = UILabel()
-    var E2Label: UILabel = UILabel()
-    var E3Label: UILabel = UILabel()
-    var G12Label: UILabel = UILabel()
-    var G13Label: UILabel = UILabel()
-    var G23Label: UILabel = UILabel()
-    var v12Label: UILabel = UILabel()
-    var v13Label: UILabel = UILabel()
-    var v23Label: UILabel = UILabel()
-
-    var E1TextField: UITextField = UITextField()
-    var E2TextField: UITextField = UITextField()
-    var E3TextField: UITextField = UITextField()
-    var G12TextField: UITextField = UITextField()
-    var G13TextField: UITextField = UITextField()
-    var G23TextField: UITextField = UITextField()
-    var v12TextField: UITextField = UITextField()
-    var v13TextField: UITextField = UITextField()
-    var v23TextField: UITextField = UITextField()
-
+    var laminaMaterialPropertiesLabel: [UILabel] = []
     
+    var laminaMaterialPropertiesTextField: [UITextField] = []
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        stackingSequenceTextField.delegate = self
-        E1TextField.delegate = self
-        E2TextField.delegate = self
-        E3TextField.delegate = self
-        G12TextField.delegate = self
-        G13TextField.delegate = self
-        G23TextField.delegate = self
-        v12TextField.delegate = self
-        v13TextField.delegate = self
-        v23TextField.delegate = self
-        
-        stackingSequenceTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
-        
-        materialCardModel.append(MaterialCardModel(name: "Young's Modulus E1", placeHolder: "E1"))
-        materialCardModel.append(MaterialCardModel(name: "Young's Modulus E2", placeHolder: "E2"))
-        materialCardModel.append(MaterialCardModel(name: "Young's Modulus E3", placeHolder: "E3"))
-        materialCardModel.append(MaterialCardModel(name: "Shear Modulus G12", placeHolder: "G12"))
-        materialCardModel.append(MaterialCardModel(name: "Shear Modulus G13", placeHolder: "G13"))
-        materialCardModel.append(MaterialCardModel(name: "Shear Modulus G23", placeHolder: "G23"))
-        materialCardModel.append(MaterialCardModel(name: "Poisson's Ratio ν12", placeHolder: "ν12"))
-        materialCardModel.append(MaterialCardModel(name: "Poisson's Ratio ν13", placeHolder: "ν13"))
-        materialCardModel.append(MaterialCardModel(name: "Poisson's Ratio ν23", placeHolder: "ν23"))
-        
-        navigationItem.title = "Laminate"
-        
         createLayout()
         
         createActionSheet()
-    
-        hideKeyboardWhenTappedAround()
-        
-        keyboardToolBarForEngineeringConstant()
         
         changeMaterialDataField()
         
+        editKeyboard()
+        
+        editNavigationBar()
+        
     }
     
     
-    // Disable tableview auto scroll when editing textfield
-    override func viewWillAppear(_ animated: Bool) {
-
-    }
-    
+    // MARK: Create layout
     
     func createLayout() {
         
@@ -137,7 +91,7 @@ class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationCon
         stackingSequenceDataBase.setTitle("Stacking Sequence Database", for: UIControlState.normal)
         stackingSequenceDataBase.titleLabel?.textAlignment = .center
         stackingSequenceDataBase.addTarget(self, action: #selector(changeStackingSequence(_:)), for: .touchUpInside)
-        stackingSequenceDataBase.applyDesign()
+        stackingSequenceDataBase.dataBaseButtonDesign()
         stackingSequenceDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
         stackingSequenceDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: stackingSequenceDataBase.intrinsicContentSize.width + 40).isActive = true
         stackingSequenceDataBase.topAnchor.constraint(equalTo: stackingSequenceLabel.bottomAnchor, constant: 8).isActive = true
@@ -186,34 +140,126 @@ class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationCon
         laminaMaterialDataBase.setTitle("Laminate Material Database", for: UIControlState.normal)
         laminaMaterialDataBase.titleLabel?.textAlignment = .center
         laminaMaterialDataBase.addTarget(self, action: #selector(changeLaminateMaterial(_:)), for: .touchUpInside)
-        laminaMaterialDataBase.applyDesign()
+        laminaMaterialDataBase.dataBaseButtonDesign()
         laminaMaterialDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
         laminaMaterialDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: laminaMaterialDataBase.intrinsicContentSize.width + 40).isActive = true
         laminaMaterialDataBase.topAnchor.constraint(equalTo: laminaMaterialLabel.bottomAnchor, constant: 8).isActive = true
         laminaMaterialDataBase.centerXAnchor.constraint(equalTo: laminaMaterialCell.centerXAnchor).isActive = true
         
         laminaMaterialCard.translatesAutoresizingMaskIntoConstraints = false
-        laminaMaterialCard.cardViewDesign()
-        laminaMaterialCard.register(MaterialCardCell1.self, forCellReuseIdentifier: "cell1")
-        laminaMaterialCard.delegate = self
-        laminaMaterialCard.dataSource = self
+        laminaMaterialCard.materialCardViewDesign()
         laminaMaterialCard.widthAnchor.constraint(equalTo: laminaMaterialCell.widthAnchor, multiplier: 0.8).isActive = true
         laminaMaterialCard.topAnchor.constraint(equalTo: laminaMaterialDataBase.bottomAnchor, constant: 8).isActive = true
         laminaMaterialCard.centerXAnchor.constraint(equalTo: laminaMaterialCell.centerXAnchor).isActive = true
-        laminaMaterialCard.bottomAnchor.constraint(equalTo: laminaMaterialCell.bottomAnchor, constant: -20).isActive = true
-        laminaMaterialCard.heightAnchor.constraint(equalToConstant: 700).isActive = true
+        laminaMaterialCard.bottomAnchor.constraint(equalTo: laminaMaterialCell.bottomAnchor, constant: -40).isActive = true
+        laminaMaterialCard.addSubview(laminaMaterialNameLabel)
+        laminaMaterialCard.addSubview(laminaMaterialUnitLabel)
         
+        laminaMaterialNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        laminaMaterialNameLabel.materialCardLabelDesign()
+        laminaMaterialNameLabel.textAlignment = .center
+        laminaMaterialNameLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        laminaMaterialNameLabel.text = "Name: IM7/8552"
+        laminaMaterialNameLabel.topAnchor.constraint(equalTo: laminaMaterialCard.topAnchor, constant: 8).isActive = true
+        laminaMaterialNameLabel.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8).isActive = true
+        laminaMaterialNameLabel.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
+        laminaMaterialNameLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        laminaMaterialUnitLabel.translatesAutoresizingMaskIntoConstraints = false
+        laminaMaterialUnitLabel.materialCardLabelDesign()
+        laminaMaterialUnitLabel.textAlignment = .center
+        laminaMaterialUnitLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        laminaMaterialUnitLabel.text = "Unit: GPa"
+        laminaMaterialUnitLabel.topAnchor.constraint(equalTo: laminaMaterialNameLabel.bottomAnchor, constant: 8).isActive = true
+        laminaMaterialUnitLabel.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8).isActive = true
+        laminaMaterialUnitLabel.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
+        laminaMaterialUnitLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        for i in 0...8 {
+            laminaMaterialPropertiesLabel.append(UILabel())
+            laminaMaterialCard.addSubview(laminaMaterialPropertiesLabel[i])
+            laminaMaterialPropertiesLabel[i].materialCardLabelDesign()
+            laminaMaterialPropertiesLabel[i].textAlignment = .right
+            switch i {
+            case 0:
+                laminaMaterialPropertiesLabel[i].text = "Young's Modulus E1"
+            case 1:
+                laminaMaterialPropertiesLabel[i].text = "Young's Modulus E2"
+            case 2:
+                laminaMaterialPropertiesLabel[i].text = "Young's Modulus E3"
+            case 3:
+                laminaMaterialPropertiesLabel[i].text = "Shear Modulus G12"
+            case 4:
+                laminaMaterialPropertiesLabel[i].text = "Shear Modulus G13"
+            case 5:
+                laminaMaterialPropertiesLabel[i].text = "Shear Modulus G23"
+            case 6:
+                laminaMaterialPropertiesLabel[i].text = "Poisson's Ratio ν12"
+            case 7:
+                laminaMaterialPropertiesLabel[i].text = "Poisson's Ratio ν13"
+            case 8:
+                laminaMaterialPropertiesLabel[i].text = "Poisson's Ratio ν23"
+            default:
+                break
+            }
+            laminaMaterialPropertiesLabel[i].translatesAutoresizingMaskIntoConstraints = false
+            laminaMaterialPropertiesLabel[i].leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8).isActive = true
+            laminaMaterialPropertiesLabel[i].widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
+            laminaMaterialPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 30).isActive = true
+            switch i {
+            case 0:
+                laminaMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: laminaMaterialUnitLabel.bottomAnchor, constant: 8).isActive = true
+            case 8:
+                laminaMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: laminaMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
+                laminaMaterialPropertiesLabel[i].bottomAnchor.constraint(equalTo: laminaMaterialCard.bottomAnchor, constant: -8).isActive = true
+            default:
+                laminaMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: laminaMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
+            }
+        }
+        
+        for i in 0...8 {
+            laminaMaterialPropertiesTextField.append(UITextField())
+            laminaMaterialCard.addSubview(laminaMaterialPropertiesTextField[i])
+            laminaMaterialPropertiesTextField[i].materialCardTextFieldDesign()
+            laminaMaterialPropertiesTextField[i].textAlignment = .left
+            switch i {
+            case 0:
+                laminaMaterialPropertiesTextField[i].placeholder = "E1"
+            case 1:
+                laminaMaterialPropertiesTextField[i].placeholder = "E2"
+            case 2:
+                laminaMaterialPropertiesTextField[i].placeholder = "E3"
+            case 3:
+                laminaMaterialPropertiesTextField[i].placeholder = "G12"
+            case 4:
+                laminaMaterialPropertiesTextField[i].placeholder = "G13"
+            case 5:
+                laminaMaterialPropertiesTextField[i].placeholder = "G23"
+            case 6:
+                laminaMaterialPropertiesTextField[i].placeholder = "ν12"
+            case 7:
+                laminaMaterialPropertiesTextField[i].placeholder = "ν13"
+            case 8:
+                laminaMaterialPropertiesTextField[i].placeholder = "ν23"
+            default:
+                break
+            }
+            laminaMaterialPropertiesTextField[i].translatesAutoresizingMaskIntoConstraints = false
+            laminaMaterialPropertiesTextField[i].rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
+            laminaMaterialPropertiesTextField[i].widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
+            laminaMaterialPropertiesTextField[i].heightAnchor.constraint(equalToConstant: 30).isActive = true
+            laminaMaterialPropertiesTextField[i].centerYAnchor.constraint(equalTo: laminaMaterialPropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
+        }
         
     }
     
     
     
-    // MARK: UIbottom action functions
+    // UIbottom action functions
     
     @objc func changeStackingSequence(_ sender: UIButton) {
         sender.flash()
         self.present(stackingSequenceDataBaseAlterController, animated: true, completion: nil)
-        self.laminaMaterialCard.frame = CGRect(x: laminaMaterialCard.frame.origin.x, y: laminaMaterialCard.frame.origin.y, width: laminaMaterialCard.frame.width, height: laminaMaterialCard.contentSize.height)
     }
     
     @objc func explainStackingSequence(_ sender: UIButton) {
@@ -342,7 +388,6 @@ class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationCon
             self.stackingSequenceTextField.text = ""
         }
         
-        
         let s1 = UIAlertAction(title: "[0/90]", style: UIAlertActionStyle.default) { (action) -> Void in
             self.stackingSequenceTextField.text = "[0/90]"
         }
@@ -364,7 +409,6 @@ class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationCon
 
         }
         
-        
         stackingSequenceDataBaseAlterController.addAction(s0)
         stackingSequenceDataBaseAlterController.addAction(s1)
         stackingSequenceDataBaseAlterController.addAction(s2)
@@ -377,39 +421,88 @@ class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationCon
         laminaMaterialDataBaseAlterController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
         let l0 = UIAlertAction(title: "Define Your Own", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.laminaMaterialName = "User Defined Material"
             self.laminaMaterialNameLabel.text = "User Defined Material"
             self.changeMaterialDataField()
         }
         
         
         let l1 = UIAlertAction(title: "IM7/8552", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.laminaMaterialName = "IM7/8552"
-            self.laminaMaterialNameLabel.text = "Name: " + self.laminaMaterialName
-            self.laminaMaterialUnitLabel.text = "Unit: GPa"
-            self.changeMaterialDataField()
-        }
-        
-        let l2 = UIAlertAction(title: "T2C190/F155", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.laminaMaterialName = "T2C190/F155"
-            self.laminaMaterialNameLabel.text = "Name: " + self.laminaMaterialName
+            self.laminaMaterialNameLabel.text = "Name: " + "IM7/8552"
             self.laminaMaterialUnitLabel.text = "Unit: " + "GPa"
             self.changeMaterialDataField()
         }
         
+        let l2 = UIAlertAction(title: "T2C190/F155", style: UIAlertActionStyle.default) { (action) -> Void in
+            self.laminaMaterialNameLabel.text = "Name: " + "T2C190/F155"
+            self.laminaMaterialUnitLabel.text = "Unit: " + "GPa"
+            self.changeMaterialDataField()
+        }
         
         laminaMaterialDataBaseAlterController.addAction(l0)
         laminaMaterialDataBaseAlterController.addAction(l1)
         laminaMaterialDataBaseAlterController.addAction(l2)
         laminaMaterialDataBaseAlterController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
         
-        
-        
     }
     
+
     
- 
-    // MARK: Edit keyboard
+    
+    
+    // MARK: Change material data fields
+    
+    func changeMaterialDataField() {
+        let allMaterials = MaterialBank()
+        
+        for material in allMaterials.list {
+            var materialCurrectName = laminaMaterialNameLabel.text!
+            let removeRange = materialCurrectName.startIndex ... materialCurrectName.index(materialCurrectName.startIndex, offsetBy: 5)
+            materialCurrectName.removeSubrange(removeRange)
+            if materialCurrectName == material.materialName {
+                laminaMaterialPropertiesTextField[0].text = String(format: "%.2f", material.materialProperties["E1"]!)
+                laminaMaterialPropertiesTextField[1].text = String(format: "%.2f", material.materialProperties["E2"]!)
+                laminaMaterialPropertiesTextField[2].text = String(format: "%.2f", material.materialProperties["E3"]!)
+                laminaMaterialPropertiesTextField[3].text = String(format: "%.2f", material.materialProperties["G12"]!)
+                laminaMaterialPropertiesTextField[4].text = String(format: "%.2f", material.materialProperties["G13"]!)
+                laminaMaterialPropertiesTextField[5].text = String(format: "%.2f", material.materialProperties["G23"]!)
+                laminaMaterialPropertiesTextField[6].text = String(format: "%.2f", material.materialProperties["v12"]!)
+                laminaMaterialPropertiesTextField[7].text = String(format: "%.2f", material.materialProperties["v13"]!)
+                laminaMaterialPropertiesTextField[8].text = String(format: "%.2f", material.materialProperties["v23"]!)
+            }
+            else if materialCurrectName == "efined Material" {
+                laminaMaterialPropertiesTextField[0].text = ""
+                laminaMaterialPropertiesTextField[1].text = ""
+                laminaMaterialPropertiesTextField[2].text = ""
+                laminaMaterialPropertiesTextField[3].text = ""
+                laminaMaterialPropertiesTextField[4].text = ""
+                laminaMaterialPropertiesTextField[5].text = ""
+                laminaMaterialPropertiesTextField[6].text = ""
+                laminaMaterialPropertiesTextField[7].text = ""
+                laminaMaterialPropertiesTextField[8].text = ""
+            }
+        }
+    }
+        
+
+    
+    
+    // MARK: Edit keyborad
+    
+    func editKeyboard() {
+        
+        stackingSequenceTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
+        
+        for i in 0...8 {
+            laminaMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
+        }
+        
+        hideKeyboardWhenTappedAround()
+        
+        keyboardToolBarForEngineeringConstant()
+    }
+
+    
+    // Add done button to keyboard
     
     func keyboardToolBarForEngineeringConstant() {
         let toolBar = UIToolbar()
@@ -421,15 +514,9 @@ class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationCon
         
         toolBar.setItems([flexibleSpace, doneButton], animated: true)
         
-        E1TextField.inputAccessoryView = toolBar
-        E2TextField.inputAccessoryView = toolBar
-        E3TextField.inputAccessoryView = toolBar
-        G12TextField.inputAccessoryView = toolBar
-        G13TextField.inputAccessoryView = toolBar
-        G23TextField.inputAccessoryView = toolBar
-        v12TextField.inputAccessoryView = toolBar
-        v13TextField.inputAccessoryView = toolBar
-        v23TextField.inputAccessoryView = toolBar
+        for i in 0...8 {
+            laminaMaterialPropertiesTextField[i].inputAccessoryView = toolBar
+        }
         
     }
     
@@ -439,49 +526,355 @@ class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationCon
     
     
     
-    // MARK: Change material data fields
     
-    func changeMaterialDataField() {
-        let allMaterials = MaterialBank()
+    
+    
+    
+    // MARK: Edit navigation bar
+    
+    
+    func editNavigationBar() {
         
-        for material in allMaterials.list {
-            if laminaMaterialName == material.materialName {
-                E1TextField.text = String(format: "%.2f", material.materialProperties["E1"]!)
-                E2TextField.text = String(format: "%.2f", material.materialProperties["E2"]!)
-                E3TextField.text = String(format: "%.2f", material.materialProperties["E3"]!)
-                G12TextField.text = String(format: "%.2f", material.materialProperties["G12"]!)
-                G13TextField.text = String(format: "%.2f", material.materialProperties["G13"]!)
-                G23TextField.text = String(format: "%.2f", material.materialProperties["G23"]!)
-                v12TextField.text = String(format: "%.2f", material.materialProperties["v12"]!)
-                v13TextField.text = String(format: "%.2f", material.materialProperties["v13"]!)
-                v23TextField.text = String(format: "%.2f", material.materialProperties["v23"]!)
-            }
-            else if laminaMaterialName == "User Defined Material" {
-                E1TextField.text = ""
-                E2TextField.text = ""
-                E3TextField.text = ""
-                G12TextField.text = ""
-                G13TextField.text = ""
-                G23TextField.text = ""
-                v12TextField.text = ""
-                v13TextField.text = ""
-                v23TextField.text = ""
-            }
+        navigationItem.title = "Laminate"
+        
+        let button = UIButton()
+        button.calculateButtonDesign()
+        button.addTarget(self, action: #selector(calculate), for: .touchUpInside)
+        let item = UIBarButtonItem(customView: button)
+        self.navigationItem.setRightBarButtonItems([item], animated: true)
+    }
+    
+    @objc func calculate(_ sender: UIButton) {
+        
+        sender.flash()
+        
+        if calculateResult() {
+            performSegue(withIdentifier: "testResultSegue", sender: self)
         }
         
     }
     
-
+    // Calculate result
     
-    
-
-    
-    // MARK: Textfield
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+    func calculateResult() -> Bool {
+        
+        let alter = UIAlertController(title: "Wrong value", message: "Please double check", preferredStyle: UIAlertControllerStyle.alert)
+        alter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        
+        if let e1 = Double(laminaMaterialPropertiesTextField[0].text!), let e2 = Double(laminaMaterialPropertiesTextField[1].text!), let e3 = Double(laminaMaterialPropertiesTextField[2].text!), let g12 = Double(laminaMaterialPropertiesTextField[3].text!), let g13 = Double(laminaMaterialPropertiesTextField[4].text!), let g23 = Double(laminaMaterialPropertiesTextField[5].text!), let v12 = Double(laminaMaterialPropertiesTextField[6].text!), let v13 = Double(laminaMaterialPropertiesTextField[7].text!), let v23 = Double(laminaMaterialPropertiesTextField[8].text!), let layup = stackingSequenceTextField.text {
+            
+            if layup != "" {
+                
+                let str = layup
+                var rBefore : Int = 1
+                var rAfter : Int = 1
+                var symmetry : Int = 1
+                var baseLayup : String
+                var baseLayupSequence = [Double]()
+                var layupSequence = [Double]()
+                
+                if str.split(separator: "]").count == 2 {
+                    baseLayup = str.split(separator: "]")[0].replacingOccurrences(of: "[", with: "")
+                    let rsr = str.split(separator: "]")[1]
+                    if rsr.split(separator: "s").count == 2 {
+                        symmetry = 2
+                        if let i = Int(rsr.split(separator: "s")[0]), let j = Int(rsr.split(separator: "s")[1]) {
+                            rBefore = i
+                            rAfter = j
+                        }
+                        else {
+                            self.present(alter, animated: true, completion: nil)
+                            return false
+                        }
+                    }
+                    else if rsr.contains("s") {
+                        symmetry = 2
+                        if (rsr[rsr.startIndex] == "s") && (rsr == "s") {
+                            rAfter = 1
+                            rBefore = 1
+                        }
+                        else if rsr[rsr.startIndex] == "s"{
+                            rBefore = 1
+                            if rsr.split(separator: "s") != [] {
+                                if let i = Int(rsr.split(separator: "s")[0]) {
+                                    rAfter = i
+                                }
+                                else {
+                                    self.present(alter, animated: true, completion: nil)
+                                    return false
+                                }
+                            }
+                            else {
+                                self.present(alter, animated: true, completion: nil)
+                                return false
+                            }
+                        }
+                        else {
+                            rAfter = 1
+                            if let i = Int(rsr.split(separator: "s")[0]) {
+                                rBefore = i
+                            }
+                            else {
+                                self.present(alter, animated: true, completion: nil)
+                                return false
+                            }
+                        }
+                    }
+                    else {
+                        symmetry = 1
+                        rBefore = 1
+                        if let i = Int(rsr) {
+                            rAfter = i
+                        }
+                        else {
+                            self.present(alter, animated: true, completion: nil)
+                            return false
+                        }
+                    }
+                    
+                }
+                else {
+                    baseLayup = str.replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "[", with: "")
+                    rBefore = 1
+                    rAfter = 1
+                    symmetry = 1
+                }
+                
+                for i in baseLayup.components(separatedBy: "/") {
+                    if let j = Double(i) {
+                        baseLayupSequence.append(j)
+                    }
+                    else {
+                        self.present(alter, animated: true, completion: nil)
+                        return false
+                    }
+                }
+                
+                let nPly = baseLayupSequence.count * rBefore * symmetry * rAfter
+                
+                if nPly > 0 {
+                    var t : Double = 1.0
+                    
+                    var bzi = [Double]()
+                    
+                    for i in 1...nPly {
+                        bzi.append((-Double(nPly+1)*t)/2 + Double(i)*t)
+                    }
+                    
+                    
+                    for _ in 1...rBefore {
+                        for i in baseLayupSequence {
+                            layupSequence.append(i)
+                        }
+                    }
+                    
+                    baseLayupSequence = layupSequence
+                    
+                    if symmetry == 2 {
+                        for i in baseLayupSequence.reversed() {
+                            layupSequence.append(i)
+                        }
+                    }
+                    
+                    baseLayupSequence = layupSequence
+                    
+                    if rAfter > 1 {
+                        for _ in 2...rAfter {
+                            for i in baseLayupSequence {
+                                layupSequence.append(i)
+                            }
+                        }
+                    }
+                    
+                    let Sp : [Double] = [1/e1, -v12/e1, -v13/e1, 0, 0, 0, -v12/e1, 1/e2, -v23/e2, 0, 0, 0, -v13/e1, -v23/e2, 1/e3, 0, 0, 0, 0, 0, 0, 1/g23, 0, 0, 0, 0, 0, 0, 1/g13, 0, 0, 0, 0, 0, 0, 1/g12]
+                    let Cp = invert(matrix: Sp)
+                    
+                    var tempCts = [Double](repeating: 0.0, count: 9)
+                    var tempCets = [Double](repeating: 0.0, count: 9)
+                    var Qs = [Double](repeating: 0.0, count: 9)
+                    var Cts = [Double](repeating: 0.0, count: 9)
+                    var Cets = [Double](repeating: 0.0, count: 9)
+                    var Ces = [Double](repeating: 0.0, count: 9)
+                    // Calculate effective 3D properties
+                    for i in 1...nPly {
+                        
+                        // Set up
+                        let c = cos(layupSequence[i-1] * Double.pi / 180)
+                        let s = sin(layupSequence[i-1] * Double.pi / 180)
+                        let Rsigma = [c*c, s*s, 0, 0, 0, -2*s*c, s*s, c*c, 0, 0, 0, 2*s*c, 0, 0, 1, 0, 0, 0, 0, 0, 0, c, s, 0, 0 ,0 ,0, -s, c, 0, s*c, -s*c, 0, 0, 0, c*c-s*s]
+                        var RsigmaT = [Double](repeating: 0.0, count: 36)
+                        vDSP_mtransD(Rsigma, 1, &RsigmaT, 1, 6, 6)
+                        
+                        var C = [Double](repeating: 0.0, count: 36)
+                        var temp1 = [Double](repeating: 0.0, count: 36)
+                        vDSP_mmulD(Rsigma,1,Cp,1,&temp1,1,6,6,6)
+                        vDSP_mmulD(temp1,1,RsigmaT,1,&C,1,6,6,6)
+                        
+                        // Get Ce, Cet, Ct
+                        let Ce = [C[0], C[1], C[5], C[1], C[7], C[11], C[5], C[11], C[35]]
+                        let Cet = [C[2], C[3], C[4], C[8], C[9], C[10], C[17], C[23], C[29]]
+                        let Ct = [C[14], C[15], C[16], C[15], C[21], C[22], C[16], C[22], C[28]]
+                        
+                        // Get Q
+                        var Q = [Double](repeating: 0.0, count: 9)
+                        let CtI = invert(matrix: Ct)
+                        var CetT = [Double](repeating: 0.0, count: 9)
+                        vDSP_mtransD(Cet, 1, &CetT, 1, 3, 3)
+                        
+                        var temp2 = [Double](repeating: 0.0, count: 9)
+                        var temp3 = [Double](repeating: 0.0, count: 9)
+                        vDSP_mmulD(Cet,1,CtI,1,&temp2,1,3,3,3)
+                        vDSP_mmulD(temp2,1,CetT,1,&temp3,1,3,3,3)
+                        vDSP_vsubD(temp3, 1, Ce, 1, &Q, 1, 9)
+                        
+                        // Get tempCts, Qs, tempCets
+                        vDSP_vaddD(Qs, 1, Q, 1, &Qs, 1, 9)
+                        vDSP_vaddD(tempCts, 1, CtI, 1, &tempCts, 1, 9)
+                        var temp4 = [Double](repeating: 0.0, count: 9)
+                        vDSP_mmulD(Cet,1,CtI,1,&temp4,1,3,3,3)
+                        vDSP_vaddD(tempCets, 1, temp4, 1, &tempCets, 1, 9)
+                    }
+                    
+                    // Get average tempCts, Qs, tempCets
+                    var nPlyD = Double(nPly)
+                    vDSP_vsdivD(Qs, 1, &nPlyD, &Qs, 1, 9)
+                    vDSP_vsdivD(tempCts, 1, &nPlyD, &tempCts, 1, 9)
+                    vDSP_vsdivD(tempCets, 1, &nPlyD, &tempCets, 1, 9)
+                    
+                    
+                    // Get Cts, Cets, Cet
+                    Cts = invert(matrix: tempCts)
+                    vDSP_mmulD(tempCets,1,Cts,1,&Cets,1,3,3,3)
+                    let CtsI = invert(matrix: Cts)
+                    var CetsT = [Double](repeating: 0.0, count: 9)
+                    vDSP_mtransD(Cets, 1, &CetsT, 1, 3, 3)
+                    var temp5 = [Double](repeating: 0.0, count: 9)
+                    vDSP_mmulD(Cets,1,CtsI,1,&temp5,1,3,3,3)
+                    var temp6 = [Double](repeating: 0.0, count: 9)
+                    vDSP_mmulD(temp5,1,CetsT,1,&temp6,1,3,3,3)
+                    vDSP_vaddD(Qs, 1, temp6, 1, &Ces, 1, 9)
+                    
+                    //Get Cs
+                    let Cs = [Ces[0], Ces[1], Cets[0], Cets[1], Cets[2], Ces[2], Ces[3], Ces[4], Cets[3], Cets[4], Cets[5], Ces[5], Cets[0], Cets[3], Cts[0], Cts[1], Cts[2], Cets[6], Cets[1], Cets[4], Cts[1], Cts[4], Cts[7], Cets[7], Cets[2], Cets[5], Cts[2], Cts[5], Cts[8], Cets[8], Ces[6], Ces[7], Cets[6], Cets[7], Cets[8], Ces[8]]
+                    
+                    let Ss = invert(matrix: Cs)
+                    
+                    // Effective 3D properties
+                    effective3DProperties[0] = 1/Ss[0]
+                    effective3DProperties[1] = 1/Ss[7]
+                    effective3DProperties[2] = 1/Ss[14]
+                    effective3DProperties[3] = 1/Ss[21]
+                    effective3DProperties[4] = 1/Ss[28]
+                    effective3DProperties[5] = 1/Ss[35]
+                    effective3DProperties[6] = -1/Ss[0]*Ss[1]
+                    effective3DProperties[7] = -1/Ss[0]*Ss[2]
+                    effective3DProperties[8] = -1/Ss[7]*Ss[8]
+                    
+                    // Calculate A, B, and D matrices
+                    let Sep : [Double] = [1/e1, -v12/e1, 0, -v12/e1, 1/e2, 0, 0, 0, 1/g12]
+                    let Qep = invert(matrix: Sep)
+                    var A = [Double](repeating: 0.0, count: 9)
+                    var B = [Double](repeating: 0.0, count: 9)
+                    var D = [Double](repeating: 0.0, count: 9)
+                    for i in 1...nPly {
+                        let c = cos(layupSequence[i-1] * Double.pi / 180)
+                        let s = sin(layupSequence[i-1] * Double.pi / 180)
+                        let Rsigmae = [c*c, s*s, -2*s*c, s*s, c*c, 2*s*c, s*c, -s*c, c*c-s*s]
+                        var RsigmaeT = [Double](repeating: 0.0, count: 9)
+                        vDSP_mtransD(Rsigmae, 1, &RsigmaeT, 1, 3, 3)
+                        
+                        var Qe = [Double](repeating: 0.0, count: 9)
+                        var Atemp = [Double](repeating: 0.0, count: 9)
+                        var Btemp = [Double](repeating: 0.0, count: 9)
+                        var Dtemp = [Double](repeating: 0.0, count: 9)
+                        
+                        var temp1 = [Double](repeating: 0.0, count: 9)
+                        vDSP_mmulD(Rsigmae,1,Qep,1,&temp1,1,3,3,3)
+                        vDSP_mmulD(temp1,1,RsigmaeT,1,&Qe,1,3,3,3)
+                        
+                        vDSP_vsmulD(Qe, 1, &t, &Atemp, 1, 9)
+                        
+                        var temp2 = bzi[i-1]*t
+                        vDSP_vsmulD(Qe, 1, &temp2, &Btemp, 1, 9)
+                        
+                        var temp3 = t*bzi[i-1]*bzi[i-1] + pow(t, 3.0)/12
+                        vDSP_vsmulD(Qe, 1, &temp3, &Dtemp, 1, 9)
+                        
+                        vDSP_vaddD(A, 1, Atemp, 1, &A, 1, 9)
+                        vDSP_vaddD(B, 1, Btemp, 1, &B, 1, 9)
+                        vDSP_vaddD(D, 1, Dtemp, 1, &D, 1, 9)
+                    }
+                    
+                    let ABD = [A[0], A[1], A[2], B[0], B[1], B[2], A[3], A[4], A[5], B[3], B[4], B[5], A[6], A[7], A[8], B[6], B[7], B[8], B[0], B[3], B[6], D[0], D[1], D[2], B[1], B[4], B[7], D[3], D[4], D[5], B[2], B[5], B[8], D[6], D[7], D[8]]
+                    
+                    var abd = invert(matrix: ABD)
+                    
+                    var h = nPlyD * t
+                    
+                    let AI = [abd[0], abd[1], abd[2], abd[6], abd[7], abd[8], abd[12], abd[13], abd[14]]
+                    
+                    let DI = [abd[21], abd[22], abd[23], abd[27], abd[28], abd[29], abd[33], abd[34], abd[35]]
+                    
+                    var Ses = [Double](repeating: 0.0, count: 9)
+                    vDSP_vsmulD(AI, 1, &h, &Ses, 1, 9)
+                    
+                    var Sesf = [Double](repeating: 0.0, count: 9)
+                    var temph = pow(h, 3.0) / 12.0
+                    vDSP_vsmulD(DI, 1, &temph, &Sesf, 1, 9)
+                    
+                    effectiveInplaneProperties[0] = 1/Ses[0]
+                    effectiveInplaneProperties[1] = 1/Ses[4]
+                    effectiveInplaneProperties[2] = 1/Ses[8]
+                    effectiveInplaneProperties[3] = -1/Ses[0]*Ses[1]
+                    effectiveInplaneProperties[4] = 1/Ses[8]*Ses[2]
+                    effectiveInplaneProperties[5] = 1/Ses[8]*Ses[5]
+                    
+                    effectiveFlexuralProperties[0] = 1/Sesf[0]
+                    effectiveFlexuralProperties[1] = 1/Sesf[4]
+                    effectiveFlexuralProperties[2] = 1/Sesf[8]
+                    effectiveFlexuralProperties[3] = -1/Sesf[0]*Sesf[1]
+                    effectiveFlexuralProperties[4] = 1/Sesf[8]*Sesf[2]
+                    effectiveFlexuralProperties[5] = 1/Sesf[8]*Sesf[5]
+                    
+                }
+                else {
+                    self.present(alter, animated: true, completion: nil)
+                    return false
+                }
+            }
+            else {
+                self.present(alter, animated: true, completion: nil)
+                return false
+            }
+        }
+        else {
+            self.present(alter, animated: true, completion: nil)
+            return false
+        }
+        
         return true
     }
+    
+    // Inverse operation for matrix
+    
+    func invert(matrix : [Double]) -> [Double] {
+        var inMatrix = matrix
+        let N = __CLPK_integer(sqrt(Double(matrix.count)))
+        var pivots = [__CLPK_integer](repeating: 0, count: Int(N))
+        var workspace = [Double](repeating: 0.0, count: Int(N))
+        var error : __CLPK_integer = 0
+        
+        // Mutable copies to circumvent "Simultaneous accesses to var 'N'" error in Swift 4
+        var N1 = N, N2 = N, N3 = N
+        dgetrf_(&N1, &N2, &inMatrix, &N3, &pivots, &error)
+        dgetri_(&N1, &inMatrix, &N2, &pivots, &workspace, &N3, &error)
+        return inMatrix
+    }
+    
+    
+    
+    
+    
     
     // MARK: Table view
     
@@ -491,34 +884,38 @@ class test: UITableViewController, UITextFieldDelegate, UIPopoverPresentationCon
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == self.tableView {
-            return 2
-        }
-        if tableView == laminaMaterialCard {
-            return materialCardModel.count
-        }
-        fatalError("Unknown row")
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == self.tableView {
-            switch indexPath.row {
-            case 0:
-                return stackingSequenceCell
-            case 1:
-                return laminaMaterialCell
-            default:
-                fatalError("Unknown row")
+        switch indexPath.row {
+        case 0:
+            return stackingSequenceCell
+        case 1:
+            return laminaMaterialCell
+        default:
+            fatalError("Unknown row")
+        }
+
+    }
+    
+    
+    // MARK: Prepare for segue
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "testResultSegue" {
+            let destination = segue.destination as! testResult
+            
+            for i in 0...8 {
+                destination.effective3DProperties[i] = effective3DProperties[i]
             }
+            
+            for i in 0...5 {
+                destination.effectiveInPlaneProperties[i] = effectiveInplaneProperties[i]
+                destination.effectiveFlexuralProperties[i] = effectiveFlexuralProperties[i]
+            }
+            
         }
-        if tableView == self.laminaMaterialCard {
-            let cell = laminaMaterialCard.dequeueReusableCell(withIdentifier: "cell1", for: indexPath) as! MaterialCardCell1
-            cell.materialpropertyLabel.text = materialCardModel[indexPath.row].materialPropertyName
-            cell.materialpropertyTextField.placeholder = materialCardModel[indexPath.row].materialPropertyPlaceHolder
-            cell.materialpropertyTextField.keyboardType = UIKeyboardType.decimalPad 
-            return cell
-        }
-        fatalError("Unknown row")
     }
 
 }
