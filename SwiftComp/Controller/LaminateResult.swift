@@ -170,7 +170,7 @@ class LaminateResult: UIViewController {
         // second section
         
         inPlanePropertiesCard.resultCardViewDesign()
-        inPlanePropertiesCard.topAnchor.constraint(equalTo: threeDPropertiesCard.bottomAnchor, constant: 40).isActive = true
+        inPlanePropertiesCard.topAnchor.constraint(equalTo: threeDPropertiesCard.bottomAnchor, constant: 20).isActive = true
         inPlanePropertiesCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
         inPlanePropertiesCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
         inPlanePropertiesCard.addSubview(inPlanePropertiesTitleLabel)
@@ -246,7 +246,7 @@ class LaminateResult: UIViewController {
         // third section
         
         flexuralPropertiesCard.resultCardViewDesign()
-        flexuralPropertiesCard.topAnchor.constraint(equalTo: inPlanePropertiesCard.bottomAnchor, constant: 40).isActive = true
+        flexuralPropertiesCard.topAnchor.constraint(equalTo: inPlanePropertiesCard.bottomAnchor, constant: 20).isActive = true
         flexuralPropertiesCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
         flexuralPropertiesCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
         flexuralPropertiesCard.addSubview(flexuralPropertiesTitleLabel)
@@ -333,6 +333,9 @@ class LaminateResult: UIViewController {
             else if abs(effective3DProperties[i]) > 0.0001 {
                 threeDPropertiesResultLabel[i].text = String(format: "%.3f", effective3DProperties[i])
             }
+            else if abs(effective3DProperties[i]) < 0.000000000000001 {
+                threeDPropertiesResultLabel[i].text = "0"
+            }
             else {
                 threeDPropertiesResultLabel[i].text = String(format: "%.3e", effective3DProperties[i])
             }
@@ -347,6 +350,9 @@ class LaminateResult: UIViewController {
             else if abs(effectiveInPlaneProperties[i]) > 0.0001 {
                 inPlanePropertiesResultLabel[i].text = String(format: "%.3f", effectiveInPlaneProperties[i])
             }
+            else if abs(effectiveInPlaneProperties[i]) < 0.000000000000001 {
+                inPlanePropertiesResultLabel[i].text = "0"
+            }
             else {
                 inPlanePropertiesResultLabel[i].text = String(format: "%.3e", effectiveInPlaneProperties[i])
             }
@@ -356,6 +362,9 @@ class LaminateResult: UIViewController {
             }
             else if abs(effectiveFlexuralProperties[i]) > 0.0001 {
                 flexuralPropertiesResultLabel[i].text = String(format: "%.3f", effectiveFlexuralProperties[i])
+            }
+            else if abs(effectiveFlexuralProperties[i]) < 0.000000000000001 {
+                flexuralPropertiesResultLabel[i].text = "0"
             }
             else {
                 flexuralPropertiesResultLabel[i].text = String(format: "%.3e", effectiveFlexuralProperties[i])

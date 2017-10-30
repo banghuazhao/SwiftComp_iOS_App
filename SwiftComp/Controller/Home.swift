@@ -15,17 +15,34 @@ class Home: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.backgroundColor = .black
+        setupCompositeModels()
         
-        navigationItem.title = "Composite Models"
+        editNavigationBar()
         
         tableView.register(CompositeModelCell.self, forCellReuseIdentifier: "cellID")
-        
-        setupCompositeModels()
         
         tableView.tableFooterView = UIView()
 
     }
+    
+    
+    
+    
+    // MARK: set up navigation bar
+    
+    func editNavigationBar() {
+        navigationController?.navigationBar.backgroundColor = .black
+        
+        navigationItem.title = "Composite Models"
+        
+        let backItem = UIBarButtonItem()
+        backItem.title = "Home"
+        self.navigationItem.backBarButtonItem = backItem
+    }
+    
+    
+    
+    // MARK: Set up composite models
 
     func setupCompositeModels() {
         let compositeModel1 = CompositeModel(name: "Laminate", image: #imageLiteral(resourceName: "laminate"))
@@ -33,6 +50,11 @@ class Home: UITableViewController {
         
         self.compositeModels = [compositeModel1, compositeModel2]
     }
+    
+    
+    
+    
+    
 
     
     // MARK: - Table view
@@ -63,8 +85,11 @@ class Home: UITableViewController {
         tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
         switch indexPath.row {
         case 0:
-            let testViewController = Laminate()
-            self.navigationController?.pushViewController(testViewController, animated: true)
+            let laminateViewController = Laminate()
+            self.navigationController?.pushViewController(laminateViewController, animated: true)
+        case 1:
+            let UDFRCViewController = UDFRC()
+            self.navigationController?.pushViewController(UDFRCViewController, animated: true)
         default:
             return
         }
@@ -73,6 +98,11 @@ class Home: UITableViewController {
     
 
 }
+
+
+
+
+// MARK: extension definition
 
 
 extension UIViewController {

@@ -15,7 +15,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
     var effectiveInplaneProperties = [Double](repeating: 0.0, count: 6)
     var effectiveFlexuralProperties = [Double](repeating: 0.0, count: 6)
     
-    // first cell
+    // first section
     
     var stackingSequenceCell: UITableViewCell = UITableViewCell()
     
@@ -28,7 +28,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
     var stackingSequenceExplain : UIButton = UIButton()
     
     
-    // second cell
+    // second section
     
     var laminaMaterialCell: UITableViewCell = UITableViewCell()
     
@@ -108,7 +108,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         stackingSequenceExplain.heightAnchor.constraint(equalToConstant: 20).isActive = true
         stackingSequenceExplain.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
         stackingSequenceExplain.topAnchor.constraint(equalTo: stackingSequenceTextField.bottomAnchor, constant: 8).isActive = true
-        stackingSequenceExplain.bottomAnchor.constraint(equalTo: stackingSequenceCell.bottomAnchor, constant: -40).isActive = true
+        stackingSequenceExplain.bottomAnchor.constraint(equalTo: stackingSequenceCell.bottomAnchor, constant: -20).isActive = true
         stackingSequenceExplain.centerXAnchor.constraint(equalTo: stackingSequenceCell.centerXAnchor).isActive = true
 
         
@@ -131,7 +131,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         laminaMaterialCard.widthAnchor.constraint(equalTo: laminaMaterialCell.widthAnchor, multiplier: 0.8).isActive = true
         laminaMaterialCard.topAnchor.constraint(equalTo: laminaMaterialDataBase.bottomAnchor, constant: 8).isActive = true
         laminaMaterialCard.centerXAnchor.constraint(equalTo: laminaMaterialCell.centerXAnchor).isActive = true
-        laminaMaterialCard.bottomAnchor.constraint(equalTo: laminaMaterialCell.bottomAnchor, constant: -40).isActive = true
+        laminaMaterialCard.bottomAnchor.constraint(equalTo: laminaMaterialCell.bottomAnchor, constant: -20).isActive = true
         laminaMaterialCard.addSubview(laminaMaterialNameLabel)
         laminaMaterialCard.addSubview(laminaMaterialUnitLabel)
         
@@ -510,7 +510,6 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
     
     // MARK: Edit navigation bar
     
-    
     func editNavigationBar() {
         
         navigationItem.title = "Laminate"
@@ -544,6 +543,8 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         }
         
     }
+    
+    
     
     // Calculate result
     
