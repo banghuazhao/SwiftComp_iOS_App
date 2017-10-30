@@ -1,2 +1,2 @@
 # SwiftComp
-IOS App for SwiftComp.
+iOS App for SwiftComp.
