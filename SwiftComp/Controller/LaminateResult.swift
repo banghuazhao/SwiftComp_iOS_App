@@ -10,9 +10,11 @@ import UIKit
 
 class LaminateResult: UIViewController {
     
-    var effective3DProperties = [Double](repeating: 0, count: 9)
+    var effective3DProperties = [Double](repeating: 0, count: 12)
     var effectiveInPlaneProperties = [Double](repeating: 0, count: 6)
     var effectiveFlexuralProperties = [Double](repeating: 0, count: 6)
+    
+    var  materialPropertyName = MaterialPropertyName()
     
     var scrollView: UIScrollView = UIScrollView()
     
@@ -93,39 +95,19 @@ class LaminateResult: UIViewController {
         threeDPropertiesTitleLabel.rightAnchor.constraint(equalTo: threeDPropertiesCard.rightAnchor, constant: 0).isActive = true
         threeDPropertiesTitleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        for i in 0...8 {
+        for i in 0...11 {
             threeDPropertiesLabel.append(UILabel())
             threeDPropertiesCard.addSubview(threeDPropertiesLabel[i])
             threeDPropertiesLabel[i].resultCardLabelLeftDesign()
-            switch i {
-            case 0:
-                threeDPropertiesLabel[i].text = "Young's Modulus E1"
-            case 1:
-                threeDPropertiesLabel[i].text = "Young's Modulus E2"
-            case 2:
-                threeDPropertiesLabel[i].text = "Young's Modulus E3"
-            case 3:
-                threeDPropertiesLabel[i].text = "Shear Modulus G12"
-            case 4:
-                threeDPropertiesLabel[i].text = "Shear Modulus G13"
-            case 5:
-                threeDPropertiesLabel[i].text = "Shear Modulus G23"
-            case 6:
-                threeDPropertiesLabel[i].text = "Poisson's Ratio ν12"
-            case 7:
-                threeDPropertiesLabel[i].text = "Poisson's Ratio ν13"
-            case 8:
-                threeDPropertiesLabel[i].text = "Poisson's Ratio ν23"
-            default:
-                break
-            }
+            threeDPropertiesLabel[i].text = materialPropertyName.orthotropic[i]
+            
             threeDPropertiesLabel[i].leftAnchor.constraint(equalTo: threeDPropertiesCard.leftAnchor, constant: 8).isActive = true
             threeDPropertiesLabel[i].widthAnchor.constraint(equalTo: threeDPropertiesCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
             threeDPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             switch i {
             case 0:
                 threeDPropertiesLabel[i].topAnchor.constraint(equalTo: threeDPropertiesTitleLabel.bottomAnchor, constant: 8).isActive = true
-            case 8:
+            case 11:
                 threeDPropertiesLabel[i].topAnchor.constraint(equalTo: threeDPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
                 threeDPropertiesLabel[i].bottomAnchor.constraint(equalTo: threeDPropertiesCard.bottomAnchor, constant: -8).isActive = true
             default:
@@ -133,32 +115,11 @@ class LaminateResult: UIViewController {
             }
         }
         
-        for i in 0...8 {
+        for i in 0...11 {
             threeDPropertiesResultLabel.append(UILabel())
             threeDPropertiesCard.addSubview(threeDPropertiesResultLabel[i])
             threeDPropertiesResultLabel[i].resultCardLabelRightDesign()
-            switch i {
-            case 0:
-                threeDPropertiesResultLabel[i].text = "Young's Modulus E1"
-            case 1:
-                threeDPropertiesResultLabel[i].text = "Young's Modulus E2"
-            case 2:
-                threeDPropertiesResultLabel[i].text = "Young's Modulus E3"
-            case 3:
-                threeDPropertiesResultLabel[i].text = "Shear Modulus G12"
-            case 4:
-                threeDPropertiesResultLabel[i].text = "Shear Modulus G13"
-            case 5:
-                threeDPropertiesResultLabel[i].text = "Shear Modulus G23"
-            case 6:
-                threeDPropertiesResultLabel[i].text = "Poisson's Ratio ν12"
-            case 7:
-                threeDPropertiesResultLabel[i].text = "Poisson's Ratio ν13"
-            case 8:
-                threeDPropertiesResultLabel[i].text = "Poisson's Ratio ν23"
-            default:
-                break
-            }
+            
             threeDPropertiesResultLabel[i].rightAnchor.constraint(equalTo: threeDPropertiesCard.rightAnchor, constant: -8).isActive = true
             threeDPropertiesResultLabel[i].widthAnchor.constraint(equalTo: threeDPropertiesCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
             threeDPropertiesResultLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
@@ -325,7 +286,7 @@ class LaminateResult: UIViewController {
     
     func applyResult() {
         
-        for i in 0...8 {
+        for i in 0...11 {
             
             if abs(effective3DProperties[i]) > 100000 {
                 threeDPropertiesResultLabel[i].text = String(format: "%.3e", effective3DProperties[i])

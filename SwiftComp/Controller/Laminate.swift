@@ -11,9 +11,13 @@ import Accelerate
 
 class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, UITextFieldDelegate {
     
-    var effective3DProperties = [Double](repeating: 0.0, count: 9)
+    var effective3DProperties = [Double](repeating: 0.0, count: 12)
     var effectiveInplaneProperties = [Double](repeating: 0.0, count: 6)
     var effectiveFlexuralProperties = [Double](repeating: 0.0, count: 6)
+    
+    var  materialPropertyName = MaterialPropertyName()
+    var materialPropertyLabel = MaterialPropertyLabel()
+    var  materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
     
     // first section
     
@@ -149,39 +153,19 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         laminaMaterialUnitLabel.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
         laminaMaterialUnitLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
-        for i in 0...8 {
+        for i in 0...11 {
             laminaMaterialPropertiesLabel.append(UILabel())
             laminaMaterialCard.addSubview(laminaMaterialPropertiesLabel[i])
             laminaMaterialPropertiesLabel[i].materialCardLabelDesign()
-            switch i {
-            case 0:
-                laminaMaterialPropertiesLabel[i].text = "Young's Modulus E1"
-            case 1:
-                laminaMaterialPropertiesLabel[i].text = "Young's Modulus E2"
-            case 2:
-                laminaMaterialPropertiesLabel[i].text = "Young's Modulus E3"
-            case 3:
-                laminaMaterialPropertiesLabel[i].text = "Shear Modulus G12"
-            case 4:
-                laminaMaterialPropertiesLabel[i].text = "Shear Modulus G13"
-            case 5:
-                laminaMaterialPropertiesLabel[i].text = "Shear Modulus G23"
-            case 6:
-                laminaMaterialPropertiesLabel[i].text = "Poisson's Ratio ν12"
-            case 7:
-                laminaMaterialPropertiesLabel[i].text = "Poisson's Ratio ν13"
-            case 8:
-                laminaMaterialPropertiesLabel[i].text = "Poisson's Ratio ν23"
-            default:
-                break
-            }
+            laminaMaterialPropertiesLabel[i].text = materialPropertyName.orthotropic[i]
+            
             laminaMaterialPropertiesLabel[i].leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8).isActive = true
             laminaMaterialPropertiesLabel[i].widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
             laminaMaterialPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             switch i {
             case 0:
                 laminaMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: laminaMaterialUnitLabel.bottomAnchor, constant: 8).isActive = true
-            case 8:
+            case 11:
                 laminaMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: laminaMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
                 laminaMaterialPropertiesLabel[i].bottomAnchor.constraint(equalTo: laminaMaterialCard.bottomAnchor, constant: -8).isActive = true
             default:
@@ -189,32 +173,12 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
             }
         }
         
-        for i in 0...8 {
+        for i in 0...11 {
             laminaMaterialPropertiesTextField.append(UITextField())
             laminaMaterialCard.addSubview(laminaMaterialPropertiesTextField[i])
             laminaMaterialPropertiesTextField[i].materialCardTextFieldDesign()
-            switch i {
-            case 0:
-                laminaMaterialPropertiesTextField[i].placeholder = "E1"
-            case 1:
-                laminaMaterialPropertiesTextField[i].placeholder = "E2"
-            case 2:
-                laminaMaterialPropertiesTextField[i].placeholder = "E3"
-            case 3:
-                laminaMaterialPropertiesTextField[i].placeholder = "G12"
-            case 4:
-                laminaMaterialPropertiesTextField[i].placeholder = "G13"
-            case 5:
-                laminaMaterialPropertiesTextField[i].placeholder = "G23"
-            case 6:
-                laminaMaterialPropertiesTextField[i].placeholder = "ν12"
-            case 7:
-                laminaMaterialPropertiesTextField[i].placeholder = "ν13"
-            case 8:
-                laminaMaterialPropertiesTextField[i].placeholder = "ν23"
-            default:
-                break
-            }
+            laminaMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.orthotropic[i]
+           
             laminaMaterialPropertiesTextField[i].rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
             laminaMaterialPropertiesTextField[i].widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
             laminaMaterialPropertiesTextField[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
@@ -429,26 +393,14 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
             let removeRange = materialCurrectName.startIndex ... materialCurrectName.index(materialCurrectName.startIndex, offsetBy: 5)
             materialCurrectName.removeSubrange(removeRange)
             if materialCurrectName == material.materialName {
-                laminaMaterialPropertiesTextField[0].text = String(format: "%.2f", material.materialProperties["E1"]!)
-                laminaMaterialPropertiesTextField[1].text = String(format: "%.2f", material.materialProperties["E2"]!)
-                laminaMaterialPropertiesTextField[2].text = String(format: "%.2f", material.materialProperties["E3"]!)
-                laminaMaterialPropertiesTextField[3].text = String(format: "%.2f", material.materialProperties["G12"]!)
-                laminaMaterialPropertiesTextField[4].text = String(format: "%.2f", material.materialProperties["G13"]!)
-                laminaMaterialPropertiesTextField[5].text = String(format: "%.2f", material.materialProperties["G23"]!)
-                laminaMaterialPropertiesTextField[6].text = String(format: "%.2f", material.materialProperties["v12"]!)
-                laminaMaterialPropertiesTextField[7].text = String(format: "%.2f", material.materialProperties["v13"]!)
-                laminaMaterialPropertiesTextField[8].text = String(format: "%.2f", material.materialProperties["v23"]!)
+                for i in 0...11 {
+                    laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", material.materialProperties[materialPropertyLabel.orthotropic[i]]!)
+                }
             }
             else if materialCurrectName == "efined Material" {
-                laminaMaterialPropertiesTextField[0].text = ""
-                laminaMaterialPropertiesTextField[1].text = ""
-                laminaMaterialPropertiesTextField[2].text = ""
-                laminaMaterialPropertiesTextField[3].text = ""
-                laminaMaterialPropertiesTextField[4].text = ""
-                laminaMaterialPropertiesTextField[5].text = ""
-                laminaMaterialPropertiesTextField[6].text = ""
-                laminaMaterialPropertiesTextField[7].text = ""
-                laminaMaterialPropertiesTextField[8].text = ""
+                for i in 0...11 {
+                    laminaMaterialPropertiesTextField[i].text = ""
+                }
             }
         }
     }
@@ -462,7 +414,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         
         stackingSequenceTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
         
-        for i in 0...8 {
+        for i in 0...11 {
             laminaMaterialPropertiesTextField[i].delegate = self
             laminaMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
         }
@@ -492,7 +444,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         
         toolBar.setItems([flexibleSpace, doneButton], animated: true)
         
-        for i in 0...8 {
+        for i in 0...11 {
             laminaMaterialPropertiesTextField[i].inputAccessoryView = toolBar
         }
         
@@ -530,7 +482,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         
         if calculateResult() {
             
-            for i in 0...8 {
+            for i in 0...11 {
                 laminateResultViewController.effective3DProperties[i] = effective3DProperties[i]
             }
             
@@ -553,7 +505,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         let alter = UIAlertController(title: "Wrong value", message: "Please double check", preferredStyle: UIAlertControllerStyle.alert)
         alter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         
-        if let e1 = Double(laminaMaterialPropertiesTextField[0].text!), let e2 = Double(laminaMaterialPropertiesTextField[1].text!), let e3 = Double(laminaMaterialPropertiesTextField[2].text!), let g12 = Double(laminaMaterialPropertiesTextField[3].text!), let g13 = Double(laminaMaterialPropertiesTextField[4].text!), let g23 = Double(laminaMaterialPropertiesTextField[5].text!), let v12 = Double(laminaMaterialPropertiesTextField[6].text!), let v13 = Double(laminaMaterialPropertiesTextField[7].text!), let v23 = Double(laminaMaterialPropertiesTextField[8].text!), let layup = stackingSequenceTextField.text {
+        if let e1 = Double(laminaMaterialPropertiesTextField[0].text!), let e2 = Double(laminaMaterialPropertiesTextField[1].text!), let e3 = Double(laminaMaterialPropertiesTextField[2].text!), let g12 = Double(laminaMaterialPropertiesTextField[3].text!), let g13 = Double(laminaMaterialPropertiesTextField[4].text!), let g23 = Double(laminaMaterialPropertiesTextField[5].text!), let v12 = Double(laminaMaterialPropertiesTextField[6].text!), let v13 = Double(laminaMaterialPropertiesTextField[7].text!), let v23 = Double(laminaMaterialPropertiesTextField[8].text!), let alpha11 = Double(laminaMaterialPropertiesTextField[9].text!), let alpha22 = Double(laminaMaterialPropertiesTextField[10].text!), let alpha33 = Double(laminaMaterialPropertiesTextField[11].text!), let layup = stackingSequenceTextField.text {
             
             if layup != "" {
                 
@@ -680,6 +632,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
                     
                     let Sp : [Double] = [1/e1, -v12/e1, -v13/e1, 0, 0, 0, -v12/e1, 1/e2, -v23/e2, 0, 0, 0, -v13/e1, -v23/e2, 1/e3, 0, 0, 0, 0, 0, 0, 1/g23, 0, 0, 0, 0, 0, 0, 1/g13, 0, 0, 0, 0, 0, 0, 1/g12]
                     let Cp = invert(matrix: Sp)
+                    let alphap = [alpha11, alpha22, alpha33, 0, 0, 0]
                     
                     var tempCts = [Double](repeating: 0.0, count: 9)
                     var tempCets = [Double](repeating: 0.0, count: 9)
@@ -687,6 +640,10 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
                     var Cts = [Double](repeating: 0.0, count: 9)
                     var Cets = [Double](repeating: 0.0, count: 9)
                     var Ces = [Double](repeating: 0.0, count: 9)
+                    
+                    var tempalphaes = [Double](repeating: 0.0, count: 3)
+                    var tempalphats = [Double](repeating: 0.0, count: 3)
+                    
                     // Calculate effective 3D properties
                     for i in 1...nPly {
                         
@@ -696,6 +653,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
                         let Rsigma = [c*c, s*s, 0, 0, 0, -2*s*c, s*s, c*c, 0, 0, 0, 2*s*c, 0, 0, 1, 0, 0, 0, 0, 0, 0, c, s, 0, 0 ,0 ,0, -s, c, 0, s*c, -s*c, 0, 0, 0, c*c-s*s]
                         var RsigmaT = [Double](repeating: 0.0, count: 36)
                         vDSP_mtransD(Rsigma, 1, &RsigmaT, 1, 6, 6)
+                        let Repsilon = invert(matrix: RsigmaT)
                         
                         var C = [Double](repeating: 0.0, count: 36)
                         var temp1 = [Double](repeating: 0.0, count: 36)
@@ -725,6 +683,25 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
                         var temp4 = [Double](repeating: 0.0, count: 9)
                         vDSP_mmulD(Cet,1,CtI,1,&temp4,1,3,3,3)
                         vDSP_vaddD(tempCets, 1, temp4, 1, &tempCets, 1, 9)
+                        
+                        // Get alphaes
+                        var alpha = [Double](repeating: 0.0, count: 6)
+                        vDSP_mmulD(Repsilon,1,alphap,1,&alpha,1,6,1,6)
+                        
+                        let alphae = [alpha[0], alpha[1], alpha[5]]
+                        let alphat = [alpha[2], alpha[3], alpha[4]]
+                        
+                        // Get tempalphate, tempalphats
+                        var temp5 = [Double](repeating: 0.0, count: 3)
+                        vDSP_mmulD(Q,1,alphae,1,&temp5,1,3,1,3)
+                        vDSP_vaddD(tempalphaes, 1, temp5, 1, &tempalphaes, 1, 3)
+                        
+                        vDSP_mmulD(CtI,1,CetT,1,&temp2,1,3,3,3)
+                        vDSP_mmulD(temp2,1,alphae,1,&temp5,1,3,1,3)
+                        
+                        var temp6 = [Double](repeating: 0.0, count: 3)
+                        vDSP_vaddD(alphat, 1, temp5, 1, &temp6, 1, 3)
+                        vDSP_vaddD(tempalphats, 1, temp6, 1, &tempalphats, 1, 3)
                     }
                     
                     // Get average tempCts, Qs, tempCets
@@ -733,23 +710,39 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
                     vDSP_vsdivD(tempCts, 1, &nPlyD, &tempCts, 1, 9)
                     vDSP_vsdivD(tempCets, 1, &nPlyD, &tempCets, 1, 9)
                     
-                    
+                
                     // Get Cts, Cets, Cet
                     Cts = invert(matrix: tempCts)
                     vDSP_mmulD(tempCets,1,Cts,1,&Cets,1,3,3,3)
                     let CtsI = invert(matrix: Cts)
                     var CetsT = [Double](repeating: 0.0, count: 9)
                     vDSP_mtransD(Cets, 1, &CetsT, 1, 3, 3)
-                    var temp5 = [Double](repeating: 0.0, count: 9)
-                    vDSP_mmulD(Cets,1,CtsI,1,&temp5,1,3,3,3)
-                    var temp6 = [Double](repeating: 0.0, count: 9)
-                    vDSP_mmulD(temp5,1,CetsT,1,&temp6,1,3,3,3)
-                    vDSP_vaddD(Qs, 1, temp6, 1, &Ces, 1, 9)
+                    var temp7 = [Double](repeating: 0.0, count: 9)
+                    vDSP_mmulD(Cets,1,CtsI,1,&temp7,1,3,3,3)
+                    var temp8 = [Double](repeating: 0.0, count: 9)
+                    vDSP_mmulD(temp7,1,CetsT,1,&temp8,1,3,3,3)
+                    vDSP_vaddD(Qs, 1, temp8, 1, &Ces, 1, 9)
                     
-                    //Get Cs
+                    // Get Cs
                     let Cs = [Ces[0], Ces[1], Cets[0], Cets[1], Cets[2], Ces[2], Ces[3], Ces[4], Cets[3], Cets[4], Cets[5], Ces[5], Cets[0], Cets[3], Cts[0], Cts[1], Cts[2], Cets[6], Cets[1], Cets[4], Cts[1], Cts[4], Cts[7], Cets[7], Cets[2], Cets[5], Cts[2], Cts[5], Cts[8], Cets[8], Ces[6], Ces[7], Cets[6], Cets[7], Cets[8], Ces[8]]
                     
                     let Ss = invert(matrix: Cs)
+                    
+                    // Get alphaes, alphats
+                    vDSP_vsdivD(tempalphaes, 1, &nPlyD, &tempalphaes, 1, 3)
+                    vDSP_vsdivD(tempalphats, 1, &nPlyD, &tempalphats, 1, 3)
+                    
+                    let QsI = invert(matrix: Qs)
+                    var alphaes = [Double](repeating: 0.0, count: 3)
+                    vDSP_mmulD(QsI,1,tempalphaes,1,&alphaes,1,3,1,3)
+                    
+                    var alphats = [Double](repeating: 0.0, count: 3)
+                    var temp9 = [Double](repeating: 0.0, count: 9)
+                    var temp10 = [Double](repeating: 0.0, count: 3)
+                    vDSP_mmulD(CtsI,1,CetsT,1,&temp9,1,3,3,3)
+                    vDSP_mmulD(temp9,1,alphaes,1,&temp10,1,3,1,3)
+                    vDSP_vsubD(temp10, 1, tempalphats, 1, &alphats, 1, 3)
+                    
                     
                     // Effective 3D properties
                     effective3DProperties[0] = 1/Ss[0]
@@ -761,6 +754,10 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
                     effective3DProperties[6] = -1/Ss[0]*Ss[1]
                     effective3DProperties[7] = -1/Ss[0]*Ss[2]
                     effective3DProperties[8] = -1/Ss[7]*Ss[8]
+                    effective3DProperties[9] = alphaes[0]
+                    effective3DProperties[10] = alphaes[1]
+                    effective3DProperties[11] = alphats[0]
+
                     
                     // Calculate A, B, and D matrices
                     let Sep : [Double] = [1/e1, -v12/e1, 0, -v12/e1, 1/e2, 0, 0, 0, 1/g12]

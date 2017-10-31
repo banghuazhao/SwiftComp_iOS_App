@@ -10,9 +10,12 @@ import UIKit
 
 class UDFRCResult: UIViewController {
 
-    var engineeringConstants = [Double](repeating: 0.0, count: 5)
+    var engineeringConstants = [Double](repeating: 0.0, count: 7)
     var planeStressReducedCompliance = [Double](repeating: 0.0, count: 9)
     var planeStressReducedStiffness = [Double](repeating: 0.0, count: 9)
+    
+    var materialPropertyName = MaterialPropertyName()
+    var materialPropertyLabel = MaterialPropertyLabel()
     
     var scrollView: UIScrollView = UIScrollView()
     
@@ -90,31 +93,19 @@ class UDFRCResult: UIViewController {
         engineeringConstantsTitleLabel.rightAnchor.constraint(equalTo: engineeringConstantsCard.rightAnchor, constant: 0).isActive = true
         engineeringConstantsTitleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        for i in 0...4 {
+        for i in 0...6 {
             engineeringConstantsLabel.append(UILabel())
             engineeringConstantsCard.addSubview(engineeringConstantsLabel[i])
             engineeringConstantsLabel[i].resultCardLabelLeftDesign()
-            switch i {
-            case 0:
-                engineeringConstantsLabel[i].text = "Young's Modulus E1"
-            case 1:
-                engineeringConstantsLabel[i].text = "Young's Modulus E2"
-            case 2:
-                engineeringConstantsLabel[i].text = "Shear Modulus G12"
-            case 3:
-                engineeringConstantsLabel[i].text = "Poisson's Ratio ν12"
-            case 4:
-                engineeringConstantsLabel[i].text = "Poisson's Ratio ν23"
-            default:
-                break
-            }
+            engineeringConstantsLabel[i].text = materialPropertyName.transverseIsotropic[i]
+            
             engineeringConstantsLabel[i].leftAnchor.constraint(equalTo: engineeringConstantsCard.leftAnchor, constant: 8).isActive = true
             engineeringConstantsLabel[i].widthAnchor.constraint(equalTo: engineeringConstantsCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
             engineeringConstantsLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             switch i {
             case 0:
                 engineeringConstantsLabel[i].topAnchor.constraint(equalTo: engineeringConstantsTitleLabel.bottomAnchor, constant: 8).isActive = true
-            case 4:
+            case 6:
                 engineeringConstantsLabel[i].topAnchor.constraint(equalTo: engineeringConstantsLabel[i-1].bottomAnchor, constant: 8).isActive = true
                 engineeringConstantsLabel[i].bottomAnchor.constraint(equalTo: engineeringConstantsCard.bottomAnchor, constant: -8).isActive = true
             default:
@@ -122,24 +113,11 @@ class UDFRCResult: UIViewController {
             }
         }
         
-        for i in 0...4 {
+        for i in 0...6 {
             engineeringConstantsResultLabel.append(UILabel())
             engineeringConstantsCard.addSubview(engineeringConstantsResultLabel[i])
             engineeringConstantsResultLabel[i].resultCardLabelRightDesign()
-            switch i {
-            case 0:
-                engineeringConstantsResultLabel[i].text = "Young's Modulus E1"
-            case 1:
-                engineeringConstantsResultLabel[i].text = "Young's Modulus E2"
-            case 2:
-                engineeringConstantsResultLabel[i].text = "Shear Modulus G12"
-            case 3:
-                engineeringConstantsResultLabel[i].text = "Poisson's Ratio ν12"
-            case 4:
-                engineeringConstantsResultLabel[i].text = "Poisson's Ratio ν23"
-            default:
-                break
-            }
+
             engineeringConstantsResultLabel[i].rightAnchor.constraint(equalTo: engineeringConstantsCard.rightAnchor, constant: -8).isActive = true
             engineeringConstantsResultLabel[i].widthAnchor.constraint(equalTo: engineeringConstantsCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
             engineeringConstantsResultLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
@@ -272,7 +250,7 @@ class UDFRCResult: UIViewController {
     
     func applyResult() {
         
-        for i in 0...4 {
+        for i in 0...6 {
             
             if abs(engineeringConstants[i]) > 100000 {
                 engineeringConstantsResultLabel[i].text = String(format: "%.3e", engineeringConstants[i])

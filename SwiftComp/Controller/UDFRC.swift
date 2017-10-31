@@ -11,10 +11,13 @@ import Accelerate
 
 class UDFRC: UITableViewController {
     
-    var engineeringConstants = [Double](repeating: 0.0, count: 5)
+    var engineeringConstants = [Double](repeating: 0.0, count: 7)
     var planeStressReducedCompliance = [Double](repeating: 0.0, count: 9)
     var planeStressReducedStiffness = [Double](repeating: 0.0, count: 9)
     
+    var materialPropertyName = MaterialPropertyName()
+    var materialPropertyLabel = MaterialPropertyLabel()
+    var materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
     
     // first section
     
@@ -118,7 +121,7 @@ class UDFRC: UITableViewController {
         methodLabel.translatesAutoresizingMaskIntoConstraints = false
         methodLabel.text = "Voigt Rules of Mixture"
         methodLabel.textAlignment = .center
-        methodLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        methodLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         methodLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: methodDataBase.intrinsicContentSize.width + 20).isActive = true
         methodLabel.topAnchor.constraint(equalTo: methodDataBase.bottomAnchor, constant: 8).isActive = true
         methodLabel.centerXAnchor.constraint(equalTo: methodCell.centerXAnchor).isActive = true
@@ -182,38 +185,26 @@ class UDFRC: UITableViewController {
         fiberNameLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
         fiberUnitLabel.materialCardTitleDesign()
-        fiberUnitLabel.text = "Unit: GPa"
+        fiberUnitLabel.text = "Unit: GPa, μ/℃"
         fiberUnitLabel.topAnchor.constraint(equalTo: fiberNameLabel.bottomAnchor, constant: 8).isActive = true
         fiberUnitLabel.leftAnchor.constraint(equalTo: fiberMaterialCardView.leftAnchor, constant: 8).isActive = true
         fiberUnitLabel.rightAnchor.constraint(equalTo: fiberMaterialCardView.rightAnchor, constant: -8).isActive = true
         fiberUnitLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
         
-        for i in 0...4 {
+        for i in 0...6 {
             fiberMaterialPropertiesLabel.append(UILabel())
             fiberMaterialCardView.addSubview(fiberMaterialPropertiesLabel[i])
             fiberMaterialPropertiesLabel[i].materialCardLabelDesign()
-            switch i {
-            case 0:
-                fiberMaterialPropertiesLabel[i].text = "Young's Modulus E1"
-            case 1:
-                fiberMaterialPropertiesLabel[i].text = "Young's Modulus E2"
-            case 2:
-                fiberMaterialPropertiesLabel[i].text = "Shear Modulus G12"
-            case 3:
-                fiberMaterialPropertiesLabel[i].text = "Poisson's Ratio ν12"
-            case 4:
-                fiberMaterialPropertiesLabel[i].text = "Poisson's Ratio ν23"
-            default:
-                break
-            }
+            fiberMaterialPropertiesLabel[i].text = materialPropertyName.transverseIsotropic[i]
+            
             fiberMaterialPropertiesLabel[i].leftAnchor.constraint(equalTo: fiberMaterialCardView.leftAnchor, constant: 8).isActive = true
             fiberMaterialPropertiesLabel[i].widthAnchor.constraint(equalTo: fiberMaterialCardView.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
             fiberMaterialPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             switch i {
             case 0:
                 fiberMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: fiberUnitLabel.bottomAnchor, constant: 8).isActive = true
-            case 4:
+            case 6:
                 fiberMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: fiberMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
                 fiberMaterialPropertiesLabel[i].bottomAnchor.constraint(equalTo: fiberMaterialCardView.bottomAnchor, constant: -8).isActive = true
             default:
@@ -221,24 +212,12 @@ class UDFRC: UITableViewController {
             }
         }
         
-        for i in 0...4 {
+        for i in 0...6 {
             fiberMaterialPropertiesTextField.append(UITextField())
             fiberMaterialCardView.addSubview(fiberMaterialPropertiesTextField[i])
             fiberMaterialPropertiesTextField[i].materialCardTextFieldDesign()
-            switch i {
-            case 0:
-                fiberMaterialPropertiesTextField[i].placeholder = "E1"
-            case 1:
-                fiberMaterialPropertiesTextField[i].placeholder = "E2"
-            case 2:
-                fiberMaterialPropertiesTextField[i].placeholder = "G12"
-            case 3:
-                fiberMaterialPropertiesTextField[i].placeholder = "ν12"
-            case 4:
-                fiberMaterialPropertiesTextField[i].placeholder = "ν23"
-            default:
-                break
-            }
+            fiberMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.transverseIsotropic[i]
+        
             fiberMaterialPropertiesTextField[i].rightAnchor.constraint(equalTo: fiberMaterialCardView.rightAnchor, constant: -8).isActive = true
             fiberMaterialPropertiesTextField[i].widthAnchor.constraint(equalTo: fiberMaterialCardView.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
             fiberMaterialPropertiesTextField[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
@@ -278,51 +257,39 @@ class UDFRC: UITableViewController {
         matrixNameLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
         matrixUnitLabel.materialCardTitleDesign()
-        matrixUnitLabel.text = "Unit: GPa"
+        matrixUnitLabel.text = "Unit: GPa, μ/℃"
         matrixUnitLabel.topAnchor.constraint(equalTo: matrixNameLabel.bottomAnchor, constant: 8).isActive = true
         matrixUnitLabel.leftAnchor.constraint(equalTo: matrixMaterialCardView.leftAnchor, constant: 8).isActive = true
         matrixUnitLabel.rightAnchor.constraint(equalTo: matrixMaterialCardView.rightAnchor, constant: -8).isActive = true
         matrixUnitLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
         
-        for i in 0...1 {
+        for i in 0...2 {
             matrixMaterialPropertiesLabel.append(UILabel())
             matrixMaterialCardView.addSubview(matrixMaterialPropertiesLabel[i])
             matrixMaterialPropertiesLabel[i].materialCardLabelDesign()
-            switch i {
-            case 0:
-                matrixMaterialPropertiesLabel[i].text = "Young's Modulus E"
-            case 1:
-                matrixMaterialPropertiesLabel[i].text = "Poisson's Ratio ν"
-            default:
-                break
-            }
+            matrixMaterialPropertiesLabel[i].text = materialPropertyName.isotropic[i]
+            
             matrixMaterialPropertiesLabel[i].leftAnchor.constraint(equalTo: matrixMaterialCardView.leftAnchor, constant: 8).isActive = true
             matrixMaterialPropertiesLabel[i].widthAnchor.constraint(equalTo: matrixMaterialCardView.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
             matrixMaterialPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
             switch i {
             case 0:
                 matrixMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: matrixUnitLabel.bottomAnchor, constant: 8).isActive = true
-            case 1:
+            case 2:
                 matrixMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: matrixMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
                 matrixMaterialPropertiesLabel[i].bottomAnchor.constraint(equalTo: matrixMaterialCardView.bottomAnchor, constant: -8).isActive = true
             default:
-                break
+                matrixMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: matrixMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
             }
         }
         
-        for i in 0...1 {
+        for i in 0...2 {
             matrixMaterialPropertiesTextField.append(UITextField())
             matrixMaterialCardView.addSubview(matrixMaterialPropertiesTextField[i])
             matrixMaterialPropertiesTextField[i].materialCardTextFieldDesign()
-            switch i {
-            case 0:
-                matrixMaterialPropertiesTextField[i].placeholder = "E"
-            case 1:
-                matrixMaterialPropertiesTextField[i].placeholder = "ν"
-            default:
-                break
-            }
+            matrixMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.isotropic[i]
+            
             matrixMaterialPropertiesTextField[i].rightAnchor.constraint(equalTo: matrixMaterialCardView.rightAnchor, constant: -8).isActive = true
             matrixMaterialPropertiesTextField[i].widthAnchor.constraint(equalTo: matrixMaterialCardView.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
             matrixMaterialPropertiesTextField[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
@@ -434,26 +401,22 @@ class UDFRC: UITableViewController {
             self.changeMaterialDataField()
         }
         let m2 = UIAlertAction(title: "Polyester", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.matrixNameLabel.text = "Name: S-Glass"
-            self.changeMaterialDataField()
-        }
-        let m3 = UIAlertAction(title: "Polyester", style: UIAlertActionStyle.default) { (action) -> Void in
             self.matrixNameLabel.text = "Name: Polyester"
             self.changeMaterialDataField()
         }
-        let m4 = UIAlertAction(title: "Polyimide", style: UIAlertActionStyle.default) { (action) -> Void in
+        let m3 = UIAlertAction(title: "Polyimide", style: UIAlertActionStyle.default) { (action) -> Void in
             self.matrixNameLabel.text = "Name: Polyimide"
             self.changeMaterialDataField()
         }
-        let m5 = UIAlertAction(title: "PEEK", style: UIAlertActionStyle.default) { (action) -> Void in
+        let m4 = UIAlertAction(title: "PEEK", style: UIAlertActionStyle.default) { (action) -> Void in
             self.matrixNameLabel.text = "Name: PEEK"
             self.changeMaterialDataField()
         }
-        let m6 = UIAlertAction(title: "Copper", style: UIAlertActionStyle.default) { (action) -> Void in
+        let m5 = UIAlertAction(title: "Copper", style: UIAlertActionStyle.default) { (action) -> Void in
             self.matrixNameLabel.text = "Name: Copper"
             self.changeMaterialDataField()
         }
-        let m7 = UIAlertAction(title: "Silicon Carbide", style: UIAlertActionStyle.default) { (action) -> Void in
+        let m6 = UIAlertAction(title: "Silicon Carbide", style: UIAlertActionStyle.default) { (action) -> Void in
             self.matrixNameLabel.text = "Name: Silicon Carbide"
             self.changeMaterialDataField()
         }
@@ -465,7 +428,6 @@ class UDFRC: UITableViewController {
         matrixMaterialDataBaseAlterController.addAction(m4)
         matrixMaterialDataBaseAlterController.addAction(m5)
         matrixMaterialDataBaseAlterController.addAction(m6)
-        matrixMaterialDataBaseAlterController.addAction(m7)
         matrixMaterialDataBaseAlterController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
     
     }
@@ -489,18 +451,14 @@ class UDFRC: UITableViewController {
             fiberMaterialCurrectName.removeSubrange(removeFiberRange)
             
             if fiberMaterialCurrectName == material.materialName {
-                fiberMaterialPropertiesTextField[0].text = String(format: "%.2f", material.materialProperties["E1"]!)
-                fiberMaterialPropertiesTextField[1].text = String(format: "%.2f", material.materialProperties["E2"]!)
-                fiberMaterialPropertiesTextField[2].text = String(format: "%.2f", material.materialProperties["G12"]!)
-                fiberMaterialPropertiesTextField[3].text = String(format: "%.2f", material.materialProperties["v12"]!)
-                fiberMaterialPropertiesTextField[4].text = String(format: "%.2f", material.materialProperties["v23"]!)
+                for i in 0...6 {
+                    fiberMaterialPropertiesTextField[i].text = String(format: "%.2f", material.materialProperties[materialPropertyLabel.transverseIsotropic[i]]!)
+                }
             }
             else if fiberMaterialCurrectName == "efined Material" {
-                fiberMaterialPropertiesTextField[0].text = ""
-                fiberMaterialPropertiesTextField[1].text = ""
-                fiberMaterialPropertiesTextField[2].text = ""
-                fiberMaterialPropertiesTextField[3].text = ""
-                fiberMaterialPropertiesTextField[4].text = ""
+                for i in 0...6 {
+                    fiberMaterialPropertiesTextField[i].text = ""
+                }
             }
             
             // change matrix material card
@@ -512,12 +470,14 @@ class UDFRC: UITableViewController {
             matrixMaterialCurrectName.removeSubrange(removeMatrixRange)
             
             if matrixMaterialCurrectName == material.materialName {
-                matrixMaterialPropertiesTextField[0].text = String(format: "%.2f", material.materialProperties["E1"]!)
-                matrixMaterialPropertiesTextField[1].text = String(format: "%.2f", material.materialProperties["v12"]!)
+                for i in 0...2 {
+                    matrixMaterialPropertiesTextField[i].text = String(format: "%.2f", material.materialProperties[materialPropertyLabel.isotropic[i]]!)
+                }
             }
             else if matrixMaterialCurrectName == "efined Material" {
-                matrixMaterialPropertiesTextField[0].text = ""
-                matrixMaterialPropertiesTextField[1].text = ""
+                for i in 0...2 {
+                    matrixMaterialPropertiesTextField[i].text = ""
+                }
             }
             
         }
@@ -533,11 +493,11 @@ class UDFRC: UITableViewController {
     
     func editKeyboard() {
         
-        for i in 0...4 {
+        for i in 0...6 {
             fiberMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
         }
         
-        for i in 0...1 {
+        for i in 0...2 {
             matrixMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
         }
         
@@ -566,11 +526,11 @@ class UDFRC: UITableViewController {
         
         toolBar.setItems([flexibleSpace, doneButton], animated: true)
         
-        for i in 0...4 {
+        for i in 0...6 {
             fiberMaterialPropertiesTextField[i].inputAccessoryView = toolBar
         }
         
-        for i in 0...1 {
+        for i in 0...2 {
             matrixMaterialPropertiesTextField[i].inputAccessoryView = toolBar
         }
         
@@ -605,7 +565,7 @@ class UDFRC: UITableViewController {
         
         if calculateResult() {
             
-            for i in 0...4 {
+            for i in 0...6 {
                 UDFRCResultViewController.engineeringConstants[i] = engineeringConstants[i]
             }
             
@@ -628,7 +588,7 @@ class UDFRC: UITableViewController {
     
     func calculateResult() -> Bool {
         
-        if let ef1 = Double(fiberMaterialPropertiesTextField[0].text!), let ef2 = Double(fiberMaterialPropertiesTextField[1].text!), let gf12 = Double(fiberMaterialPropertiesTextField[2].text!), let vf12 = Double(fiberMaterialPropertiesTextField[3].text!), let vf23 = Double(fiberMaterialPropertiesTextField[4].text!), let em = Double(matrixMaterialPropertiesTextField[0].text!), let vm = Double(matrixMaterialPropertiesTextField[1].text!) {
+        if let ef1 = Double(fiberMaterialPropertiesTextField[0].text!), let ef2 = Double(fiberMaterialPropertiesTextField[1].text!), let gf12 = Double(fiberMaterialPropertiesTextField[2].text!), let vf12 = Double(fiberMaterialPropertiesTextField[3].text!), let vf23 = Double(fiberMaterialPropertiesTextField[4].text!), let alphaf11 = Double(fiberMaterialPropertiesTextField[5].text!), let alphaf22 = Double(fiberMaterialPropertiesTextField[6].text!), let em = Double(matrixMaterialPropertiesTextField[0].text!), let vm = Double(matrixMaterialPropertiesTextField[1].text!), let alpham = Double(matrixMaterialPropertiesTextField[2].text!) {
             
             let s = geometryLabel.text!
             
@@ -661,12 +621,36 @@ class UDFRC: UITableViewController {
             
             SVs = invert(matrix: CVs)
             
+            //CTEs
+            
+            let alphaFiber : [Double] = [alphaf11 , alphaf22, alphaf22 ,0 ,0 ,0]
+            let alphaMatrix : [Double] = [alpham , alpham, alpham ,0 ,0 ,0]
+
+            var temp3 = [Double](repeating: 0, count: 6)
+            var temp4 = [Double](repeating: 0, count: 6)
+            vDSP_mmulD(Cf, 1, alphaFiber, 1, &temp3, 1, 6, 1, 6)
+            vDSP_mmulD(Cm, 1, alphaMatrix, 1, &temp4, 1, 6, 1, 6)
+            
+            var temp5 = [Double](repeating: 0, count: 6)
+            vDSP_vsmulD(temp3, 1, &Vf, &temp1, 1, 6)
+            vDSP_vsmulD(temp4, 1, &Vm, &temp2, 1, 6)
+            vDSP_vaddD(temp1, 1, temp2, 1, &temp5, 1, 6)
+            
+            var alphamVs = [Double](repeating: 0, count: 6)
+            vDSP_mmulD(SVs, 1, temp5, 1, &alphamVs, 1, 6, 1, 6)
+            
+            let alphamRs : [Double] =  [Vf*alphaf11+Vm*alpham,  Vf*alphaf22+Vm*alpham, Vf*alphaf22+Vm*alpham, 0 ,0 ,0]
+
+            
             // Voigt results
             let eV1 = 1/SVs[0]
             let eV2 = 1/SVs[7]
             let gV12 = 1/SVs[35]
             let vV12 = -eV1*SVs[1]
             let vV23 = -eV2*SVs[8]
+            let alphaV11 = alphamVs[0]
+            let alphaV22 = alphamVs[1]
+
             
             // Reuss results
             let eR1 = 1/SRs[0]
@@ -674,6 +658,8 @@ class UDFRC: UITableViewController {
             let gR12 = 1/SRs[35]
             let vR12 = -eR1*SRs[1]
             let vR23 = -eR2*SRs[8]
+            let alphaR11 = alphamRs[0]
+            let alphaR22 = alphamRs[1]
             
             //Hybird results
             let gf12 = ef1/(2*(1+vf12))
@@ -683,6 +669,8 @@ class UDFRC: UITableViewController {
             let eH2 = 1 / (Vf/ef2 + Vm/em - (Vf*Vm*pow(em*vf12-ef1*vm, 2)) / (ef1*em*(ef1*Vf+em*Vm)) )
             let vH23 = eH2 * (Vf*(vf23/ef2+vf12*vf12/ef1) + Vm*vm*(1+vm)/em - vH12*vH12/eH1)
             let gH12 = 1 / (Vf/gf12 + Vm/gm)
+            let alphaH11 = (Vf*ef1+alphaf11 + Vm*em*alpham) / eH1
+            let alphaH22 = Vf * (alphaf11*vf12 + alphaf22) + Vm * alpham * (1 + Vm) - alphaH11*vH12
             
             if methodLabel.text! == "Voigt Rules of Mixture" {
                 engineeringConstants[0] = eV1
@@ -690,6 +678,8 @@ class UDFRC: UITableViewController {
                 engineeringConstants[2] = gV12
                 engineeringConstants[3] = vV12
                 engineeringConstants[4] = vV23
+                engineeringConstants[5] = alphaV11
+                engineeringConstants[6] = alphaV22
             }
             else if methodLabel.text! == "Reuss Rules of Mixture" {
                 engineeringConstants[0] = eR1
@@ -697,6 +687,8 @@ class UDFRC: UITableViewController {
                 engineeringConstants[2] = gR12
                 engineeringConstants[3] = vR12
                 engineeringConstants[4] = vR23
+                engineeringConstants[5] = alphaR11
+                engineeringConstants[6] = alphaR22
             }
             else if methodLabel.text! == "Hybrid Rules of Mixture" {
                 engineeringConstants[0] = eH1
@@ -704,6 +696,8 @@ class UDFRC: UITableViewController {
                 engineeringConstants[2] = gH12
                 engineeringConstants[3] = vH12
                 engineeringConstants[4] = vH23
+                engineeringConstants[5] = alphaH11
+                engineeringConstants[6] = alphaH22
             }
             
             planeStressReducedCompliance = [1/engineeringConstants[0], -engineeringConstants[3]/engineeringConstants[0], 0, -engineeringConstants[3]/engineeringConstants[0], 1/engineeringConstants[1], 0, 0, 0, 1/engineeringConstants[3]]
