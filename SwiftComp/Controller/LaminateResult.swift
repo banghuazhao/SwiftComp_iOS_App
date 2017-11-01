@@ -109,7 +109,7 @@ class LaminateResult: UIViewController {
         
         // third section
         
-        flexuralPropertiesTitleLabel.text = "In-plane Properties"
+        flexuralPropertiesTitleLabel.text = "Flexural Properties"
         for i in 0...5 {
             flexuralPropertiesLabel.append(UILabel())
             flexuralPropertiesLabel[i].text = materialPropertyName.plate[i]

@@ -595,8 +595,16 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
     // MARK: Edit keyborad
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y), animated: true)
-        print(textField.frame.origin.y)
+        for i in 0...6 {
+            if textField == fiberMaterialPropertiesTextField[i] {
+                tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y + 200), animated: true)
+            }
+        }
+        for i in 0...2 {
+            if textField == matrixMaterialPropertiesTextField[i] {
+                tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y + 600), animated: true)
+            }
+        }
     }
     
     

@@ -29,7 +29,7 @@ func creatResultListCard(resultCard: UIView, title: UILabel, label: [UILabel], r
         label[i].resultCardLabelLeftDesign()
         
         label[i].leftAnchor.constraint(equalTo: resultCard.leftAnchor, constant: 8).isActive = true
-        label[i].widthAnchor.constraint(equalTo: resultCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
+        label[i].widthAnchor.constraint(equalTo: resultCard.widthAnchor, multiplier: 0.6, constant: -16).isActive = true
         label[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
         if i == 0 {
             label[i].topAnchor.constraint(equalTo: title.bottomAnchor, constant: 8).isActive = true
@@ -48,7 +48,7 @@ func creatResultListCard(resultCard: UIView, title: UILabel, label: [UILabel], r
         result[i].resultCardLabelRightDesign()
         
         result[i].rightAnchor.constraint(equalTo: resultCard.rightAnchor, constant: -8).isActive = true
-        result[i].widthAnchor.constraint(equalTo: resultCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
+        result[i].widthAnchor.constraint(equalTo: resultCard.widthAnchor, multiplier: 0.4, constant: -16).isActive = true
         result[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
         result[i].centerYAnchor.constraint(equalTo: label[i].centerYAnchor, constant: 0).isActive = true
     }
