@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		9904AFED1FA779310018FD55 /* MaterialTypeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFEC1FA779310018FD55 /* MaterialTypeModel.swift */; };
+		9904AFEF1FA8FF430018FD55 /* ResultCardDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFEE1FA8FF430018FD55 /* ResultCardDesign.swift */; };
+		9904AFF11FA8FFA50018FD55 /* MaterialCardDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFF01FA8FFA50018FD55 /* MaterialCardDesign.swift */; };
+		9904AFF31FA9001A0018FD55 /* ButtonDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFF21FA9001A0018FD55 /* ButtonDesign.swift */; };
+		9904AFF51FA900690018FD55 /* KeyboardDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFF41FA900690018FD55 /* KeyboardDesign.swift */; };
 		990F76C41F85BFCF0073E459 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76C31F85BFCF0073E459 /* AppDelegate.swift */; };
 		990F76C91F85BFCF0073E459 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 990F76C71F85BFCF0073E459 /* Main.storyboard */; };
 		990F76CB1F85BFCF0073E459 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 990F76CA1F85BFCF0073E459 /* Assets.xcassets */; };
@@ -25,6 +29,10 @@
 
 /* Begin PBXFileReference section */
 		9904AFEC1FA779310018FD55 /* MaterialTypeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialTypeModel.swift; sourceTree = "<group>"; };
+		9904AFEE1FA8FF430018FD55 /* ResultCardDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCardDesign.swift; sourceTree = "<group>"; };
+		9904AFF01FA8FFA50018FD55 /* MaterialCardDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialCardDesign.swift; sourceTree = "<group>"; };
+		9904AFF21FA9001A0018FD55 /* ButtonDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonDesign.swift; sourceTree = "<group>"; };
+		9904AFF41FA900690018FD55 /* KeyboardDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDesign.swift; sourceTree = "<group>"; };
 		990F76C01F85BFCF0073E459 /* SwiftComp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftComp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		990F76C31F85BFCF0073E459 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		990F76C81F85BFCF0073E459 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -98,6 +106,10 @@
 				990F76C71F85BFCF0073E459 /* Main.storyboard */,
 				9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */,
 				9945CF871FA62D88002F2F30 /* TableHeader.swift */,
+				9904AFEE1FA8FF430018FD55 /* ResultCardDesign.swift */,
+				9904AFF01FA8FFA50018FD55 /* MaterialCardDesign.swift */,
+				9904AFF21FA9001A0018FD55 /* ButtonDesign.swift */,
+				9904AFF41FA900690018FD55 /* KeyboardDesign.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -188,16 +200,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				9945CF8D1FA67AF0002F2F30 /* CompositeModelCell.swift in Sources */,
+				9904AFEF1FA8FF430018FD55 /* ResultCardDesign.swift in Sources */,
 				990F76D61F85C0280073E459 /* Home.swift in Sources */,
+				9904AFF31FA9001A0018FD55 /* ButtonDesign.swift in Sources */,
 				99C5BF7F1F9CD54E00D87360 /* CompositeModel.swift in Sources */,
 				9945CF881FA62D88002F2F30 /* TableHeader.swift in Sources */,
 				990F76C41F85BFCF0073E459 /* AppDelegate.swift in Sources */,
 				9945CF8B1FA678C0002F2F30 /* UDFRC.swift in Sources */,
 				9945CF861FA565C7002F2F30 /* LaminateResult.swift in Sources */,
 				99B508C51F86872200B6BC47 /* MaterialDataModel.swift in Sources */,
+				9904AFF11FA8FFA50018FD55 /* MaterialCardDesign.swift in Sources */,
 				9945CF891FA66432002F2F30 /* Laminate.swift in Sources */,
 				9945CF8F1FA6BF04002F2F30 /* UDFRCResult.swift in Sources */,
 				9904AFED1FA779310018FD55 /* MaterialTypeModel.swift in Sources */,
+				9904AFF51FA900690018FD55 /* KeyboardDesign.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -58,7 +58,10 @@ class UDFRCResult: UIViewController {
         
         applyResult()
         
+        navigationItem.title = "Result"
+        
     }
+    
     
     
     // MARK: Create layout
@@ -72,7 +75,7 @@ class UDFRCResult: UIViewController {
         scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
         scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 1000)
+        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 700)
         scrollView.addSubview(engineeringConstantsCard)
         scrollView.addSubview(planeStressReducedComplianceCard)
         scrollView.addSubview(planeStressReducedStiffnessCard)
@@ -80,165 +83,32 @@ class UDFRCResult: UIViewController {
         
         // first section
         
-        engineeringConstantsCard.resultCardViewDesign()
-        engineeringConstantsCard.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20).isActive = true
-        engineeringConstantsCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
-        engineeringConstantsCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        engineeringConstantsCard.addSubview(engineeringConstantsTitleLabel)
-        
-        engineeringConstantsTitleLabel.resultCardTitleDesign()
         engineeringConstantsTitleLabel.text = "3D Properties"
-        engineeringConstantsTitleLabel.topAnchor.constraint(equalTo: engineeringConstantsCard.topAnchor, constant: 0).isActive = true
-        engineeringConstantsTitleLabel.leftAnchor.constraint(equalTo: engineeringConstantsCard.leftAnchor, constant: 0).isActive = true
-        engineeringConstantsTitleLabel.rightAnchor.constraint(equalTo: engineeringConstantsCard.rightAnchor, constant: 0).isActive = true
-        engineeringConstantsTitleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
         for i in 0...6 {
             engineeringConstantsLabel.append(UILabel())
-            engineeringConstantsCard.addSubview(engineeringConstantsLabel[i])
-            engineeringConstantsLabel[i].resultCardLabelLeftDesign()
             engineeringConstantsLabel[i].text = materialPropertyName.transverseIsotropic[i]
             
-            engineeringConstantsLabel[i].leftAnchor.constraint(equalTo: engineeringConstantsCard.leftAnchor, constant: 8).isActive = true
-            engineeringConstantsLabel[i].widthAnchor.constraint(equalTo: engineeringConstantsCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            engineeringConstantsLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            switch i {
-            case 0:
-                engineeringConstantsLabel[i].topAnchor.constraint(equalTo: engineeringConstantsTitleLabel.bottomAnchor, constant: 8).isActive = true
-            case 6:
-                engineeringConstantsLabel[i].topAnchor.constraint(equalTo: engineeringConstantsLabel[i-1].bottomAnchor, constant: 8).isActive = true
-                engineeringConstantsLabel[i].bottomAnchor.constraint(equalTo: engineeringConstantsCard.bottomAnchor, constant: -8).isActive = true
-            default:
-                engineeringConstantsLabel[i].topAnchor.constraint(equalTo: engineeringConstantsLabel[i-1].bottomAnchor, constant: 8).isActive = true
-            }
-        }
-        
-        for i in 0...6 {
             engineeringConstantsResultLabel.append(UILabel())
-            engineeringConstantsCard.addSubview(engineeringConstantsResultLabel[i])
-            engineeringConstantsResultLabel[i].resultCardLabelRightDesign()
-
-            engineeringConstantsResultLabel[i].rightAnchor.constraint(equalTo: engineeringConstantsCard.rightAnchor, constant: -8).isActive = true
-            engineeringConstantsResultLabel[i].widthAnchor.constraint(equalTo: engineeringConstantsCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            engineeringConstantsResultLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            engineeringConstantsResultLabel[i].centerYAnchor.constraint(equalTo: engineeringConstantsLabel[i].centerYAnchor, constant: 0).isActive = true
         }
         
-        
+        creatResultListCard(resultCard: engineeringConstantsCard, title: engineeringConstantsTitleLabel, label: engineeringConstantsLabel, result: engineeringConstantsResultLabel, aboveConstraint: scrollView.topAnchor, under: scrollView)
         
         
         // second section
-        
-        planeStressReducedComplianceCard.resultCardViewDesign()
-        planeStressReducedComplianceCard.topAnchor.constraint(equalTo: engineeringConstantsCard.bottomAnchor, constant: 20).isActive = true
-        planeStressReducedComplianceCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
-        planeStressReducedComplianceCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        planeStressReducedComplianceCard.addSubview(planeStressReducedComplianceTitleLabel)
-        
-        planeStressReducedComplianceTitleLabel.resultCardTitleDesign()
-        planeStressReducedComplianceTitleLabel.text = "Plane-stress Reduced Compliance"
-        planeStressReducedComplianceTitleLabel.topAnchor.constraint(equalTo: planeStressReducedComplianceCard.topAnchor, constant: 0).isActive = true
-        planeStressReducedComplianceTitleLabel.leftAnchor.constraint(equalTo: planeStressReducedComplianceCard.leftAnchor, constant: 0).isActive = true
-        planeStressReducedComplianceTitleLabel.rightAnchor.constraint(equalTo: planeStressReducedComplianceCard.rightAnchor, constant: 0).isActive = true
-        planeStressReducedComplianceTitleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        
-        for i in 0...8 {
+        for _ in 0...8 {
             planeStressReducedComplianceResultLabel.append(UILabel())
-            planeStressReducedComplianceCard.addSubview(planeStressReducedComplianceResultLabel[i])
-            planeStressReducedComplianceResultLabel[i].resultCardLabelRightDesign()
-            planeStressReducedComplianceResultLabel[i].textAlignment = .center
-            planeStressReducedComplianceResultLabel[i].widthAnchor.constraint(equalTo: planeStressReducedComplianceCard.widthAnchor, multiplier: 0.3).isActive = true
-            planeStressReducedComplianceResultLabel[i].heightAnchor.constraint(equalToConstant: 20).isActive = true
         }
+        planeStressReducedComplianceTitleLabel.text = "Plane-stress Reduced Compliance"
+        createResult3by3MatrixCard(resultCard: planeStressReducedComplianceCard, title: planeStressReducedComplianceTitleLabel, result: planeStressReducedComplianceResultLabel, aboveConstraint: engineeringConstantsCard.bottomAnchor, under: scrollView)
         
-        planeStressReducedComplianceResultLabel[0].leftAnchor.constraint(equalTo: planeStressReducedComplianceCard.leftAnchor, constant: 8).isActive = true
-        planeStressReducedComplianceResultLabel[0].topAnchor.constraint(equalTo: planeStressReducedComplianceTitleLabel.bottomAnchor, constant: 8).isActive = true
-        
-        planeStressReducedComplianceResultLabel[1].centerXAnchor.constraint(equalTo: planeStressReducedComplianceCard.centerXAnchor, constant: 8).isActive = true
-        planeStressReducedComplianceResultLabel[1].topAnchor.constraint(equalTo: planeStressReducedComplianceTitleLabel.bottomAnchor, constant: 8).isActive = true
-        
-        planeStressReducedComplianceResultLabel[2].rightAnchor.constraint(equalTo: planeStressReducedComplianceCard.rightAnchor, constant: -8).isActive = true
-        planeStressReducedComplianceResultLabel[2].topAnchor.constraint(equalTo: planeStressReducedComplianceTitleLabel.bottomAnchor, constant: 8).isActive = true
-        
-        
-        planeStressReducedComplianceResultLabel[3].leftAnchor.constraint(equalTo: planeStressReducedComplianceCard.leftAnchor, constant: 8).isActive = true
-        planeStressReducedComplianceResultLabel[3].topAnchor.constraint(equalTo: planeStressReducedComplianceResultLabel[1].bottomAnchor, constant: 8).isActive = true
-        
-        planeStressReducedComplianceResultLabel[4].centerXAnchor.constraint(equalTo: planeStressReducedComplianceCard.centerXAnchor, constant: 8).isActive = true
-        planeStressReducedComplianceResultLabel[4].topAnchor.constraint(equalTo: planeStressReducedComplianceResultLabel[1].bottomAnchor, constant: 8).isActive = true
-        
-        planeStressReducedComplianceResultLabel[5].rightAnchor.constraint(equalTo: planeStressReducedComplianceCard.rightAnchor, constant: -8).isActive = true
-        planeStressReducedComplianceResultLabel[5].topAnchor.constraint(equalTo: planeStressReducedComplianceResultLabel[1].bottomAnchor, constant: 8).isActive = true
-        
-
-        planeStressReducedComplianceResultLabel[6].leftAnchor.constraint(equalTo: planeStressReducedComplianceCard.leftAnchor, constant: 8).isActive = true
-        planeStressReducedComplianceResultLabel[6].topAnchor.constraint(equalTo: planeStressReducedComplianceResultLabel[4].bottomAnchor, constant: 8).isActive = true
-        planeStressReducedComplianceResultLabel[6].bottomAnchor.constraint(equalTo: planeStressReducedComplianceCard.bottomAnchor, constant: -8).isActive = true
-        
-        planeStressReducedComplianceResultLabel[7].centerXAnchor.constraint(equalTo: planeStressReducedComplianceCard.centerXAnchor, constant: 8).isActive = true
-        planeStressReducedComplianceResultLabel[7].topAnchor.constraint(equalTo: planeStressReducedComplianceResultLabel[4].bottomAnchor, constant: 8).isActive = true
-        
-        planeStressReducedComplianceResultLabel[8].rightAnchor.constraint(equalTo: planeStressReducedComplianceCard.rightAnchor, constant: -8).isActive = true
-        planeStressReducedComplianceResultLabel[8].topAnchor.constraint(equalTo: planeStressReducedComplianceResultLabel[4].bottomAnchor, constant: 8).isActive = true
-        
-        
-        
+  
         // third section
         
-        planeStressReducedStiffnessCard.resultCardViewDesign()
-        planeStressReducedStiffnessCard.topAnchor.constraint(equalTo: planeStressReducedComplianceCard.bottomAnchor, constant: 20).isActive = true
-        planeStressReducedStiffnessCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
-        planeStressReducedStiffnessCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        planeStressReducedStiffnessCard.addSubview(planeStressReducedStiffnessTitleLabel)
-        
-        planeStressReducedStiffnessTitleLabel.resultCardTitleDesign()
-        planeStressReducedStiffnessTitleLabel.text = "Plane-stress Reduced Stiffness"
-        planeStressReducedStiffnessTitleLabel.topAnchor.constraint(equalTo: planeStressReducedStiffnessCard.topAnchor, constant: 0).isActive = true
-        planeStressReducedStiffnessTitleLabel.leftAnchor.constraint(equalTo: planeStressReducedStiffnessCard.leftAnchor, constant: 0).isActive = true
-        planeStressReducedStiffnessTitleLabel.rightAnchor.constraint(equalTo: planeStressReducedStiffnessCard.rightAnchor, constant: 0).isActive = true
-        planeStressReducedStiffnessTitleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        
-        for i in 0...8 {
+        for _ in 0...8 {
             planeStressReducedStiffnessResultLabel.append(UILabel())
-            planeStressReducedStiffnessCard.addSubview(planeStressReducedStiffnessResultLabel[i])
-            planeStressReducedStiffnessResultLabel[i].resultCardLabelRightDesign()
-            planeStressReducedStiffnessResultLabel[i].textAlignment = .center
-            planeStressReducedStiffnessResultLabel[i].widthAnchor.constraint(equalTo: planeStressReducedStiffnessCard.widthAnchor, multiplier: 0.3).isActive = true
-            planeStressReducedStiffnessResultLabel[i].heightAnchor.constraint(equalToConstant: 20).isActive = true
         }
-        
-        planeStressReducedStiffnessResultLabel[0].leftAnchor.constraint(equalTo: planeStressReducedStiffnessCard.leftAnchor, constant: 8).isActive = true
-        planeStressReducedStiffnessResultLabel[0].topAnchor.constraint(equalTo: planeStressReducedStiffnessTitleLabel.bottomAnchor, constant: 8).isActive = true
-        
-        planeStressReducedStiffnessResultLabel[1].centerXAnchor.constraint(equalTo: planeStressReducedStiffnessCard.centerXAnchor, constant: 8).isActive = true
-        planeStressReducedStiffnessResultLabel[1].topAnchor.constraint(equalTo: planeStressReducedStiffnessTitleLabel.bottomAnchor, constant: 8).isActive = true
-        
-        planeStressReducedStiffnessResultLabel[2].rightAnchor.constraint(equalTo: planeStressReducedStiffnessCard.rightAnchor, constant: -8).isActive = true
-        planeStressReducedStiffnessResultLabel[2].topAnchor.constraint(equalTo: planeStressReducedStiffnessTitleLabel.bottomAnchor, constant: 8).isActive = true
-        
-        
-        planeStressReducedStiffnessResultLabel[3].leftAnchor.constraint(equalTo: planeStressReducedStiffnessCard.leftAnchor, constant: 8).isActive = true
-        planeStressReducedStiffnessResultLabel[3].topAnchor.constraint(equalTo: planeStressReducedStiffnessResultLabel[1].bottomAnchor, constant: 8).isActive = true
-        
-        planeStressReducedStiffnessResultLabel[4].centerXAnchor.constraint(equalTo: planeStressReducedStiffnessCard.centerXAnchor, constant: 8).isActive = true
-        planeStressReducedStiffnessResultLabel[4].topAnchor.constraint(equalTo: planeStressReducedStiffnessResultLabel[1].bottomAnchor, constant: 8).isActive = true
-        
-        planeStressReducedStiffnessResultLabel[5].rightAnchor.constraint(equalTo: planeStressReducedStiffnessCard.rightAnchor, constant: -8).isActive = true
-        planeStressReducedStiffnessResultLabel[5].topAnchor.constraint(equalTo: planeStressReducedStiffnessResultLabel[1].bottomAnchor, constant: 8).isActive = true
-        
-        
-        planeStressReducedStiffnessResultLabel[6].leftAnchor.constraint(equalTo: planeStressReducedStiffnessCard.leftAnchor, constant: 8).isActive = true
-        planeStressReducedStiffnessResultLabel[6].topAnchor.constraint(equalTo: planeStressReducedStiffnessResultLabel[4].bottomAnchor, constant: 8).isActive = true
-        planeStressReducedStiffnessResultLabel[6].bottomAnchor.constraint(equalTo: planeStressReducedStiffnessCard.bottomAnchor, constant: -8).isActive = true
-        
-        planeStressReducedStiffnessResultLabel[7].centerXAnchor.constraint(equalTo: planeStressReducedStiffnessCard.centerXAnchor, constant: 8).isActive = true
-        planeStressReducedStiffnessResultLabel[7].topAnchor.constraint(equalTo: planeStressReducedStiffnessResultLabel[4].bottomAnchor, constant: 8).isActive = true
-        
-        planeStressReducedStiffnessResultLabel[8].rightAnchor.constraint(equalTo: planeStressReducedStiffnessCard.rightAnchor, constant: -8).isActive = true
-        planeStressReducedStiffnessResultLabel[8].topAnchor.constraint(equalTo: planeStressReducedStiffnessResultLabel[4].bottomAnchor, constant: 8).isActive = true
-        
+        planeStressReducedStiffnessTitleLabel.text = "Plane-stress Reduced Stiffness"
+        createResult3by3MatrixCard(resultCard: planeStressReducedStiffnessCard, title: planeStressReducedStiffnessTitleLabel, result: planeStressReducedStiffnessResultLabel, aboveConstraint: planeStressReducedComplianceCard.bottomAnchor, under: scrollView)
         
     }
     

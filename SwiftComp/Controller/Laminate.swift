@@ -11,13 +11,13 @@ import Accelerate
 
 class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, UITextFieldDelegate {
     
-    var effective3DProperties = [Double](repeating: 0.0, count: 12)
+    var effective3DProperties = [Double](repeating: 0.0, count: 17)
     var effectiveInplaneProperties = [Double](repeating: 0.0, count: 6)
     var effectiveFlexuralProperties = [Double](repeating: 0.0, count: 6)
     
-    var  materialPropertyName = MaterialPropertyName()
+    var materialPropertyName = MaterialPropertyName()
     var materialPropertyLabel = MaterialPropertyLabel()
-    var  materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
+    var materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
     
     // first section
     
@@ -44,8 +44,6 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         
     var laminaMaterialNameLabel: UILabel = UILabel()
     
-    var laminaMaterialUnitLabel: UILabel = UILabel()
-    
     var laminaMaterialPropertiesLabel: [UILabel] = []
     
     var laminaMaterialPropertiesTextField: [UITextField] = []
@@ -56,14 +54,13 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         
         tableView.register(TableHeader.self, forHeaderFooterViewReuseIdentifier: "headerID")
         tableView.tableFooterView = UIView()
+        hideKeyboardWhenTappedAround()
         
         createLayout()
         
         createActionSheet()
         
         changeMaterialDataField()
-        
-        editKeyboard()
         
         editNavigationBar()
         
@@ -73,6 +70,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         
     }
     
+
     
     // MARK: Create layout
     
@@ -94,6 +92,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         stackingSequenceDataBase.centerXAnchor.constraint(equalTo: stackingSequenceCell.centerXAnchor).isActive = true
         
         stackingSequenceTextField.translatesAutoresizingMaskIntoConstraints = false
+        stackingSequenceTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
         stackingSequenceTextField.text = "[0/90/45/-45]s"
         stackingSequenceTextField.borderStyle = .roundedRect
         stackingSequenceTextField.textAlignment = .center
@@ -131,59 +130,20 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         laminaMaterialDataBase.topAnchor.constraint(equalTo: laminaMaterialCell.topAnchor, constant: 8).isActive = true
         laminaMaterialDataBase.centerXAnchor.constraint(equalTo: laminaMaterialCell.centerXAnchor).isActive = true
         
-        laminaMaterialCard.materialCardViewDesign()
-        laminaMaterialCard.widthAnchor.constraint(equalTo: laminaMaterialCell.widthAnchor, multiplier: 0.8).isActive = true
-        laminaMaterialCard.topAnchor.constraint(equalTo: laminaMaterialDataBase.bottomAnchor, constant: 8).isActive = true
-        laminaMaterialCard.centerXAnchor.constraint(equalTo: laminaMaterialCell.centerXAnchor).isActive = true
-        laminaMaterialCard.bottomAnchor.constraint(equalTo: laminaMaterialCell.bottomAnchor, constant: -20).isActive = true
-        laminaMaterialCard.addSubview(laminaMaterialNameLabel)
-        laminaMaterialCard.addSubview(laminaMaterialUnitLabel)
-        
-        laminaMaterialNameLabel.materialCardTitleDesign()
-        laminaMaterialNameLabel.text = "Name: IM7/8552"
-        laminaMaterialNameLabel.topAnchor.constraint(equalTo: laminaMaterialCard.topAnchor, constant: 8).isActive = true
-        laminaMaterialNameLabel.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8).isActive = true
-        laminaMaterialNameLabel.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
-        laminaMaterialNameLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
-        laminaMaterialUnitLabel.materialCardTitleDesign()
-        laminaMaterialUnitLabel.text = "Unit: GPa"
-        laminaMaterialUnitLabel.topAnchor.constraint(equalTo: laminaMaterialNameLabel.bottomAnchor, constant: 8).isActive = true
-        laminaMaterialUnitLabel.leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8).isActive = true
-        laminaMaterialUnitLabel.rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
-        laminaMaterialUnitLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
+        laminaMaterialNameLabel.text = "IM7/8552"
         for i in 0...11 {
             laminaMaterialPropertiesLabel.append(UILabel())
-            laminaMaterialCard.addSubview(laminaMaterialPropertiesLabel[i])
-            laminaMaterialPropertiesLabel[i].materialCardLabelDesign()
             laminaMaterialPropertiesLabel[i].text = materialPropertyName.orthotropic[i]
             
-            laminaMaterialPropertiesLabel[i].leftAnchor.constraint(equalTo: laminaMaterialCard.leftAnchor, constant: 8).isActive = true
-            laminaMaterialPropertiesLabel[i].widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            laminaMaterialPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            switch i {
-            case 0:
-                laminaMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: laminaMaterialUnitLabel.bottomAnchor, constant: 8).isActive = true
-            case 11:
-                laminaMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: laminaMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-                laminaMaterialPropertiesLabel[i].bottomAnchor.constraint(equalTo: laminaMaterialCard.bottomAnchor, constant: -8).isActive = true
-            default:
-                laminaMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: laminaMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-            }
-        }
-        
-        for i in 0...11 {
             laminaMaterialPropertiesTextField.append(UITextField())
-            laminaMaterialCard.addSubview(laminaMaterialPropertiesTextField[i])
-            laminaMaterialPropertiesTextField[i].materialCardTextFieldDesign()
             laminaMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.orthotropic[i]
-           
-            laminaMaterialPropertiesTextField[i].rightAnchor.constraint(equalTo: laminaMaterialCard.rightAnchor, constant: -8).isActive = true
-            laminaMaterialPropertiesTextField[i].widthAnchor.constraint(equalTo: laminaMaterialCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            laminaMaterialPropertiesTextField[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            laminaMaterialPropertiesTextField[i].centerYAnchor.constraint(equalTo: laminaMaterialPropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
+            laminaMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
+            laminaMaterialPropertiesTextField[i].inputAccessoryView = keyboardToolBarDoneButton()
+            laminaMaterialPropertiesTextField[i].delegate = self
+            
         }
+        createMaterialCard(materialCard: laminaMaterialCard, materialName: laminaMaterialNameLabel, label: laminaMaterialPropertiesLabel, value: laminaMaterialPropertiesTextField, aboveConstraint: laminaMaterialDataBase.bottomAnchor, under: laminaMaterialCell)
+
         
     }
     
@@ -361,14 +321,12 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         
         
         let l1 = UIAlertAction(title: "IM7/8552", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.laminaMaterialNameLabel.text = "Name: " + "IM7/8552"
-            self.laminaMaterialUnitLabel.text = "Unit: " + "GPa"
+            self.laminaMaterialNameLabel.text = "IM7/8552"
             self.changeMaterialDataField()
         }
         
         let l2 = UIAlertAction(title: "T2C190/F155", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.laminaMaterialNameLabel.text = "Name: " + "T2C190/F155"
-            self.laminaMaterialUnitLabel.text = "Unit: " + "GPa"
+            self.laminaMaterialNameLabel.text = "T2C190/F155"
             self.changeMaterialDataField()
         }
         
@@ -389,15 +347,13 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         let allMaterials = MaterialBank()
         
         for material in allMaterials.list {
-            var materialCurrectName = laminaMaterialNameLabel.text!
-            let removeRange = materialCurrectName.startIndex ... materialCurrectName.index(materialCurrectName.startIndex, offsetBy: 5)
-            materialCurrectName.removeSubrange(removeRange)
+            let materialCurrectName = laminaMaterialNameLabel.text!
             if materialCurrectName == material.materialName {
                 for i in 0...11 {
                     laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", material.materialProperties[materialPropertyLabel.orthotropic[i]]!)
                 }
             }
-            else if materialCurrectName == "efined Material" {
+            else if materialCurrectName == "User Defined Material" {
                 for i in 0...11 {
                     laminaMaterialPropertiesTextField[i].text = ""
                 }
@@ -406,57 +362,6 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
     }
         
 
-    
-    
-    // MARK: Edit keyborad
-    
-    func editKeyboard() {
-        
-        stackingSequenceTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
-        
-        for i in 0...11 {
-            laminaMaterialPropertiesTextField[i].delegate = self
-            laminaMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
-        }
-        
-        hideKeyboardWhenTappedAround()
-        
-        keyboardToolBarForEngineeringConstant()
-        
-        
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y - 100), animated: true)
-    }
-    
-
-    
-    // Add done button to keyboard
-    
-    func keyboardToolBarForEngineeringConstant() {
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
-        
-        toolBar.setItems([flexibleSpace, doneButton], animated: true)
-        
-        for i in 0...11 {
-            laminaMaterialPropertiesTextField[i].inputAccessoryView = toolBar
-        }
-        
-    }
-    
-    @objc func doneClicked() {
-        view.endEditing(true)
-    }
-    
-    
-    
-    
     
     
     
@@ -482,7 +387,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         
         if calculateResult() {
             
-            for i in 0...11 {
+            for i in 0...16 {
                 laminateResultViewController.effective3DProperties[i] = effective3DProperties[i]
             }
             
@@ -495,6 +400,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         }
         
     }
+    
     
     
     
@@ -754,9 +660,14 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
                     effective3DProperties[6] = -1/Ss[0]*Ss[1]
                     effective3DProperties[7] = -1/Ss[0]*Ss[2]
                     effective3DProperties[8] = -1/Ss[7]*Ss[8]
-                    effective3DProperties[9] = alphaes[0]
-                    effective3DProperties[10] = alphaes[1]
-                    effective3DProperties[11] = alphats[0]
+                    effective3DProperties[9] = -1/Ss[35]*Ss[5]
+                    effective3DProperties[10] = -1/Ss[35]*Ss[11]
+                    effective3DProperties[11] = -1/Ss[35]*Ss[17]
+                    effective3DProperties[12] = -1/Ss[28]*Ss[22]
+                    effective3DProperties[13] = alphaes[0]
+                    effective3DProperties[14] = alphaes[1]
+                    effective3DProperties[15] = alphats[0]
+                    effective3DProperties[16] = alphaes[2]/2
 
                     
                     // Calculate A, B, and D matrices
@@ -860,6 +771,15 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         return inMatrix
     }
     
+    
+    
+    
+    
+    // MARK: Edit keyboard
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y), animated: true)
+    }
     
     
     

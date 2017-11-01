@@ -9,7 +9,7 @@
 import UIKit
 import Accelerate
 
-class UDFRC: UITableViewController {
+class UDFRC: UITableViewController, UITextFieldDelegate {
     
     var engineeringConstants = [Double](repeating: 0.0, count: 7)
     var planeStressReducedCompliance = [Double](repeating: 0.0, count: 9)
@@ -51,8 +51,6 @@ class UDFRC: UITableViewController {
     
     var fiberNameLabel: UILabel = UILabel()
     
-    var fiberUnitLabel: UILabel = UILabel()
-    
     var fiberMaterialPropertiesLabel: [UILabel] = []
     
     var fiberMaterialPropertiesTextField: [UITextField] = []
@@ -70,8 +68,6 @@ class UDFRC: UITableViewController {
     
     var matrixNameLabel: UILabel = UILabel()
     
-    var matrixUnitLabel: UILabel = UILabel()
-    
     var matrixMaterialPropertiesLabel: [UILabel] = []
     
     var matrixMaterialPropertiesTextField: [UITextField] = []
@@ -84,6 +80,7 @@ class UDFRC: UITableViewController {
         
         tableView.register(TableHeader.self, forHeaderFooterViewReuseIdentifier: "headerID")
         tableView.tableFooterView = UIView()
+        hideKeyboardWhenTappedAround()
         
         createLayout()
         
@@ -91,10 +88,12 @@ class UDFRC: UITableViewController {
         
         changeMaterialDataField()
         
-        editKeyboard()
-        
         editNavigationBar()
+        
+    }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
         
     }
     
@@ -169,61 +168,20 @@ class UDFRC: UITableViewController {
         fiberDataBase.topAnchor.constraint(equalTo: fiberCell.topAnchor, constant: 8).isActive = true
         fiberDataBase.centerXAnchor.constraint(equalTo: fiberCell.centerXAnchor).isActive = true
         
-        fiberMaterialCardView.materialCardViewDesign()
-        fiberMaterialCardView.widthAnchor.constraint(equalTo: fiberCell.widthAnchor, multiplier: 0.8).isActive = true
-        fiberMaterialCardView.topAnchor.constraint(equalTo: fiberDataBase.bottomAnchor, constant: 8).isActive = true
-        fiberMaterialCardView.centerXAnchor.constraint(equalTo: fiberCell.centerXAnchor).isActive = true
-        fiberMaterialCardView.bottomAnchor.constraint(equalTo: fiberCell.bottomAnchor, constant: -20).isActive = true
-        fiberMaterialCardView.addSubview(fiberNameLabel)
-        fiberMaterialCardView.addSubview(fiberUnitLabel)
         
-        fiberNameLabel.materialCardTitleDesign()
-        fiberNameLabel.text = "Name: E-Glass"
-        fiberNameLabel.topAnchor.constraint(equalTo: fiberMaterialCardView.topAnchor, constant: 8).isActive = true
-        fiberNameLabel.leftAnchor.constraint(equalTo: fiberMaterialCardView.leftAnchor, constant: 8).isActive = true
-        fiberNameLabel.rightAnchor.constraint(equalTo: fiberMaterialCardView.rightAnchor, constant: -8).isActive = true
-        fiberNameLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
-        fiberUnitLabel.materialCardTitleDesign()
-        fiberUnitLabel.text = "Unit: GPa, μ/℃"
-        fiberUnitLabel.topAnchor.constraint(equalTo: fiberNameLabel.bottomAnchor, constant: 8).isActive = true
-        fiberUnitLabel.leftAnchor.constraint(equalTo: fiberMaterialCardView.leftAnchor, constant: 8).isActive = true
-        fiberUnitLabel.rightAnchor.constraint(equalTo: fiberMaterialCardView.rightAnchor, constant: -8).isActive = true
-        fiberUnitLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
-        
+        fiberNameLabel.text = "E-Glass"
         for i in 0...6 {
             fiberMaterialPropertiesLabel.append(UILabel())
-            fiberMaterialCardView.addSubview(fiberMaterialPropertiesLabel[i])
-            fiberMaterialPropertiesLabel[i].materialCardLabelDesign()
             fiberMaterialPropertiesLabel[i].text = materialPropertyName.transverseIsotropic[i]
             
-            fiberMaterialPropertiesLabel[i].leftAnchor.constraint(equalTo: fiberMaterialCardView.leftAnchor, constant: 8).isActive = true
-            fiberMaterialPropertiesLabel[i].widthAnchor.constraint(equalTo: fiberMaterialCardView.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            fiberMaterialPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            switch i {
-            case 0:
-                fiberMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: fiberUnitLabel.bottomAnchor, constant: 8).isActive = true
-            case 6:
-                fiberMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: fiberMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-                fiberMaterialPropertiesLabel[i].bottomAnchor.constraint(equalTo: fiberMaterialCardView.bottomAnchor, constant: -8).isActive = true
-            default:
-                fiberMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: fiberMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-            }
-        }
-        
-        for i in 0...6 {
             fiberMaterialPropertiesTextField.append(UITextField())
-            fiberMaterialCardView.addSubview(fiberMaterialPropertiesTextField[i])
-            fiberMaterialPropertiesTextField[i].materialCardTextFieldDesign()
-            fiberMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.transverseIsotropic[i]
-        
-            fiberMaterialPropertiesTextField[i].rightAnchor.constraint(equalTo: fiberMaterialCardView.rightAnchor, constant: -8).isActive = true
-            fiberMaterialPropertiesTextField[i].widthAnchor.constraint(equalTo: fiberMaterialCardView.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            fiberMaterialPropertiesTextField[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            fiberMaterialPropertiesTextField[i].centerYAnchor.constraint(equalTo: fiberMaterialPropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
+            fiberMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.orthotropic[i]
+            fiberMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
+            fiberMaterialPropertiesTextField[i].inputAccessoryView = keyboardToolBarDoneButton()
+            fiberMaterialPropertiesTextField[i].delegate = self
         }
         
+        createMaterialCard(materialCard: fiberMaterialCardView, materialName: fiberNameLabel, label: fiberMaterialPropertiesLabel, value: fiberMaterialPropertiesTextField, aboveConstraint: fiberDataBase.bottomAnchor, under: fiberCell)
         
         
         // fourth secion
@@ -247,61 +205,26 @@ class UDFRC: UITableViewController {
         matrixMaterialCardView.centerXAnchor.constraint(equalTo: matrixCell.centerXAnchor).isActive = true
         matrixMaterialCardView.bottomAnchor.constraint(equalTo: matrixCell.bottomAnchor, constant: -20).isActive = true
         matrixMaterialCardView.addSubview(matrixNameLabel)
-        matrixMaterialCardView.addSubview(matrixUnitLabel)
         
-        matrixNameLabel.materialCardTitleDesign()
-        matrixNameLabel.text = "Name: Epoxy"
-        matrixNameLabel.topAnchor.constraint(equalTo: matrixMaterialCardView.topAnchor, constant: 8).isActive = true
-        matrixNameLabel.leftAnchor.constraint(equalTo: matrixMaterialCardView.leftAnchor, constant: 8).isActive = true
-        matrixNameLabel.rightAnchor.constraint(equalTo: matrixMaterialCardView.rightAnchor, constant: -8).isActive = true
-        matrixNameLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
-        matrixUnitLabel.materialCardTitleDesign()
-        matrixUnitLabel.text = "Unit: GPa, μ/℃"
-        matrixUnitLabel.topAnchor.constraint(equalTo: matrixNameLabel.bottomAnchor, constant: 8).isActive = true
-        matrixUnitLabel.leftAnchor.constraint(equalTo: matrixMaterialCardView.leftAnchor, constant: 8).isActive = true
-        matrixUnitLabel.rightAnchor.constraint(equalTo: matrixMaterialCardView.rightAnchor, constant: -8).isActive = true
-        matrixUnitLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
-        
+        matrixNameLabel.text = "Epoxy"
         for i in 0...2 {
             matrixMaterialPropertiesLabel.append(UILabel())
-            matrixMaterialCardView.addSubview(matrixMaterialPropertiesLabel[i])
-            matrixMaterialPropertiesLabel[i].materialCardLabelDesign()
             matrixMaterialPropertiesLabel[i].text = materialPropertyName.isotropic[i]
             
-            matrixMaterialPropertiesLabel[i].leftAnchor.constraint(equalTo: matrixMaterialCardView.leftAnchor, constant: 8).isActive = true
-            matrixMaterialPropertiesLabel[i].widthAnchor.constraint(equalTo: matrixMaterialCardView.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            matrixMaterialPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            switch i {
-            case 0:
-                matrixMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: matrixUnitLabel.bottomAnchor, constant: 8).isActive = true
-            case 2:
-                matrixMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: matrixMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-                matrixMaterialPropertiesLabel[i].bottomAnchor.constraint(equalTo: matrixMaterialCardView.bottomAnchor, constant: -8).isActive = true
-            default:
-                matrixMaterialPropertiesLabel[i].topAnchor.constraint(equalTo: matrixMaterialPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-            }
-        }
-        
-        for i in 0...2 {
             matrixMaterialPropertiesTextField.append(UITextField())
-            matrixMaterialCardView.addSubview(matrixMaterialPropertiesTextField[i])
-            matrixMaterialPropertiesTextField[i].materialCardTextFieldDesign()
-            matrixMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.isotropic[i]
+            matrixMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.orthotropic[i]
+            matrixMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
+            matrixMaterialPropertiesTextField[i].inputAccessoryView = keyboardToolBarDoneButton()
+            matrixMaterialPropertiesTextField[i].delegate = self
             
-            matrixMaterialPropertiesTextField[i].rightAnchor.constraint(equalTo: matrixMaterialCardView.rightAnchor, constant: -8).isActive = true
-            matrixMaterialPropertiesTextField[i].widthAnchor.constraint(equalTo: matrixMaterialCardView.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            matrixMaterialPropertiesTextField[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            matrixMaterialPropertiesTextField[i].centerYAnchor.constraint(equalTo: matrixMaterialPropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
         }
         
-        
+        createMaterialCard(materialCard: matrixMaterialCardView, materialName: matrixNameLabel, label: matrixMaterialPropertiesLabel, value: matrixMaterialPropertiesTextField, aboveConstraint: matrixDataBase.bottomAnchor, under: matrixCell)
         
     }
     
     
-    // UIbottom action functions
+    // UIbutton action functions
     
     @objc func changeMethod(_ sender: UIButton) {
         sender.flash()
@@ -354,27 +277,27 @@ class UDFRC: UITableViewController {
             self.changeMaterialDataField()
         }
         let f1 = UIAlertAction(title: "E-Glass", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.fiberNameLabel.text = "Name: E-Glass"
+            self.fiberNameLabel.text = "E-Glass"
             self.changeMaterialDataField()
         }
         let f2 = UIAlertAction(title: "S-Glass", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.fiberNameLabel.text = "Name: S-Glass"
+            self.fiberNameLabel.text = "S-Glass"
             self.changeMaterialDataField()
         }
         let f3 = UIAlertAction(title: "Carbon (IM)", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.fiberNameLabel.text = "Name: Carbon (IM)"
+            self.fiberNameLabel.text = "Carbon (IM)"
             self.changeMaterialDataField()
         }
         let f4 = UIAlertAction(title: "Carbon (HM)", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.fiberNameLabel.text = "Name: Carbon (HM)"
+            self.fiberNameLabel.text = "Carbon (HM)"
             self.changeMaterialDataField()
         }
         let f5 = UIAlertAction(title: "Boron", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.fiberNameLabel.text = "Name: Boron"
+            self.fiberNameLabel.text = "Boron"
             self.changeMaterialDataField()
         }
         let f6 = UIAlertAction(title: "Kelvar-49", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.fiberNameLabel.text = "Name: Kelvar-49"
+            self.fiberNameLabel.text = "Kelvar-49"
             self.changeMaterialDataField()
         }
         
@@ -397,27 +320,27 @@ class UDFRC: UITableViewController {
             self.changeMaterialDataField()
         }
         let m1 = UIAlertAction(title: "Epoxy", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.matrixNameLabel.text = "Name: Epoxy"
+            self.matrixNameLabel.text = "Epoxy"
             self.changeMaterialDataField()
         }
         let m2 = UIAlertAction(title: "Polyester", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.matrixNameLabel.text = "Name: Polyester"
+            self.matrixNameLabel.text = "Polyester"
             self.changeMaterialDataField()
         }
         let m3 = UIAlertAction(title: "Polyimide", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.matrixNameLabel.text = "Name: Polyimide"
+            self.matrixNameLabel.text = "Polyimide"
             self.changeMaterialDataField()
         }
         let m4 = UIAlertAction(title: "PEEK", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.matrixNameLabel.text = "Name: PEEK"
+            self.matrixNameLabel.text = "PEEK"
             self.changeMaterialDataField()
         }
         let m5 = UIAlertAction(title: "Copper", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.matrixNameLabel.text = "Name: Copper"
+            self.matrixNameLabel.text = "Copper"
             self.changeMaterialDataField()
         }
         let m6 = UIAlertAction(title: "Silicon Carbide", style: UIAlertActionStyle.default) { (action) -> Void in
-            self.matrixNameLabel.text = "Name: Silicon Carbide"
+            self.matrixNameLabel.text = "Silicon Carbide"
             self.changeMaterialDataField()
         }
         
@@ -444,18 +367,14 @@ class UDFRC: UITableViewController {
             
             // change fiber material card
             
-            var fiberMaterialCurrectName = fiberNameLabel.text!
-            
-            let removeFiberRange = fiberMaterialCurrectName.startIndex ... fiberMaterialCurrectName.index(fiberMaterialCurrectName.startIndex, offsetBy: 5)
-            
-            fiberMaterialCurrectName.removeSubrange(removeFiberRange)
+            let fiberMaterialCurrectName = fiberNameLabel.text!
             
             if fiberMaterialCurrectName == material.materialName {
                 for i in 0...6 {
                     fiberMaterialPropertiesTextField[i].text = String(format: "%.2f", material.materialProperties[materialPropertyLabel.transverseIsotropic[i]]!)
                 }
             }
-            else if fiberMaterialCurrectName == "efined Material" {
+            else if fiberMaterialCurrectName == "User Defined Material" {
                 for i in 0...6 {
                     fiberMaterialPropertiesTextField[i].text = ""
                 }
@@ -463,18 +382,14 @@ class UDFRC: UITableViewController {
             
             // change matrix material card
             
-            var matrixMaterialCurrectName = matrixNameLabel.text!
-            
-            let removeMatrixRange = matrixMaterialCurrectName.startIndex ... matrixMaterialCurrectName.index(matrixMaterialCurrectName.startIndex, offsetBy: 5)
-
-            matrixMaterialCurrectName.removeSubrange(removeMatrixRange)
+            let matrixMaterialCurrectName = matrixNameLabel.text!
             
             if matrixMaterialCurrectName == material.materialName {
                 for i in 0...2 {
                     matrixMaterialPropertiesTextField[i].text = String(format: "%.2f", material.materialProperties[materialPropertyLabel.isotropic[i]]!)
                 }
             }
-            else if matrixMaterialCurrectName == "efined Material" {
+            else if matrixMaterialCurrectName == "User Defined Material" {
                 for i in 0...2 {
                     matrixMaterialPropertiesTextField[i].text = ""
                 }
@@ -483,64 +398,6 @@ class UDFRC: UITableViewController {
         }
         
     }
-    
-
-    
-
-    
-    
-    // MARK: Edit keyborad
-    
-    func editKeyboard() {
-        
-        for i in 0...6 {
-            fiberMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
-        }
-        
-        for i in 0...2 {
-            matrixMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
-        }
-        
-        hideKeyboardWhenTappedAround()
-        
-        keyboardToolBarForEngineeringConstant()
-        
-        
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y - 100), animated: true)
-    }
-    
-    
-    
-    // Add done button to keyboard
-    
-    func keyboardToolBarForEngineeringConstant() {
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
-        
-        toolBar.setItems([flexibleSpace, doneButton], animated: true)
-        
-        for i in 0...6 {
-            fiberMaterialPropertiesTextField[i].inputAccessoryView = toolBar
-        }
-        
-        for i in 0...2 {
-            matrixMaterialPropertiesTextField[i].inputAccessoryView = toolBar
-        }
-        
-    }
-    
-    @objc func doneClicked() {
-        view.endEditing(true)
-    }
-    
-    
     
     
     // MARK: Edit navigation bar
@@ -733,6 +590,14 @@ class UDFRC: UITableViewController {
     
     
     
+    
+    
+    // MARK: Edit keyborad
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y), animated: true)
+        print(textField.frame.origin.y)
+    }
     
     
     

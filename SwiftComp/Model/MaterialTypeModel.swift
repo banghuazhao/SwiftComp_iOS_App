@@ -13,6 +13,8 @@ struct MaterialPropertyName {
     let isotropic =  ["Young's Modulus E", "Poisson's Ratio ν", "CTE α"]
     let transverseIsotropic = ["Young's Modulus E1", "Young's Modulus E2", "Shear Modulus G12", "Poisson's Ratio ν12", "Poisson's Ratio ν23", "CTE α11", "CTE α22"]
     let orthotropic = ["Young's Modulus E1", "Young's Modulus E2", "Young's Modulus E3", "Shear Modulus G12", "Shear Modulus G13", "Shear Modulus G23", "Poisson's Ratio ν12", "Poisson's Ratio ν13", "Poisson's Ratio ν23", "CTE α11" , "CTE α22", "CTE α33"]
+    let plate = ["Young's Modulus E1", "Young's Modulus E2", "Shear Modulus G12", "Poisson's Ratio ν12", "Mutual Influence η12,1", "Mutual Influence η12,2"]
+    let monoclinic = ["Young's Modulus E1", "Young's Modulus E2", "Young's Modulus E3", "Shear Modulus G12", "Shear Modulus G13", "Shear Modulus G23", "Poisson's Ratio ν12", "Poisson's Ratio ν13", "Poisson's Ratio ν23", "Mutual Influence η12,1", "Mutual Influence η12,2", "Mutual Influence η12,3", "Mutual Influence η13,23", "CTE α11" , "CTE α22", "CTE α33", "CTE α12"]
 }
 
 struct MaterialPropertyLabel {

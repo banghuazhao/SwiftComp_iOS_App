@@ -10,7 +10,7 @@ import UIKit
 
 class LaminateResult: UIViewController {
     
-    var effective3DProperties = [Double](repeating: 0, count: 12)
+    var effective3DProperties = [Double](repeating: 0, count: 17)
     var effectiveInPlaneProperties = [Double](repeating: 0, count: 6)
     var effectiveFlexuralProperties = [Double](repeating: 0, count: 6)
     
@@ -60,6 +60,8 @@ class LaminateResult: UIViewController {
         
         applyResult()
         
+        navigationItem.title = "Result"
+        
     }
     
     
@@ -74,7 +76,7 @@ class LaminateResult: UIViewController {
         scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
         scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 1000)
+        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 1200)
         scrollView.addSubview(threeDPropertiesCard)
         scrollView.addSubview(inPlanePropertiesCard)
         scrollView.addSubview(flexuralPropertiesCard)
@@ -82,202 +84,41 @@ class LaminateResult: UIViewController {
         
         // first section
         
-        threeDPropertiesCard.resultCardViewDesign()
-        threeDPropertiesCard.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20).isActive = true
-        threeDPropertiesCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
-        threeDPropertiesCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        threeDPropertiesCard.addSubview(threeDPropertiesTitleLabel)
-        
-        threeDPropertiesTitleLabel.resultCardTitleDesign()
         threeDPropertiesTitleLabel.text = "3D Properties"
-        threeDPropertiesTitleLabel.topAnchor.constraint(equalTo: threeDPropertiesCard.topAnchor, constant: 0).isActive = true
-        threeDPropertiesTitleLabel.leftAnchor.constraint(equalTo: threeDPropertiesCard.leftAnchor, constant: 0).isActive = true
-        threeDPropertiesTitleLabel.rightAnchor.constraint(equalTo: threeDPropertiesCard.rightAnchor, constant: 0).isActive = true
-        threeDPropertiesTitleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        for i in 0...11 {
+        for i in 0...16 {
             threeDPropertiesLabel.append(UILabel())
-            threeDPropertiesCard.addSubview(threeDPropertiesLabel[i])
-            threeDPropertiesLabel[i].resultCardLabelLeftDesign()
-            threeDPropertiesLabel[i].text = materialPropertyName.orthotropic[i]
+            threeDPropertiesLabel[i].text = materialPropertyName.monoclinic[i]
             
-            threeDPropertiesLabel[i].leftAnchor.constraint(equalTo: threeDPropertiesCard.leftAnchor, constant: 8).isActive = true
-            threeDPropertiesLabel[i].widthAnchor.constraint(equalTo: threeDPropertiesCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            threeDPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            switch i {
-            case 0:
-                threeDPropertiesLabel[i].topAnchor.constraint(equalTo: threeDPropertiesTitleLabel.bottomAnchor, constant: 8).isActive = true
-            case 11:
-                threeDPropertiesLabel[i].topAnchor.constraint(equalTo: threeDPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-                threeDPropertiesLabel[i].bottomAnchor.constraint(equalTo: threeDPropertiesCard.bottomAnchor, constant: -8).isActive = true
-            default:
-                threeDPropertiesLabel[i].topAnchor.constraint(equalTo: threeDPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-            }
-        }
-        
-        for i in 0...11 {
             threeDPropertiesResultLabel.append(UILabel())
-            threeDPropertiesCard.addSubview(threeDPropertiesResultLabel[i])
-            threeDPropertiesResultLabel[i].resultCardLabelRightDesign()
-            
-            threeDPropertiesResultLabel[i].rightAnchor.constraint(equalTo: threeDPropertiesCard.rightAnchor, constant: -8).isActive = true
-            threeDPropertiesResultLabel[i].widthAnchor.constraint(equalTo: threeDPropertiesCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            threeDPropertiesResultLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            threeDPropertiesResultLabel[i].centerYAnchor.constraint(equalTo: threeDPropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
         }
         
-        
+        creatResultListCard(resultCard: threeDPropertiesCard, title: threeDPropertiesTitleLabel, label: threeDPropertiesLabel, result: threeDPropertiesResultLabel, aboveConstraint: scrollView.topAnchor, under: scrollView)
         
         // second section
-        
-        inPlanePropertiesCard.resultCardViewDesign()
-        inPlanePropertiesCard.topAnchor.constraint(equalTo: threeDPropertiesCard.bottomAnchor, constant: 20).isActive = true
-        inPlanePropertiesCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
-        inPlanePropertiesCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        inPlanePropertiesCard.addSubview(inPlanePropertiesTitleLabel)
-        
-        inPlanePropertiesTitleLabel.resultCardTitleDesign()
+
         inPlanePropertiesTitleLabel.text = "In-plane Properties"
-        inPlanePropertiesTitleLabel.topAnchor.constraint(equalTo: inPlanePropertiesCard.topAnchor, constant: 0).isActive = true
-        inPlanePropertiesTitleLabel.leftAnchor.constraint(equalTo: inPlanePropertiesCard.leftAnchor, constant: 0).isActive = true
-        inPlanePropertiesTitleLabel.rightAnchor.constraint(equalTo: inPlanePropertiesCard.rightAnchor, constant: 0).isActive = true
-        inPlanePropertiesTitleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
         for i in 0...5 {
             inPlanePropertiesLabel.append(UILabel())
-            inPlanePropertiesCard.addSubview(inPlanePropertiesLabel[i])
-            inPlanePropertiesLabel[i].resultCardLabelLeftDesign()
-            switch i {
-            case 0:
-                inPlanePropertiesLabel[i].text = "Young's Modulus E1"
-            case 1:
-                inPlanePropertiesLabel[i].text = "Young's Modulus E2"
-            case 2:
-                inPlanePropertiesLabel[i].text = "Shear Modulus G12"
-            case 3:
-                inPlanePropertiesLabel[i].text = "Poisson's Ratio ν12"
-            case 4:
-                inPlanePropertiesLabel[i].text = "Mutual Influence η12,1"
-            case 5:
-                inPlanePropertiesLabel[i].text = "Mutual Influence η12,2"
-            default:
-                break
-            }
-            inPlanePropertiesLabel[i].leftAnchor.constraint(equalTo: inPlanePropertiesCard.leftAnchor, constant: 8).isActive = true
-            inPlanePropertiesLabel[i].widthAnchor.constraint(equalTo: inPlanePropertiesCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            inPlanePropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            switch i {
-            case 0:
-                inPlanePropertiesLabel[i].topAnchor.constraint(equalTo: inPlanePropertiesTitleLabel.bottomAnchor, constant: 8).isActive = true
-            case 5:
-                inPlanePropertiesLabel[i].topAnchor.constraint(equalTo: inPlanePropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-                inPlanePropertiesLabel[i].bottomAnchor.constraint(equalTo: inPlanePropertiesCard.bottomAnchor, constant: -8).isActive = true
-            default:
-                inPlanePropertiesLabel[i].topAnchor.constraint(equalTo: inPlanePropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-            }
-        }
-        
-        for i in 0...5 {
+            inPlanePropertiesLabel[i].text = materialPropertyName.plate[i]
+
             inPlanePropertiesResultLabel.append(UILabel())
-            inPlanePropertiesCard.addSubview(inPlanePropertiesResultLabel[i])
-            inPlanePropertiesResultLabel[i].resultCardLabelRightDesign()
-            switch i {
-            case 0:
-                inPlanePropertiesResultLabel[i].text = "Young's Modulus E1"
-            case 1:
-                inPlanePropertiesResultLabel[i].text = "Young's Modulus E2"
-            case 2:
-                inPlanePropertiesResultLabel[i].text = "Shear Modulus G12"
-            case 3:
-                inPlanePropertiesResultLabel[i].text = "Poisson's Ratio ν12"
-            case 4:
-                inPlanePropertiesResultLabel[i].text = "Mutual Influence η12,1"
-            case 5:
-                inPlanePropertiesResultLabel[i].text = "Mutual Influence η12,2"
-            default:
-                break
-            }
-            inPlanePropertiesResultLabel[i].rightAnchor.constraint(equalTo: inPlanePropertiesCard.rightAnchor, constant: -8).isActive = true
-            inPlanePropertiesResultLabel[i].widthAnchor.constraint(equalTo: inPlanePropertiesCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            inPlanePropertiesResultLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            inPlanePropertiesResultLabel[i].centerYAnchor.constraint(equalTo: inPlanePropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
         }
-        
+
+        creatResultListCard(resultCard: inPlanePropertiesCard, title: inPlanePropertiesTitleLabel, label: inPlanePropertiesLabel, result: inPlanePropertiesResultLabel, aboveConstraint: threeDPropertiesCard.bottomAnchor, under: scrollView)
+
         
         // third section
         
-        flexuralPropertiesCard.resultCardViewDesign()
-        flexuralPropertiesCard.topAnchor.constraint(equalTo: inPlanePropertiesCard.bottomAnchor, constant: 20).isActive = true
-        flexuralPropertiesCard.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8, constant: 0).isActive = true
-        flexuralPropertiesCard.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        flexuralPropertiesCard.addSubview(flexuralPropertiesTitleLabel)
-        
-        flexuralPropertiesTitleLabel.resultCardTitleDesign()
-        flexuralPropertiesTitleLabel.text = "Flexural Properties"
-        flexuralPropertiesTitleLabel.topAnchor.constraint(equalTo: flexuralPropertiesCard.topAnchor, constant: 0).isActive = true
-        flexuralPropertiesTitleLabel.leftAnchor.constraint(equalTo: flexuralPropertiesCard.leftAnchor, constant: 0).isActive = true
-        flexuralPropertiesTitleLabel.rightAnchor.constraint(equalTo: flexuralPropertiesCard.rightAnchor, constant: 0).isActive = true
-        flexuralPropertiesTitleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
+        flexuralPropertiesTitleLabel.text = "In-plane Properties"
         for i in 0...5 {
             flexuralPropertiesLabel.append(UILabel())
-            flexuralPropertiesCard.addSubview(flexuralPropertiesLabel[i])
-            flexuralPropertiesLabel[i].resultCardLabelLeftDesign()
-            switch i {
-            case 0:
-                flexuralPropertiesLabel[i].text = "Young's Modulus E1"
-            case 1:
-                flexuralPropertiesLabel[i].text = "Young's Modulus E2"
-            case 2:
-                flexuralPropertiesLabel[i].text = "Shear Modulus G12"
-            case 3:
-                flexuralPropertiesLabel[i].text = "Poisson's Ratio ν12"
-            case 4:
-                flexuralPropertiesLabel[i].text = "Mutual Influence η12,1"
-            case 5:
-                flexuralPropertiesLabel[i].text = "Mutual Influence η12,2"
-            default:
-                break
-            }
-            flexuralPropertiesLabel[i].leftAnchor.constraint(equalTo: flexuralPropertiesCard.leftAnchor, constant: 8).isActive = true
-            flexuralPropertiesLabel[i].widthAnchor.constraint(equalTo: flexuralPropertiesCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
-            flexuralPropertiesLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            switch i {
-            case 0:
-                flexuralPropertiesLabel[i].topAnchor.constraint(equalTo: flexuralPropertiesTitleLabel.bottomAnchor, constant: 8).isActive = true
-            case 5:
-                flexuralPropertiesLabel[i].topAnchor.constraint(equalTo: flexuralPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-                flexuralPropertiesLabel[i].bottomAnchor.constraint(equalTo: flexuralPropertiesCard.bottomAnchor, constant: -8).isActive = true
-            default:
-                flexuralPropertiesLabel[i].topAnchor.constraint(equalTo: flexuralPropertiesLabel[i-1].bottomAnchor, constant: 8).isActive = true
-            }
+            flexuralPropertiesLabel[i].text = materialPropertyName.plate[i]
+            
+            flexuralPropertiesResultLabel.append(UILabel())
         }
         
-        for i in 0...5 {
-            flexuralPropertiesResultLabel.append(UILabel())
-            flexuralPropertiesCard.addSubview(flexuralPropertiesResultLabel[i])
-            flexuralPropertiesResultLabel[i].resultCardLabelRightDesign()
-            switch i {
-            case 0:
-                flexuralPropertiesResultLabel[i].text = "Young's Modulus E1"
-            case 1:
-                flexuralPropertiesResultLabel[i].text = "Young's Modulus E2"
-            case 2:
-                flexuralPropertiesResultLabel[i].text = "Shear Modulus G12"
-            case 3:
-                flexuralPropertiesResultLabel[i].text = "Poisson's Ratio ν12"
-            case 4:
-                flexuralPropertiesResultLabel[i].text = "Mutual Influence η12,1"
-            case 5:
-                flexuralPropertiesResultLabel[i].text = "Mutual Influence η12,2"
-            default:
-                break
-            }
-            flexuralPropertiesResultLabel[i].rightAnchor.constraint(equalTo: flexuralPropertiesCard.rightAnchor, constant: -8).isActive = true
-            flexuralPropertiesResultLabel[i].widthAnchor.constraint(equalTo: flexuralPropertiesCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-            flexuralPropertiesResultLabel[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-            flexuralPropertiesResultLabel[i].centerYAnchor.constraint(equalTo: flexuralPropertiesLabel[i].centerYAnchor, constant: 0).isActive = true
-        }
+        creatResultListCard(resultCard: flexuralPropertiesCard, title: flexuralPropertiesTitleLabel, label: flexuralPropertiesLabel, result: flexuralPropertiesResultLabel, aboveConstraint: inPlanePropertiesCard.bottomAnchor, under: scrollView)
+
         
     }
     
@@ -286,7 +127,7 @@ class LaminateResult: UIViewController {
     
     func applyResult() {
         
-        for i in 0...11 {
+        for i in 0...16 {
             
             if abs(effective3DProperties[i]) > 100000 {
                 threeDPropertiesResultLabel[i].text = String(format: "%.3e", effective3DProperties[i])
