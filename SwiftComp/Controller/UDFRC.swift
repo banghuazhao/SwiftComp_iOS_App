@@ -9,7 +9,7 @@
 import UIKit
 import Accelerate
 
-class UDFRC: UITableViewController, UITextFieldDelegate {
+class UDFRC: UIViewController {
     
     var engineeringConstants = [Double](repeating: 0.0, count: 7)
     var planeStressReducedCompliance = [Double](repeating: 0.0, count: 9)
@@ -19,9 +19,11 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
     var materialPropertyLabel = MaterialPropertyLabel()
     var materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
     
+    var scrollView: UIScrollView = UIScrollView()
+    
     // first section
     
-    var methodCell: UITableViewCell = UITableViewCell()
+    var methodView: UIView = UIView()
     
     var methodDataBase: UIButton = UIButton()
     
@@ -32,7 +34,7 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
     
     // second section
 
-    var geometryCell: UITableViewCell = UITableViewCell()
+    var geometryView: UIView = UIView()
 
     var geometryLabel: UILabel = UILabel()
     
@@ -41,7 +43,7 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
     
     // third section
    
-    var fiberCell: UITableViewCell = UITableViewCell()
+    var fiberView: UIView = UIView()
     
     var fiberDataBase: UIButton = UIButton()
     
@@ -58,7 +60,7 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
     
     // fourth section
     
-    var matrixCell: UITableViewCell = UITableViewCell()
+    var matrixView: UIView = UIView()
     
     var matrixDataBase: UIButton = UIButton()
     
@@ -78,8 +80,8 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(TableHeader.self, forHeaderFooterViewReuseIdentifier: "headerID")
-        tableView.tableFooterView = UIView()
+        view.backgroundColor = UIColor.white
+
         hideKeyboardWhenTappedAround()
         
         createLayout()
@@ -93,29 +95,37 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
     }
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
-    
-    
     
     // MARK: Create layout
     
     func createLayout() {
         
+        self.view.addSubview(scrollView)
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
+        scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        scrollView.addSubview(methodView)
+        scrollView.addSubview(geometryView)
+        scrollView.addSubview(fiberView)
+        scrollView.addSubview(matrixView)
+        
+        
         // first section
         
-        methodCell.selectionStyle = UITableViewCellSelectionStyle.none
-        methodCell.addSubview(methodDataBase)
-        methodCell.addSubview(methodLabel)
+        creatViewCard(viewCard: methodView, title: "Method", aboveConstraint: scrollView.topAnchor, under: scrollView)
+        methodView.addSubview(methodDataBase)
+        methodView.addSubview(methodLabel)
         
         methodDataBase.setTitle("Method Database", for: UIControlState.normal)
         methodDataBase.addTarget(self, action: #selector(changeMethod(_:)), for: .touchUpInside)
         methodDataBase.dataBaseButtonDesign()
         methodDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
         methodDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: methodDataBase.intrinsicContentSize.width + 40).isActive = true
-        methodDataBase.topAnchor.constraint(equalTo: methodCell.topAnchor, constant: 8).isActive = true
-        methodDataBase.centerXAnchor.constraint(equalTo: methodCell.centerXAnchor).isActive = true
+        methodDataBase.topAnchor.constraint(equalTo: methodView.topAnchor, constant: 40).isActive = true
+        methodDataBase.centerXAnchor.constraint(equalTo: methodView.centerXAnchor).isActive = true
         
         methodLabel.translatesAutoresizingMaskIntoConstraints = false
         methodLabel.text = "Voigt Rules of Mixture"
@@ -123,23 +133,23 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
         methodLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         methodLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: methodDataBase.intrinsicContentSize.width + 20).isActive = true
         methodLabel.topAnchor.constraint(equalTo: methodDataBase.bottomAnchor, constant: 8).isActive = true
-        methodLabel.centerXAnchor.constraint(equalTo: methodCell.centerXAnchor).isActive = true
-        methodLabel.bottomAnchor.constraint(equalTo: methodCell.bottomAnchor, constant: -20).isActive = true
+        methodLabel.centerXAnchor.constraint(equalTo: methodView.centerXAnchor).isActive = true
+        methodLabel.bottomAnchor.constraint(equalTo: methodView.bottomAnchor, constant: -20).isActive = true
         
         
         // second section
         
-        geometryCell.selectionStyle = UITableViewCellSelectionStyle.none
-        geometryCell.addSubview(geometryLabel)
-        geometryCell.addSubview(volumeFractionSlider)
+        creatViewCard(viewCard: geometryView, title: "Geometry", aboveConstraint: methodView.bottomAnchor, under: scrollView)
+        geometryView.addSubview(geometryLabel)
+        geometryView.addSubview(volumeFractionSlider)
         
         geometryLabel.translatesAutoresizingMaskIntoConstraints = false
         geometryLabel.text = "Fiber Volume Fraction: 0.50"
         geometryLabel.textAlignment = .center
         geometryLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
         geometryLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: geometryLabel.intrinsicContentSize.width + 20).isActive = true
-        geometryLabel.topAnchor.constraint(equalTo: geometryCell.topAnchor, constant: 8).isActive = true
-        geometryLabel.centerXAnchor.constraint(equalTo: geometryCell.centerXAnchor).isActive = true
+        geometryLabel.topAnchor.constraint(equalTo: geometryView.topAnchor, constant: 40).isActive = true
+        geometryLabel.centerXAnchor.constraint(equalTo: geometryView.centerXAnchor).isActive = true
         
         volumeFractionSlider.minimumValue = 0
         volumeFractionSlider.maximumValue = 1.00
@@ -148,25 +158,25 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
         volumeFractionSlider.addTarget(self, action: #selector(changeVolumeFraction), for: .valueChanged)
         volumeFractionSlider.translatesAutoresizingMaskIntoConstraints = false
         volumeFractionSlider.topAnchor.constraint(equalTo: geometryLabel.bottomAnchor, constant: 8).isActive = true
-        volumeFractionSlider.widthAnchor.constraint(equalTo: geometryCell.widthAnchor, multiplier: 0.8).isActive = true
-        volumeFractionSlider.centerXAnchor.constraint(equalTo: geometryCell.centerXAnchor, constant: 0).isActive = true
-        volumeFractionSlider.bottomAnchor.constraint(equalTo: geometryCell.bottomAnchor, constant: -20).isActive = true
+        volumeFractionSlider.widthAnchor.constraint(equalTo: geometryView.widthAnchor, multiplier: 0.8).isActive = true
+        volumeFractionSlider.centerXAnchor.constraint(equalTo: geometryView.centerXAnchor, constant: 0).isActive = true
+        volumeFractionSlider.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        volumeFractionSlider.bottomAnchor.constraint(equalTo: geometryView.bottomAnchor, constant: -20).isActive = true
 
         
         // third secion
         
-        fiberCell.selectionStyle = UITableViewCellSelectionStyle.none
-        fiberCell.addSubview(fiberDataBase)
-        fiberCell.addSubview(fiberMaterialCardView)
-        
+        creatViewCard(viewCard: fiberView, title: "Fiber Material", aboveConstraint: geometryView.bottomAnchor, under: scrollView)
+        fiberView.addSubview(fiberDataBase)
+        fiberView.addSubview(fiberMaterialCardView)
         
         fiberDataBase.setTitle("Fiber Material Database", for: UIControlState.normal)
         fiberDataBase.addTarget(self, action: #selector(changeFiberMaterial(_:)), for: .touchUpInside)
         fiberDataBase.dataBaseButtonDesign()
         fiberDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
         fiberDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: fiberDataBase.intrinsicContentSize.width + 40).isActive = true
-        fiberDataBase.topAnchor.constraint(equalTo: fiberCell.topAnchor, constant: 8).isActive = true
-        fiberDataBase.centerXAnchor.constraint(equalTo: fiberCell.centerXAnchor).isActive = true
+        fiberDataBase.topAnchor.constraint(equalTo: fiberView.topAnchor, constant: 40).isActive = true
+        fiberDataBase.centerXAnchor.constraint(equalTo: fiberView.centerXAnchor).isActive = true
         
         
         fiberNameLabel.text = "E-Glass"
@@ -177,33 +187,30 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
             fiberMaterialPropertiesTextField.append(UITextField())
             fiberMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.orthotropic[i]
             fiberMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
-            fiberMaterialPropertiesTextField[i].inputAccessoryView = keyboardToolBarDoneButton()
-            fiberMaterialPropertiesTextField[i].delegate = self
         }
         
-        createMaterialCard(materialCard: fiberMaterialCardView, materialName: fiberNameLabel, label: fiberMaterialPropertiesLabel, value: fiberMaterialPropertiesTextField, aboveConstraint: fiberDataBase.bottomAnchor, under: fiberCell)
+        createMaterialCard(materialCard: fiberMaterialCardView, materialName: fiberNameLabel, label: fiberMaterialPropertiesLabel, value: fiberMaterialPropertiesTextField, aboveConstraint: fiberDataBase.bottomAnchor, under: fiberView)
         
         
         // fourth secion
         
-        matrixCell.selectionStyle = UITableViewCellSelectionStyle.none
-        matrixCell.addSubview(matrixDataBase)
-        matrixCell.addSubview(matrixMaterialCardView)
-        
+        creatViewCard(viewCard: matrixView, title: "Matrix Material", aboveConstraint: fiberView.bottomAnchor, under: scrollView)
+        matrixView.addSubview(matrixDataBase)
+        matrixView.addSubview(matrixMaterialCardView)
         
         matrixDataBase.setTitle("Matrix Material Database", for: UIControlState.normal)
         matrixDataBase.addTarget(self, action: #selector(changeMatrixMaterial(_:)), for: .touchUpInside)
         matrixDataBase.dataBaseButtonDesign()
         matrixDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
         matrixDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: matrixDataBase.intrinsicContentSize.width + 40).isActive = true
-        matrixDataBase.topAnchor.constraint(equalTo: matrixCell.topAnchor, constant: 8).isActive = true
-        matrixDataBase.centerXAnchor.constraint(equalTo: matrixCell.centerXAnchor).isActive = true
+        matrixDataBase.topAnchor.constraint(equalTo: matrixView.topAnchor, constant: 40).isActive = true
+        matrixDataBase.centerXAnchor.constraint(equalTo: matrixView.centerXAnchor).isActive = true
         
         matrixMaterialCardView.materialCardViewDesign()
-        matrixMaterialCardView.widthAnchor.constraint(equalTo: matrixCell.widthAnchor, multiplier: 0.8).isActive = true
+        matrixMaterialCardView.widthAnchor.constraint(equalTo: matrixView.widthAnchor, multiplier: 0.8).isActive = true
         matrixMaterialCardView.topAnchor.constraint(equalTo: matrixDataBase.bottomAnchor, constant: 8).isActive = true
-        matrixMaterialCardView.centerXAnchor.constraint(equalTo: matrixCell.centerXAnchor).isActive = true
-        matrixMaterialCardView.bottomAnchor.constraint(equalTo: matrixCell.bottomAnchor, constant: -20).isActive = true
+        matrixMaterialCardView.centerXAnchor.constraint(equalTo: matrixView.centerXAnchor).isActive = true
+        matrixMaterialCardView.bottomAnchor.constraint(equalTo: matrixView.bottomAnchor, constant: -20).isActive = true
         matrixMaterialCardView.addSubview(matrixNameLabel)
         
         matrixNameLabel.text = "Epoxy"
@@ -214,12 +221,11 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
             matrixMaterialPropertiesTextField.append(UITextField())
             matrixMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.orthotropic[i]
             matrixMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
-            matrixMaterialPropertiesTextField[i].inputAccessoryView = keyboardToolBarDoneButton()
-            matrixMaterialPropertiesTextField[i].delegate = self
             
         }
         
-        createMaterialCard(materialCard: matrixMaterialCardView, materialName: matrixNameLabel, label: matrixMaterialPropertiesLabel, value: matrixMaterialPropertiesTextField, aboveConstraint: matrixDataBase.bottomAnchor, under: matrixCell)
+        createMaterialCard(materialCard: matrixMaterialCardView, materialName: matrixNameLabel, label: matrixMaterialPropertiesLabel, value: matrixMaterialPropertiesTextField, aboveConstraint: matrixDataBase.bottomAnchor, under: matrixView)
+        matrixView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
     }
     
@@ -588,83 +594,5 @@ class UDFRC: UITableViewController, UITextFieldDelegate {
         return inMatrix
     }
     
-    
-    
-    
-    
-    // MARK: Edit keyborad
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        for i in 0...6 {
-            if textField == fiberMaterialPropertiesTextField[i] {
-                tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y + 200), animated: true)
-            }
-        }
-        for i in 0...2 {
-            if textField == matrixMaterialPropertiesTextField[i] {
-                tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y + 600), animated: true)
-            }
-        }
-    }
-    
-    
-    
-    
-    
-    // MARK: Table view
-    
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "headerID") as! TableHeader
-        switch section {
-        case 0:
-            headerView.headerLabel.text = "Method"
-        case 1:
-            headerView.headerLabel.text = "Geometry"
-        case 2:
-            headerView.headerLabel.text = "Fiber Material"
-        case 3:
-            headerView.headerLabel.text = "Matrix Material"
-        default:
-            fatalError("Unknown")
-        }
-        return headerView
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        switch indexPath.section {
-        case 0:
-            return methodCell
-        case 1:
-            return geometryCell
-        case 2:
-            return fiberCell
-        case 3:
-            return matrixCell
-        default:
-            fatalError("Unknown")
-        }
-        
-    }
-    
-    
-        
 
 }

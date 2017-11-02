@@ -75,7 +75,6 @@ class UDFRCResult: UIViewController {
         scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
         scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 700)
         scrollView.addSubview(engineeringConstantsCard)
         scrollView.addSubview(planeStressReducedComplianceCard)
         scrollView.addSubview(planeStressReducedStiffnessCard)
@@ -83,7 +82,7 @@ class UDFRCResult: UIViewController {
         
         // first section
         
-        engineeringConstantsTitleLabel.text = "3D Properties"
+        engineeringConstantsTitleLabel.text = "Engineering Constants"
         for i in 0...6 {
             engineeringConstantsLabel.append(UILabel())
             engineeringConstantsLabel[i].text = materialPropertyName.transverseIsotropic[i]
@@ -109,6 +108,7 @@ class UDFRCResult: UIViewController {
         }
         planeStressReducedStiffnessTitleLabel.text = "Plane-stress Reduced Stiffness"
         createResult3by3MatrixCard(resultCard: planeStressReducedStiffnessCard, title: planeStressReducedStiffnessTitleLabel, result: planeStressReducedStiffnessResultLabel, aboveConstraint: planeStressReducedComplianceCard.bottomAnchor, under: scrollView)
+        planeStressReducedStiffnessCard.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
     }
     

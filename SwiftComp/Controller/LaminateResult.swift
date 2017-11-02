@@ -76,7 +76,6 @@ class LaminateResult: UIViewController {
         scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
         scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 1200)
         scrollView.addSubview(threeDPropertiesCard)
         scrollView.addSubview(inPlanePropertiesCard)
         scrollView.addSubview(flexuralPropertiesCard)
@@ -118,7 +117,7 @@ class LaminateResult: UIViewController {
         }
         
         creatResultListCard(resultCard: flexuralPropertiesCard, title: flexuralPropertiesTitleLabel, label: flexuralPropertiesLabel, result: flexuralPropertiesResultLabel, aboveConstraint: inPlanePropertiesCard.bottomAnchor, under: scrollView)
-
+        flexuralPropertiesCard.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
     }
     

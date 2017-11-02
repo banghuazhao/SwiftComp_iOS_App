@@ -25,6 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         UIApplication.shared.statusBarStyle = .default
+        
+        IQKeyboardManager.sharedManager().enable = true
       
         return true
     }

@@ -9,7 +9,6 @@
 import UIKit
 
 
-
 func creatResultListCard(resultCard: UIView, title: UILabel, label: [UILabel], result: [UILabel], aboveConstraint: NSLayoutAnchor<NSLayoutYAxisAnchor>, under: UIView) {
     
     resultCard.resultCardViewDesign()

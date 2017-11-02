@@ -9,7 +9,7 @@
 import UIKit
 import Accelerate
 
-class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, UITextFieldDelegate {
+class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
     
     var effective3DProperties = [Double](repeating: 0.0, count: 17)
     var effectiveInplaneProperties = [Double](repeating: 0.0, count: 6)
@@ -19,9 +19,11 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
     var materialPropertyLabel = MaterialPropertyLabel()
     var materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
     
+    var scrollView: UIScrollView = UIScrollView()
+    
     // first section
     
-    var stackingSequenceCell: UITableViewCell = UITableViewCell()
+    var stackingSequenceView: UIView = UIView()
     
     var stackingSequenceDataBase: UIButton = UIButton()
     
@@ -34,7 +36,7 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
     
     // second section
     
-    var laminaMaterialCell: UITableViewCell = UITableViewCell()
+    var laminaMaterialView: UIView = UIView()
     
     var laminaMaterialDataBase: UIButton = UIButton()
     
@@ -52,8 +54,8 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(TableHeader.self, forHeaderFooterViewReuseIdentifier: "headerID")
-        tableView.tableFooterView = UIView()
+        view.backgroundColor = UIColor.white
+        
         hideKeyboardWhenTappedAround()
         
         createLayout()
@@ -66,30 +68,37 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
-    
 
     
     // MARK: Create layout
     
     func createLayout() {
         
-        // first section
+        self.view.addSubview(scrollView)
         
-        stackingSequenceCell.selectionStyle = UITableViewCellSelectionStyle.none
-        stackingSequenceCell.addSubview(stackingSequenceDataBase)
-        stackingSequenceCell.addSubview(stackingSequenceTextField)
-        stackingSequenceCell.addSubview(stackingSequenceExplain)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
+        scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        scrollView.addSubview(stackingSequenceView)
+        scrollView.addSubview(laminaMaterialView)
+        
+        
+        // first section
+
+        creatViewCard(viewCard: stackingSequenceView, title: "Stacking Sequence", aboveConstraint: scrollView.topAnchor, under: scrollView)
+        stackingSequenceView.addSubview(stackingSequenceDataBase)
+        stackingSequenceView.addSubview(stackingSequenceTextField)
+        stackingSequenceView.addSubview(stackingSequenceExplain)
         
         stackingSequenceDataBase.setTitle("Stacking Sequence Database", for: UIControlState.normal)
         stackingSequenceDataBase.addTarget(self, action: #selector(changeStackingSequence(_:)), for: .touchUpInside)
         stackingSequenceDataBase.dataBaseButtonDesign()
         stackingSequenceDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
         stackingSequenceDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: stackingSequenceDataBase.intrinsicContentSize.width + 40).isActive = true
-        stackingSequenceDataBase.topAnchor.constraint(equalTo: stackingSequenceCell.topAnchor, constant: 8).isActive = true
-        stackingSequenceDataBase.centerXAnchor.constraint(equalTo: stackingSequenceCell.centerXAnchor).isActive = true
+        stackingSequenceDataBase.topAnchor.constraint(equalTo: stackingSequenceView.topAnchor, constant: 40).isActive = true
+        stackingSequenceDataBase.centerXAnchor.constraint(equalTo: stackingSequenceView.centerXAnchor).isActive = true
         
         stackingSequenceTextField.translatesAutoresizingMaskIntoConstraints = false
         stackingSequenceTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
@@ -98,9 +107,9 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         stackingSequenceTextField.textAlignment = .center
         stackingSequenceTextField.placeholder = "[xx/xx/xx/xx/..]msn"
         stackingSequenceTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        stackingSequenceTextField.widthAnchor.constraint(equalTo: stackingSequenceCell.widthAnchor, multiplier: 0.6).isActive = true
+        stackingSequenceTextField.widthAnchor.constraint(equalTo: stackingSequenceView.widthAnchor, multiplier: 0.6).isActive = true
         stackingSequenceTextField.topAnchor.constraint(equalTo: stackingSequenceDataBase.bottomAnchor, constant: 8).isActive = true
-        stackingSequenceTextField.centerXAnchor.constraint(equalTo: stackingSequenceCell.centerXAnchor).isActive = true
+        stackingSequenceTextField.centerXAnchor.constraint(equalTo: stackingSequenceView.centerXAnchor).isActive = true
         
         stackingSequenceExplain.translatesAutoresizingMaskIntoConstraints = false
         stackingSequenceExplain.setTitle("What is stacking sequence?", for: .normal)
@@ -111,24 +120,23 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         stackingSequenceExplain.heightAnchor.constraint(equalToConstant: 20).isActive = true
         stackingSequenceExplain.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
         stackingSequenceExplain.topAnchor.constraint(equalTo: stackingSequenceTextField.bottomAnchor, constant: 8).isActive = true
-        stackingSequenceExplain.bottomAnchor.constraint(equalTo: stackingSequenceCell.bottomAnchor, constant: -20).isActive = true
-        stackingSequenceExplain.centerXAnchor.constraint(equalTo: stackingSequenceCell.centerXAnchor).isActive = true
+        stackingSequenceExplain.bottomAnchor.constraint(equalTo: stackingSequenceView.bottomAnchor, constant: -20).isActive = true
+        stackingSequenceExplain.centerXAnchor.constraint(equalTo: stackingSequenceView.centerXAnchor).isActive = true
 
-        
         
         // second section
 
-        laminaMaterialCell.selectionStyle = UITableViewCellSelectionStyle.none
-        laminaMaterialCell.addSubview(laminaMaterialDataBase)
-        laminaMaterialCell.addSubview(laminaMaterialCard)
+        creatViewCard(viewCard: laminaMaterialView, title: "Lamina Material", aboveConstraint: stackingSequenceView.bottomAnchor, under: scrollView)
+        laminaMaterialView.addSubview(laminaMaterialDataBase)
+        laminaMaterialView.addSubview(laminaMaterialCard)
         
         laminaMaterialDataBase.setTitle("Laminate Material Database", for: UIControlState.normal)
         laminaMaterialDataBase.addTarget(self, action: #selector(changeLaminateMaterial(_:)), for: .touchUpInside)
         laminaMaterialDataBase.dataBaseButtonDesign()
         laminaMaterialDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
         laminaMaterialDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: laminaMaterialDataBase.intrinsicContentSize.width + 40).isActive = true
-        laminaMaterialDataBase.topAnchor.constraint(equalTo: laminaMaterialCell.topAnchor, constant: 8).isActive = true
-        laminaMaterialDataBase.centerXAnchor.constraint(equalTo: laminaMaterialCell.centerXAnchor).isActive = true
+        laminaMaterialDataBase.topAnchor.constraint(equalTo: laminaMaterialView.topAnchor, constant: 40).isActive = true
+        laminaMaterialDataBase.centerXAnchor.constraint(equalTo: laminaMaterialView.centerXAnchor).isActive = true
         
         laminaMaterialNameLabel.text = "IM7/8552"
         for i in 0...11 {
@@ -138,12 +146,10 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
             laminaMaterialPropertiesTextField.append(UITextField())
             laminaMaterialPropertiesTextField[i].placeholder = materialPropertyPlaceHolder.orthotropic[i]
             laminaMaterialPropertiesTextField[i].keyboardType = UIKeyboardType.decimalPad
-            laminaMaterialPropertiesTextField[i].inputAccessoryView = keyboardToolBarDoneButton()
-            laminaMaterialPropertiesTextField[i].delegate = self
             
         }
-        createMaterialCard(materialCard: laminaMaterialCard, materialName: laminaMaterialNameLabel, label: laminaMaterialPropertiesLabel, value: laminaMaterialPropertiesTextField, aboveConstraint: laminaMaterialDataBase.bottomAnchor, under: laminaMaterialCell)
-
+        createMaterialCard(materialCard: laminaMaterialCard, materialName: laminaMaterialNameLabel, label: laminaMaterialPropertiesLabel, value: laminaMaterialPropertiesTextField, aboveConstraint: laminaMaterialDataBase.bottomAnchor, under: laminaMaterialView)
+        laminaMaterialView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
     }
     
@@ -770,66 +776,6 @@ class Laminate: UITableViewController, UIPopoverPresentationControllerDelegate, 
         dgetri_(&N1, &inMatrix, &N2, &pivots, &workspace, &N3, &error)
         return inMatrix
     }
-    
-    
-    
-    
-    
-    // MARK: Edit keyboard
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        tableView.setContentOffset(CGPoint.init(x: 0, y: textField.frame.origin.y), animated: true)
-    }
-    
-    
-    
-    
-    
-    // MARK: Table view
-    
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
-    }
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "headerID") as! TableHeader
-        switch section {
-        case 0:
-            headerView.headerLabel.text = "Stacking Sequence"
-        case 1:
-            headerView.headerLabel.text = "Lamina Material"
-        default:
-            fatalError("Unknown")
-        }
-        return headerView
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        switch indexPath.section {
-        case 0:
-            return stackingSequenceCell
-        case 1:
-            return laminaMaterialCell
-        default:
-            fatalError("Unknown")
-        }
-
-    }
-    
     
 
 }
