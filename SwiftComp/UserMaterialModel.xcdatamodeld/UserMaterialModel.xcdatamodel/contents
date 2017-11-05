@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13533" systemVersion="17B48" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="UserFiberMaterial" representedClassName="UserFiberMaterial" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" customClassName="[Double]" syncable="YES"/>
+    </entity>
+    <entity name="UserLaminaMaterial" representedClassName="UserLaminaMaterial" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" customClassName="[Double]" syncable="YES"/>
+    </entity>
+    <entity name="UserMatrixMaterial" representedClassName="UserMatrixMaterial" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" customClassName="[Double]" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="UserFiberMaterial" positionX="-389" positionY="-64" width="128" height="73"/>
+        <element name="UserLaminaMaterial" positionX="-63" positionY="0" width="128" height="73"/>
+        <element name="UserMatrixMaterial" positionX="-225" positionY="-18" width="128" height="73"/>
+    </elements>
+</model>

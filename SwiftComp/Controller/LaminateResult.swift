@@ -60,7 +60,7 @@ class LaminateResult: UIViewController {
         
         applyResult()
         
-        navigationItem.title = "Result"
+        editNavigationBar()
         
     }
     
@@ -175,10 +175,62 @@ class LaminateResult: UIViewController {
             flexuralPropertiesResultLabel[i].adjustsFontSizeToFitWidth = true
         }
         
+    }
+    
+    
+    // MARK: Edit navigation bar
+    
+    func editNavigationBar() {
         
+        navigationItem.title = "Result"
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Share", style: .plain, target: self, action: #selector(shareResult))
+    }
+    
+    @objc func shareResult() {
+        
+        var str : String = ""
+        
+        str = "3D Properties:\n"
+        for i in 0...16 {
+            str +=  materialPropertyName.monoclinic[i] + ": \t" + threeDPropertiesResultLabel[i].text! + "\n"
+        }
+        
+        str += "\n"
+        
+        str += "In-plane Properties:\n"
+        for i in 0...5 {
+            str += materialPropertyName.plate[i] + ": \t" + inPlanePropertiesResultLabel[i].text! + "\n"
+        }
+        
+        str += "\n"
+        
+        str += "Flexural Properties:\n"
+        for i in 0...5 {
+            str += materialPropertyName.plate[i] + ": \t" + flexuralPropertiesResultLabel[i].text! + "\n"
+        }
+        
+        let file = getDocumentsDirectory().appendingPathComponent("Result.txt")
+        
+        do {
+            try str.write(to: file, atomically: true, encoding: String.Encoding.utf8)
+        } catch {
+            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+        }
+    
+        
+        let activityVC = UIActivityViewController(activityItems: [file], applicationActivities: nil)
+        activityVC.popoverPresentationController?.sourceView = self.view
+        
+        self.present(activityVC, animated: true, completion: nil)
         
     }
-
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        print(paths)
+        return paths[0]
+    }
 
 
 

@@ -8,9 +8,11 @@
 
 import UIKit
 import Accelerate
+import CoreData
 
 class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
     
+  
     var effective3DProperties = [Double](repeating: 0.0, count: 17)
     var effectiveInplaneProperties = [Double](repeating: 0.0, count: 6)
     var effectiveFlexuralProperties = [Double](repeating: 0.0, count: 6)
@@ -18,6 +20,12 @@ class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
     var materialPropertyName = MaterialPropertyName()
     var materialPropertyLabel = MaterialPropertyLabel()
     var materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
+
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var userSavedLaminaMaterials = [UserLaminaMaterial]()
+    
+    
+    // layout
     
     var scrollView: UIScrollView = UIScrollView()
     
@@ -49,6 +57,10 @@ class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
     var laminaMaterialPropertiesLabel: [UILabel] = []
     
     var laminaMaterialPropertiesTextField: [UITextField] = []
+    
+    var saveLaminaMaterialButton: UIButton = UIButton()
+    
+    var deleteLaminaMaterialButton: UIButton = UIButton()
 
     
     override func viewDidLoad() {
@@ -66,9 +78,21 @@ class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
         
         editNavigationBar()
         
+        loadCoreData()
+        
+        
     }
     
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        createActionSheet()
+        
+        loadCoreData()
+        
+    }
+    
     
     // MARK: Create layout
     
@@ -96,7 +120,6 @@ class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
         stackingSequenceDataBase.addTarget(self, action: #selector(changeStackingSequence(_:)), for: .touchUpInside)
         stackingSequenceDataBase.dataBaseButtonDesign()
         stackingSequenceDataBase.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        stackingSequenceDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: stackingSequenceDataBase.intrinsicContentSize.width + 40).isActive = true
         stackingSequenceDataBase.topAnchor.constraint(equalTo: stackingSequenceView.topAnchor, constant: 40).isActive = true
         stackingSequenceDataBase.centerXAnchor.constraint(equalTo: stackingSequenceView.centerXAnchor).isActive = true
         
@@ -129,6 +152,9 @@ class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
         creatViewCard(viewCard: laminaMaterialView, title: "Lamina Material", aboveConstraint: stackingSequenceView.bottomAnchor, under: scrollView)
         laminaMaterialView.addSubview(laminaMaterialDataBase)
         laminaMaterialView.addSubview(laminaMaterialCard)
+        laminaMaterialView.addSubview(saveLaminaMaterialButton)
+        laminaMaterialView.addSubview(deleteLaminaMaterialButton)
+
         
         laminaMaterialDataBase.setTitle("Laminate Material Database", for: UIControlState.normal)
         laminaMaterialDataBase.addTarget(self, action: #selector(changeLaminateMaterial(_:)), for: .touchUpInside)
@@ -149,6 +175,19 @@ class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
             
         }
         createMaterialCard(materialCard: laminaMaterialCard, materialName: laminaMaterialNameLabel, label: laminaMaterialPropertiesLabel, value: laminaMaterialPropertiesTextField, aboveConstraint: laminaMaterialDataBase.bottomAnchor, under: laminaMaterialView)
+        
+        
+        saveLaminaMaterialButton.addTarget(self, action: #selector(saveLaminaMaterial), for: .touchUpInside)
+        saveLaminaMaterialButton.saveMaterialButtonDesign()
+        saveLaminaMaterialButton.topAnchor.constraint(equalTo: laminaMaterialCard.bottomAnchor, constant: 8).isActive = true
+        saveLaminaMaterialButton.centerXAnchor.constraint(equalTo: laminaMaterialCard.centerXAnchor).isActive = true
+        
+        deleteLaminaMaterialButton.addTarget(self, action: #selector(deleteLaminaMaterial), for: .touchUpInside)
+        deleteLaminaMaterialButton.deleteMaterialButtonDesign()
+        deleteLaminaMaterialButton.topAnchor.constraint(equalTo: saveLaminaMaterialButton.bottomAnchor, constant: 8).isActive = true
+        deleteLaminaMaterialButton.centerXAnchor.constraint(equalTo: laminaMaterialCard.centerXAnchor).isActive = true
+        deleteLaminaMaterialButton.bottomAnchor.constraint(equalTo: laminaMaterialView.bottomAnchor, constant: -20).isActive = true
+        
         laminaMaterialView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
     }
@@ -275,7 +314,104 @@ class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
         
     }
     
+    @objc func saveLaminaMaterial(_ sender: UIButton) {
+        sender.flash()
+        
+        let inputAlter = UIAlertController(title: "Save Material", message: "Enter the material name.", preferredStyle: UIAlertControllerStyle.alert)
+        inputAlter.addTextField { (textField: UITextField) in
+            textField.placeholder = "Material Name"
+        }
+        inputAlter.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        inputAlter.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action:UIAlertAction) in
+            
+            let materialNameTextField = inputAlter.textFields?.first
+            
+            // check empty name
+            
+            let emptyNameAlter = UIAlertController(title: "Empty Name", message: "Please enter a name for this material.", preferredStyle: UIAlertControllerStyle.alert)
+            emptyNameAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            var userMaterialName : String = ""
+            
+            if materialNameTextField?.text != "" {
+                userMaterialName = (materialNameTextField?.text)!
+            }
+            else {
+                self.present(emptyNameAlter, animated: true, completion: nil)
+                return
+            }
+            
+            // check wrong or empty material valuw
+            
+            var  laminaMaterialArray : [Double] = []
+            
+            let wrongMaterialValueAlter = UIAlertController(title: "Wrong Material Values", message: "Please enter valid values (number) for this material.", preferredStyle: UIAlertControllerStyle.alert)
+            wrongMaterialValueAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            let emptyMaterialValueAlter = UIAlertController(title: "Empty Material Value", message: "Please enter values (number) for this material.", preferredStyle: UIAlertControllerStyle.alert)
+            emptyMaterialValueAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            for i in 0...11 {
+                if let valueString = self.laminaMaterialPropertiesTextField[i].text {
+                    if let value = Double(valueString) {
+                        laminaMaterialArray.append(value)
+                    }
+                    else {
+                        self.present(wrongMaterialValueAlter, animated: true, completion: nil)
+                        return
+                    }
+                }
+                else {
+                    self.present(emptyMaterialValueAlter, animated: true, completion: nil)
+                    return
+                }
+            }
+            
+            // check same material name
+            
+            let sameMaterialNameAlter = UIAlertController(title: "Same Material Name", message: "Please enter a differet material name.", preferredStyle: UIAlertControllerStyle.alert)
+            sameMaterialNameAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            for name in ["User Defined Material", "IM7/8552", "T2C190/F155"] {
+                if userMaterialName == name {
+                    self.present(sameMaterialNameAlter, animated: true, completion: nil)
+                    return
+                }
+            }
+
+            for userSavedLaminaMaterial in self.userSavedLaminaMaterials {
+                if let name = userSavedLaminaMaterial.name {
+                    if userMaterialName == name {
+                        self.present(sameMaterialNameAlter, animated: true, completion: nil)
+                        return
+                    }
+                }
+            }
+            
+            let currentUserLaminaMaterial = UserLaminaMaterial(context: self.context)
+            currentUserLaminaMaterial.setValue(userMaterialName, forKey: "name")
+            currentUserLaminaMaterial.setValue(laminaMaterialArray, forKey: "properties")
+
+            do {
+                try self.context.save()
+                self.loadCoreData()
+            } catch {
+                print("Could not save data: \(error.localizedDescription)")
+            }
+            
+        }))
+        
+        self.present(inputAlter, animated: true, completion: nil)
+        
+    }
     
+    
+    
+    @objc func deleteLaminaMaterial(_ sender: UIButton) {
+        sender.flash()
+        let userSavedLaminaViewController = UserSavedLaminaMaterial()
+        self.navigationController?.pushViewController(userSavedLaminaViewController, animated: true)
+    }
     
     
     // MARK: Create action sheet
@@ -362,6 +498,17 @@ class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
             else if materialCurrectName == "User Defined Material" {
                 for i in 0...11 {
                     laminaMaterialPropertiesTextField[i].text = ""
+                }
+            }
+            else {
+                for userSaveMaterial in userSavedLaminaMaterials {
+                    if materialCurrectName == userSaveMaterial.name {
+                        if let property = userSaveMaterial.properties {
+                            for i in 0...11 {
+                                laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", property[i])
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -778,6 +925,43 @@ class Laminate: UIViewController, UIPopoverPresentationControllerDelegate {
     }
     
 
+    
+    // MARK: Load core data
+    
+    func loadCoreData() {
+        do {
+            userSavedLaminaMaterials = try context.fetch(UserLaminaMaterial.fetchRequest())
+            
+            for userSavedLaminaMaterial in userSavedLaminaMaterials {
+                
+                var add = true
+                
+                if let name = userSavedLaminaMaterial.name {
+                    for laminaMaterialActionSheet in laminaMaterialDataBaseAlterController.actions {
+                        if name == laminaMaterialActionSheet.title {
+                            add = false
+                        }
+                    }
+                    
+                    if add {
+                        let action  = UIAlertAction(title: name, style: UIAlertActionStyle.default) { (action) -> Void in
+                            self.laminaMaterialNameLabel.text = name
+                            self.changeMaterialDataField()
+                        }
+                        laminaMaterialDataBaseAlterController.addAction(action)
+                        
+                    }
+                }
+            }
+            
+        } catch {
+            print("Could not load data from database \(error.localizedDescription)")
+        }
+        
+    }
+    
+    
+    
 }
 
 

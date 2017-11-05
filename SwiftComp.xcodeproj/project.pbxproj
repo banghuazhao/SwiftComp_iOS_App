@@ -13,11 +13,16 @@
 		9904AFF31FA9001A0018FD55 /* ButtonDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFF21FA9001A0018FD55 /* ButtonDesign.swift */; };
 		9904AFF51FA900690018FD55 /* KeyboardDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFF41FA900690018FD55 /* KeyboardDesign.swift */; };
 		9904AFF71FAB888A0018FD55 /* ViewCardDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFF61FAB888A0018FD55 /* ViewCardDesign.swift */; };
+		990AC2181FACE5440080D219 /* UserMaterialModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 990AC2161FACE5430080D219 /* UserMaterialModel.xcdatamodeld */; };
 		990F76C41F85BFCF0073E459 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76C31F85BFCF0073E459 /* AppDelegate.swift */; };
 		990F76C91F85BFCF0073E459 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 990F76C71F85BFCF0073E459 /* Main.storyboard */; };
 		990F76CB1F85BFCF0073E459 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 990F76CA1F85BFCF0073E459 /* Assets.xcassets */; };
 		990F76CE1F85BFCF0073E459 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */; };
 		990F76D61F85C0280073E459 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76D51F85C0280073E459 /* Home.swift */; };
+		992285851FAEAF64004C1E34 /* UserSavedLaminaMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992285841FAEAF64004C1E34 /* UserSavedLaminaMaterial.swift */; };
+		992285871FAEB1F2004C1E34 /* UserSavedMaterialCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992285861FAEB1F2004C1E34 /* UserSavedMaterialCell.swift */; };
+		992285891FAF5C93004C1E34 /* UserSavedFiberMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992285881FAF5C93004C1E34 /* UserSavedFiberMaterial.swift */; };
+		9922858B1FAF5EAD004C1E34 /* UserSavedMatrixMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9922858A1FAF5EAD004C1E34 /* UserSavedMatrixMaterial.swift */; };
 		9945CF861FA565C7002F2F30 /* LaminateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF851FA565C7002F2F30 /* LaminateResult.swift */; };
 		9945CF891FA66432002F2F30 /* Laminate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5BF821F9CD78400D87360 /* Laminate.swift */; };
 		9945CF8B1FA678C0002F2F30 /* UDFRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF8A1FA678C0002F2F30 /* UDFRC.swift */; };
@@ -51,6 +56,7 @@
 		9904AFF21FA9001A0018FD55 /* ButtonDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonDesign.swift; sourceTree = "<group>"; };
 		9904AFF41FA900690018FD55 /* KeyboardDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDesign.swift; sourceTree = "<group>"; };
 		9904AFF61FAB888A0018FD55 /* ViewCardDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCardDesign.swift; sourceTree = "<group>"; };
+		990AC2171FACE5430080D219 /* UserMaterialModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserMaterialModel.xcdatamodel; sourceTree = "<group>"; };
 		990F76C01F85BFCF0073E459 /* SwiftComp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftComp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		990F76C31F85BFCF0073E459 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		990F76C81F85BFCF0073E459 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -58,6 +64,10 @@
 		990F76CD1F85BFCF0073E459 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		990F76CF1F85BFCF0073E459 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		990F76D51F85C0280073E459 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		992285841FAEAF64004C1E34 /* UserSavedLaminaMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavedLaminaMaterial.swift; sourceTree = "<group>"; };
+		992285861FAEB1F2004C1E34 /* UserSavedMaterialCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavedMaterialCell.swift; sourceTree = "<group>"; };
+		992285881FAF5C93004C1E34 /* UserSavedFiberMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavedFiberMaterial.swift; sourceTree = "<group>"; };
+		9922858A1FAF5EAD004C1E34 /* UserSavedMatrixMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavedMatrixMaterial.swift; sourceTree = "<group>"; };
 		9945CF851FA565C7002F2F30 /* LaminateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaminateResult.swift; sourceTree = "<group>"; };
 		9945CF8A1FA678C0002F2F30 /* UDFRC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDFRC.swift; sourceTree = "<group>"; };
 		9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositeModelCell.swift; sourceTree = "<group>"; };
@@ -121,6 +131,7 @@
 				998655411F867FE70004876A /* Controller */,
 				990F76CA1F85BFCF0073E459 /* Assets.xcassets */,
 				990F76CF1F85BFCF0073E459 /* Info.plist */,
+				990AC2161FACE5430080D219 /* UserMaterialModel.xcdatamodeld */,
 			);
 			path = SwiftComp;
 			sourceTree = "<group>";
@@ -206,6 +217,7 @@
 				990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */,
 				990F76C71F85BFCF0073E459 /* Main.storyboard */,
 				9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */,
+				992285861FAEB1F2004C1E34 /* UserSavedMaterialCell.swift */,
 				9904AFF61FAB888A0018FD55 /* ViewCardDesign.swift */,
 				9904AFEE1FA8FF430018FD55 /* ResultCardDesign.swift */,
 				9904AFF01FA8FFA50018FD55 /* MaterialCardDesign.swift */,
@@ -222,8 +234,11 @@
 				990F76D51F85C0280073E459 /* Home.swift */,
 				99C5BF821F9CD78400D87360 /* Laminate.swift */,
 				9945CF851FA565C7002F2F30 /* LaminateResult.swift */,
+				992285841FAEAF64004C1E34 /* UserSavedLaminaMaterial.swift */,
 				9945CF8A1FA678C0002F2F30 /* UDFRC.swift */,
 				9945CF8E1FA6BF04002F2F30 /* UDFRCResult.swift */,
+				992285881FAF5C93004C1E34 /* UserSavedFiberMaterial.swift */,
+				9922858A1FAF5EAD004C1E34 /* UserSavedMatrixMaterial.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -309,11 +324,13 @@
 				994FB60C1FABA12E00C7959A /* IQKeyboardManager.swift in Sources */,
 				994FB60E1FABA12E00C7959A /* IQUIScrollView+Additions.swift in Sources */,
 				994FB6091FABA12E00C7959A /* IQKeyboardManagerConstants.swift in Sources */,
+				992285891FAF5C93004C1E34 /* UserSavedFiberMaterial.swift in Sources */,
 				994FB6041FABA12E00C7959A /* IQTitleBarButtonItem.swift in Sources */,
 				994FB60B1FABA12E00C7959A /* IQKeyboardReturnKeyHandler.swift in Sources */,
 				9904AFF31FA9001A0018FD55 /* ButtonDesign.swift in Sources */,
 				994FB6081FABA12E00C7959A /* IQKeyboardManagerConstantsInternal.swift in Sources */,
 				99C5BF7F1F9CD54E00D87360 /* CompositeModel.swift in Sources */,
+				992285871FAEB1F2004C1E34 /* UserSavedMaterialCell.swift in Sources */,
 				994FB6071FABA12E00C7959A /* IQUIView+IQKeyboardToolbar.swift in Sources */,
 				994FB6061FABA12E00C7959A /* IQToolbar.swift in Sources */,
 				990F76C41F85BFCF0073E459 /* AppDelegate.swift in Sources */,
@@ -322,12 +339,15 @@
 				9945CF861FA565C7002F2F30 /* LaminateResult.swift in Sources */,
 				99B508C51F86872200B6BC47 /* MaterialDataModel.swift in Sources */,
 				994FB6101FABA12E00C7959A /* IQUITextFieldView+Additions.swift in Sources */,
+				990AC2181FACE5440080D219 /* UserMaterialModel.xcdatamodeld in Sources */,
 				9904AFF11FA8FFA50018FD55 /* MaterialCardDesign.swift in Sources */,
 				9945CF891FA66432002F2F30 /* Laminate.swift in Sources */,
+				9922858B1FAF5EAD004C1E34 /* UserSavedMatrixMaterial.swift in Sources */,
 				994FB6051FABA12E00C7959A /* IQBarButtonItem.swift in Sources */,
 				994FB60D1FABA12E00C7959A /* IQUIWindow+Hierarchy.swift in Sources */,
 				9945CF8F1FA6BF04002F2F30 /* UDFRCResult.swift in Sources */,
 				994FB6031FABA12E00C7959A /* IQPreviousNextView.swift in Sources */,
+				992285851FAEAF64004C1E34 /* UserSavedLaminaMaterial.swift in Sources */,
 				994FB6121FABA12E00C7959A /* IQNSArray+Sort.swift in Sources */,
 				9904AFED1FA779310018FD55 /* MaterialTypeModel.swift in Sources */,
 				9904AFF71FAB888A0018FD55 /* ViewCardDesign.swift in Sources */,
@@ -518,6 +538,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		990AC2161FACE5430080D219 /* UserMaterialModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				990AC2171FACE5430080D219 /* UserMaterialModel.xcdatamodel */,
+			);
+			currentVersion = 990AC2171FACE5430080D219 /* UserMaterialModel.xcdatamodel */;
+			path = UserMaterialModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 990F76B81F85BFCF0073E459 /* Project object */;
 }

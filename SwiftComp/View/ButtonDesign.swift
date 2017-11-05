@@ -18,8 +18,33 @@ extension UIButton {
         self.layer.borderColor = self.tintColor.cgColor
         self.layer.cornerRadius = self.intrinsicContentSize.height / 2
         self.titleLabel?.textAlignment = .center
+        self.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        self.widthAnchor.constraint(greaterThanOrEqualToConstant: self.intrinsicContentSize.width + 40).isActive = true
         
     }
+    
+    func saveMaterialButtonDesign() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.setTitle("Save Material", for: UIControlState.normal)
+        self.setTitleColor(.white, for: .normal)
+        self.backgroundColor = UIColor(red: 241/255, green: 196/255, blue: 15/255, alpha: 1.0)
+        self.layer.cornerRadius = self.intrinsicContentSize.height / 2
+        self.titleLabel?.textAlignment = .center
+        self.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        self.widthAnchor.constraint(greaterThanOrEqualToConstant: self.intrinsicContentSize.width + 40).isActive = true
+    }
+    
+    func deleteMaterialButtonDesign() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.setTitle("Delete Material", for: UIControlState.normal)
+        self.setTitleColor(.white, for: .normal)
+        self.backgroundColor = UIColor.red
+        self.layer.cornerRadius = self.intrinsicContentSize.height / 2
+        self.titleLabel?.textAlignment = .center
+        self.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        self.widthAnchor.constraint(greaterThanOrEqualToConstant: self.intrinsicContentSize.width + 40).isActive = true
+    }
+    
     
     func calculateButtonDesign() {
         self.translatesAutoresizingMaskIntoConstraints = false

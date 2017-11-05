@@ -14,7 +14,6 @@ func createMaterialCard(materialCard: UIView, materialName: UILabel, label: [UIL
     materialCard.widthAnchor.constraint(equalTo: under.widthAnchor, multiplier: 0.8).isActive = true
     materialCard.topAnchor.constraint(equalTo: aboveConstraint, constant: 8).isActive = true
     materialCard.centerXAnchor.constraint(equalTo: under.centerXAnchor).isActive = true
-    materialCard.bottomAnchor.constraint(equalTo: under.bottomAnchor, constant: -20).isActive = true
     materialCard.addSubview(materialName)
     
     materialName.materialCardTitleDesign()

@@ -58,7 +58,7 @@ class UDFRCResult: UIViewController {
         
         applyResult()
         
-        navigationItem.title = "Result"
+        editNavigationBar()
         
     }
     
@@ -97,7 +97,7 @@ class UDFRCResult: UIViewController {
         for _ in 0...8 {
             planeStressReducedComplianceResultLabel.append(UILabel())
         }
-        planeStressReducedComplianceTitleLabel.text = "Plane-stress Reduced Compliance"
+        planeStressReducedComplianceTitleLabel.text = " Plane-stress Reduced Compliance "
         createResult3by3MatrixCard(resultCard: planeStressReducedComplianceCard, title: planeStressReducedComplianceTitleLabel, result: planeStressReducedComplianceResultLabel, aboveConstraint: engineeringConstantsCard.bottomAnchor, under: scrollView)
         
   
@@ -106,7 +106,7 @@ class UDFRCResult: UIViewController {
         for _ in 0...8 {
             planeStressReducedStiffnessResultLabel.append(UILabel())
         }
-        planeStressReducedStiffnessTitleLabel.text = "Plane-stress Reduced Stiffness"
+        planeStressReducedStiffnessTitleLabel.text = " Plane-stress Reduced Stiffness "
         createResult3by3MatrixCard(resultCard: planeStressReducedStiffnessCard, title: planeStressReducedStiffnessTitleLabel, result: planeStressReducedStiffnessResultLabel, aboveConstraint: planeStressReducedComplianceCard.bottomAnchor, under: scrollView)
         planeStressReducedStiffnessCard.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
@@ -172,6 +172,69 @@ class UDFRCResult: UIViewController {
         }
         
     }
+    
+    
+    
+    // MARK: Edit navigation bar
+    
+    func editNavigationBar() {
+        
+        navigationItem.title = "Result"
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Share", style: .plain, target: self, action: #selector(shareResult))
+    }
+    
+    @objc func shareResult() {
+        
+        var str : String = ""
+        
+        str = "Engineering Constants:\n"
+        for i in 0...6 {
+            str +=  materialPropertyName.transverseIsotropic[i] + ": \t" + engineeringConstantsResultLabel[i].text! + "\n"
+        }
+        
+        str += "\n"
+        
+        str += "Plane-stress Reduced Compliance:\n"
+        for i in 0...2 {
+            for j in 0...2 {
+                str += planeStressReducedComplianceResultLabel[i*3+j].text! + "\t"
+            }
+            str += "\n"
+        }
+        
+        str += "\n"
+        
+        str += "Plane-stress Reduced Stiffness:\n"
+        for i in 0...2 {
+            for j in 0...2 {
+                str += planeStressReducedStiffnessResultLabel[i*3+j].text! + "\t"
+            }
+            str += "\n"
+        }
+        
+        let file = getDocumentsDirectory().appendingPathComponent("Result.txt")
+        
+        do {
+            try str.write(to: file, atomically: true, encoding: String.Encoding.utf8)
+        } catch {
+            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+        }
+        
+        
+        let activityVC = UIActivityViewController(activityItems: [file], applicationActivities: nil)
+        activityVC.popoverPresentationController?.sourceView = self.view
+        
+        self.present(activityVC, animated: true, completion: nil)
+        
+    }
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        print(paths)
+        return paths[0]
+    }
+
 
 
 }

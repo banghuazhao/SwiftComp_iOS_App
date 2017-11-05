@@ -19,6 +19,13 @@ class UDFRC: UIViewController {
     var materialPropertyLabel = MaterialPropertyLabel()
     var materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
     
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var userSavedFiberMaterials = [UserFiberMaterial]()
+    var userSavedMatrixMaterials = [UserMatrixMaterial]()
+
+    
+    // layout
+    
     var scrollView: UIScrollView = UIScrollView()
     
     // first section
@@ -57,6 +64,10 @@ class UDFRC: UIViewController {
     
     var fiberMaterialPropertiesTextField: [UITextField] = []
     
+    var saveFiberMaterialButton: UIButton = UIButton()
+    
+    var deleteFiberMaterialButton: UIButton = UIButton()
+    
     
     // fourth section
     
@@ -73,6 +84,10 @@ class UDFRC: UIViewController {
     var matrixMaterialPropertiesLabel: [UILabel] = []
     
     var matrixMaterialPropertiesTextField: [UITextField] = []
+    
+    var saveMatrixMaterialButton: UIButton = UIButton()
+    
+    var deleteMatrixMaterialButton: UIButton = UIButton()
     
     
 
@@ -92,8 +107,20 @@ class UDFRC: UIViewController {
         
         editNavigationBar()
         
+        loadCoreData()
+        
+        
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        createActionSheet()
+        
+        loadCoreData()
+        
+    }
     
     
     // MARK: Create layout
@@ -157,7 +184,7 @@ class UDFRC: UIViewController {
         volumeFractionSlider.value = 0.50
         volumeFractionSlider.addTarget(self, action: #selector(changeVolumeFraction), for: .valueChanged)
         volumeFractionSlider.translatesAutoresizingMaskIntoConstraints = false
-        volumeFractionSlider.topAnchor.constraint(equalTo: geometryLabel.bottomAnchor, constant: 8).isActive = true
+        volumeFractionSlider.topAnchor.constraint(equalTo: geometryLabel.bottomAnchor, constant: 0).isActive = true
         volumeFractionSlider.widthAnchor.constraint(equalTo: geometryView.widthAnchor, multiplier: 0.8).isActive = true
         volumeFractionSlider.centerXAnchor.constraint(equalTo: geometryView.centerXAnchor, constant: 0).isActive = true
         volumeFractionSlider.heightAnchor.constraint(equalToConstant: 30).isActive = true
@@ -169,6 +196,9 @@ class UDFRC: UIViewController {
         creatViewCard(viewCard: fiberView, title: "Fiber Material", aboveConstraint: geometryView.bottomAnchor, under: scrollView)
         fiberView.addSubview(fiberDataBase)
         fiberView.addSubview(fiberMaterialCardView)
+        fiberView.addSubview(saveFiberMaterialButton)
+        fiberView.addSubview(deleteFiberMaterialButton)
+
         
         fiberDataBase.setTitle("Fiber Material Database", for: UIControlState.normal)
         fiberDataBase.addTarget(self, action: #selector(changeFiberMaterial(_:)), for: .touchUpInside)
@@ -191,12 +221,25 @@ class UDFRC: UIViewController {
         
         createMaterialCard(materialCard: fiberMaterialCardView, materialName: fiberNameLabel, label: fiberMaterialPropertiesLabel, value: fiberMaterialPropertiesTextField, aboveConstraint: fiberDataBase.bottomAnchor, under: fiberView)
         
+        saveFiberMaterialButton.addTarget(self, action: #selector(saveFiberMaterial), for: .touchUpInside)
+        saveFiberMaterialButton.saveMaterialButtonDesign()
+        saveFiberMaterialButton.topAnchor.constraint(equalTo: fiberMaterialCardView.bottomAnchor, constant: 8).isActive = true
+        saveFiberMaterialButton.centerXAnchor.constraint(equalTo: fiberMaterialCardView.centerXAnchor).isActive = true
+        
+        deleteFiberMaterialButton.addTarget(self, action: #selector(deleteFiberMaterial), for: .touchUpInside)
+        deleteFiberMaterialButton.deleteMaterialButtonDesign()
+        deleteFiberMaterialButton.topAnchor.constraint(equalTo: saveFiberMaterialButton.bottomAnchor, constant: 8).isActive = true
+        deleteFiberMaterialButton.centerXAnchor.constraint(equalTo: saveFiberMaterialButton.centerXAnchor).isActive = true
+        deleteFiberMaterialButton.bottomAnchor.constraint(equalTo: fiberView.bottomAnchor, constant: -20).isActive = true
+        
         
         // fourth secion
         
         creatViewCard(viewCard: matrixView, title: "Matrix Material", aboveConstraint: fiberView.bottomAnchor, under: scrollView)
         matrixView.addSubview(matrixDataBase)
         matrixView.addSubview(matrixMaterialCardView)
+        matrixView.addSubview(saveMatrixMaterialButton)
+        matrixView.addSubview(deleteMatrixMaterialButton)
         
         matrixDataBase.setTitle("Matrix Material Database", for: UIControlState.normal)
         matrixDataBase.addTarget(self, action: #selector(changeMatrixMaterial(_:)), for: .touchUpInside)
@@ -205,13 +248,6 @@ class UDFRC: UIViewController {
         matrixDataBase.widthAnchor.constraint(greaterThanOrEqualToConstant: matrixDataBase.intrinsicContentSize.width + 40).isActive = true
         matrixDataBase.topAnchor.constraint(equalTo: matrixView.topAnchor, constant: 40).isActive = true
         matrixDataBase.centerXAnchor.constraint(equalTo: matrixView.centerXAnchor).isActive = true
-        
-        matrixMaterialCardView.materialCardViewDesign()
-        matrixMaterialCardView.widthAnchor.constraint(equalTo: matrixView.widthAnchor, multiplier: 0.8).isActive = true
-        matrixMaterialCardView.topAnchor.constraint(equalTo: matrixDataBase.bottomAnchor, constant: 8).isActive = true
-        matrixMaterialCardView.centerXAnchor.constraint(equalTo: matrixView.centerXAnchor).isActive = true
-        matrixMaterialCardView.bottomAnchor.constraint(equalTo: matrixView.bottomAnchor, constant: -20).isActive = true
-        matrixMaterialCardView.addSubview(matrixNameLabel)
         
         matrixNameLabel.text = "Epoxy"
         for i in 0...2 {
@@ -225,6 +261,19 @@ class UDFRC: UIViewController {
         }
         
         createMaterialCard(materialCard: matrixMaterialCardView, materialName: matrixNameLabel, label: matrixMaterialPropertiesLabel, value: matrixMaterialPropertiesTextField, aboveConstraint: matrixDataBase.bottomAnchor, under: matrixView)
+        
+        
+        saveMatrixMaterialButton.addTarget(self, action: #selector(saveMatrixMaterial), for: .touchUpInside)
+        saveMatrixMaterialButton.saveMaterialButtonDesign()
+        saveMatrixMaterialButton.topAnchor.constraint(equalTo: matrixMaterialCardView.bottomAnchor, constant: 8).isActive = true
+        saveMatrixMaterialButton.centerXAnchor.constraint(equalTo: matrixMaterialCardView.centerXAnchor).isActive = true
+        
+        deleteMatrixMaterialButton.addTarget(self, action: #selector(deleteMatrixMaterial), for: .touchUpInside)
+        deleteMatrixMaterialButton.deleteMaterialButtonDesign()
+        deleteMatrixMaterialButton.topAnchor.constraint(equalTo: saveMatrixMaterialButton.bottomAnchor, constant: 8).isActive = true
+        deleteMatrixMaterialButton.centerXAnchor.constraint(equalTo: saveMatrixMaterialButton.centerXAnchor).isActive = true
+        deleteMatrixMaterialButton.bottomAnchor.constraint(equalTo: matrixView.bottomAnchor, constant: -20).isActive = true
+        
         matrixView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
     }
@@ -248,6 +297,205 @@ class UDFRC: UIViewController {
     @objc func changeMatrixMaterial(_ sender: UIButton) {
         sender.flash()
         self.present(matrixMaterialDataBaseAlterController, animated: true, completion: nil)
+    }
+    
+    @objc func saveFiberMaterial(_ sender: UIButton) {
+        sender.flash()
+        
+        let inputAlter = UIAlertController(title: "Save Material", message: "Enter the material name.", preferredStyle: UIAlertControllerStyle.alert)
+        inputAlter.addTextField { (textField: UITextField) in
+            textField.placeholder = "Material Name"
+        }
+        inputAlter.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        inputAlter.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action:UIAlertAction) in
+            
+            let materialNameTextField = inputAlter.textFields?.first
+            
+            // check empty name
+            
+            let emptyNameAlter = UIAlertController(title: "Empty Name", message: "Please enter a name for this material.", preferredStyle: UIAlertControllerStyle.alert)
+            emptyNameAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            var userMaterialName : String = ""
+            
+            if materialNameTextField?.text != "" {
+                userMaterialName = (materialNameTextField?.text)!
+            }
+            else {
+                self.present(emptyNameAlter, animated: true, completion: nil)
+                return
+            }
+            
+            // check wrong or empty material valuw
+            
+            var  fiberMaterialArray : [Double] = []
+            
+            let wrongMaterialValueAlter = UIAlertController(title: "Wrong Material Values", message: "Please enter valid values (number) for this material.", preferredStyle: UIAlertControllerStyle.alert)
+            wrongMaterialValueAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            let emptyMaterialValueAlter = UIAlertController(title: "Empty Material Value", message: "Please enter values (number) for this material.", preferredStyle: UIAlertControllerStyle.alert)
+            emptyMaterialValueAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            for i in 0...6 {
+                if let valueString = self.fiberMaterialPropertiesTextField[i].text {
+                    if let value = Double(valueString) {
+                        fiberMaterialArray.append(value)
+                    }
+                    else {
+                        self.present(wrongMaterialValueAlter, animated: true, completion: nil)
+                        return
+                    }
+                }
+                else {
+                    self.present(emptyMaterialValueAlter, animated: true, completion: nil)
+                    return
+                }
+            }
+            
+            print(fiberMaterialArray)
+            
+            // check same material name
+            
+            let sameMaterialNameAlter = UIAlertController(title: "Same Material Name", message: "Please enter a differet material name.", preferredStyle: UIAlertControllerStyle.alert)
+            sameMaterialNameAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            for name in ["User Defined Material", "E-Glass", "S-Glass", "Carbon (IM)", "Carbon (HM)", "Boron", "Kelvar-49"] {
+                if userMaterialName == name {
+                    self.present(sameMaterialNameAlter, animated: true, completion: nil)
+                    return
+                }
+            }
+            
+            for userSavedFiberMaterial in self.userSavedFiberMaterials {
+                if let name = userSavedFiberMaterial.name {
+                    if userMaterialName == name {
+                        self.present(sameMaterialNameAlter, animated: true, completion: nil)
+                        return
+                    }
+                }
+            }
+            
+            let currentUserFiberMaterial = UserFiberMaterial(context: self.context)
+            currentUserFiberMaterial.setValue(userMaterialName, forKey: "name")
+            currentUserFiberMaterial.setValue(fiberMaterialArray, forKey: "properties")
+            
+            do {
+                try self.context.save()
+                self.loadCoreData()
+            } catch {
+                print("Could not save data: \(error.localizedDescription)")
+            }
+            
+        }))
+        
+        self.present(inputAlter, animated: true, completion: nil)
+        
+    }
+    
+    @objc func deleteFiberMaterial(_ sender: UIButton) {
+        sender.flash()
+        let userSavedFiberViewController = UserSavedFiberMaterial()
+        self.navigationController?.pushViewController(userSavedFiberViewController, animated: true)
+    }
+    
+    
+    @objc func saveMatrixMaterial(_ sender: UIButton) {
+        sender.flash()
+        
+        let inputAlter = UIAlertController(title: "Save Material", message: "Enter the material name.", preferredStyle: UIAlertControllerStyle.alert)
+        inputAlter.addTextField { (textField: UITextField) in
+            textField.placeholder = "Material Name"
+        }
+        inputAlter.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        inputAlter.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action:UIAlertAction) in
+            
+            let materialNameTextField = inputAlter.textFields?.first
+            
+            // check empty name
+            
+            let emptyNameAlter = UIAlertController(title: "Empty Name", message: "Please enter a name for this material.", preferredStyle: UIAlertControllerStyle.alert)
+            emptyNameAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            var userMaterialName : String = ""
+            
+            if materialNameTextField?.text != "" {
+                userMaterialName = (materialNameTextField?.text)!
+            }
+            else {
+                self.present(emptyNameAlter, animated: true, completion: nil)
+                return
+            }
+            
+            // check wrong or empty material valuw
+            
+            var  matrixMaterialArray : [Double] = []
+            
+            let wrongMaterialValueAlter = UIAlertController(title: "Wrong Material Values", message: "Please enter valid values (number) for this material.", preferredStyle: UIAlertControllerStyle.alert)
+            wrongMaterialValueAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            let emptyMaterialValueAlter = UIAlertController(title: "Empty Material Value", message: "Please enter values (number) for this material.", preferredStyle: UIAlertControllerStyle.alert)
+            emptyMaterialValueAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            for i in 0...2 {
+                if let valueString = self.matrixMaterialPropertiesTextField[i].text {
+                    if let value = Double(valueString) {
+                        matrixMaterialArray.append(value)
+                    }
+                    else {
+                        self.present(wrongMaterialValueAlter, animated: true, completion: nil)
+                        return
+                    }
+                }
+                else {
+                    self.present(emptyMaterialValueAlter, animated: true, completion: nil)
+                    return
+                }
+            }
+            
+            // check same material name
+            
+            let sameMaterialNameAlter = UIAlertController(title: "Same Material Name", message: "Please enter a differet material name.", preferredStyle: UIAlertControllerStyle.alert)
+            sameMaterialNameAlter.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            for name in ["User Defined Material", "Epoxy", "Polyester", "Polyimide", "PEEK", "Copper", "Silicon Carbide"] {
+                if userMaterialName == name {
+                    self.present(sameMaterialNameAlter, animated: true, completion: nil)
+                    return
+                }
+            }
+            
+            for userSavedMatrixMaterial in self.userSavedMatrixMaterials {
+                if let name = userSavedMatrixMaterial.name {
+                    if userMaterialName == name {
+                        self.present(sameMaterialNameAlter, animated: true, completion: nil)
+                        return
+                    }
+                }
+            }
+            
+            let currentUserMatrixMaterial = UserMatrixMaterial(context: self.context)
+            currentUserMatrixMaterial.setValue(userMaterialName, forKey: "name")
+            currentUserMatrixMaterial.setValue(matrixMaterialArray, forKey: "properties")
+            
+            do {
+                try self.context.save()
+                self.loadCoreData()
+            } catch {
+                print("Could not save data: \(error.localizedDescription)")
+            }
+            
+        }))
+        
+        self.present(inputAlter, animated: true, completion: nil)
+        
+    }
+    
+    
+    
+    @objc func deleteMatrixMaterial(_ sender: UIButton) {
+        sender.flash()
+        let userSavedMatrixViewController = UserSavedMatrixMaterial()
+        self.navigationController?.pushViewController(userSavedMatrixViewController, animated: true)
     }
     
     
@@ -385,6 +633,17 @@ class UDFRC: UIViewController {
                     fiberMaterialPropertiesTextField[i].text = ""
                 }
             }
+            else {
+                for userSaveMaterial in userSavedFiberMaterials {
+                    if fiberMaterialCurrectName == userSaveMaterial.name {
+                        if let property = userSaveMaterial.properties {
+                            for i in 0...6 {
+                                fiberMaterialPropertiesTextField[i].text = String(format: "%.2f", property[i])
+                            }
+                        }
+                    }
+                }
+            }
             
             // change matrix material card
             
@@ -398,6 +657,17 @@ class UDFRC: UIViewController {
             else if matrixMaterialCurrectName == "User Defined Material" {
                 for i in 0...2 {
                     matrixMaterialPropertiesTextField[i].text = ""
+                }
+            }
+            else {
+                for userSaveMaterial in userSavedMatrixMaterials {
+                    if matrixMaterialCurrectName == userSaveMaterial.name {
+                        if let property = userSaveMaterial.properties {
+                            for i in 0...2 {
+                                matrixMaterialPropertiesTextField[i].text = String(format: "%.2f", property[i])
+                            }
+                        }
+                    }
                 }
             }
             
@@ -592,6 +862,81 @@ class UDFRC: UIViewController {
         dgetrf_(&N1, &N2, &inMatrix, &N3, &pivots, &error)
         dgetri_(&N1, &inMatrix, &N2, &pivots, &workspace, &N3, &error)
         return inMatrix
+    }
+    
+    
+    
+    // MARK: Load core data
+    
+    func loadCoreData() {
+        
+        // add fiber material
+        
+        do {
+            userSavedFiberMaterials = try context.fetch(UserFiberMaterial.fetchRequest())
+            
+            for userSavedFiberMaterial in userSavedFiberMaterials {
+                
+                // check add action sheet or not
+                
+                var add = true
+                
+                if let name = userSavedFiberMaterial.name {
+                    for fiberMaterialActionSheet in fiberMaterialDataBaseAlterController.actions {
+                        if name == fiberMaterialActionSheet.title {
+                            add = false
+                        }
+                    }
+                    
+                    if add {
+                        let action  = UIAlertAction(title: name, style: UIAlertActionStyle.default) { (action) -> Void in
+                            self.fiberNameLabel.text = name
+                            self.changeMaterialDataField()
+                        }
+                        fiberMaterialDataBaseAlterController.addAction(action)
+                        
+                    }
+                }
+            }
+            
+        } catch {
+            print("Could not load data from database \(error.localizedDescription)")
+        }
+        
+        
+        // add matrix material
+        
+        do {
+            userSavedMatrixMaterials = try context.fetch(UserMatrixMaterial.fetchRequest())
+            
+            for userSavedMatrixMaterial in userSavedMatrixMaterials {
+                
+                // check add action sheet or not
+                
+                var add = true
+                
+                if let name = userSavedMatrixMaterial.name {
+                    for matrixMaterialActionSheet in matrixMaterialDataBaseAlterController.actions {
+                        if name == matrixMaterialActionSheet.title {
+                            add = false
+                        }
+                    }
+                    
+                    if add {
+                        let action  = UIAlertAction(title: name, style: UIAlertActionStyle.default) { (action) -> Void in
+                            self.matrixNameLabel.text = name
+                            self.changeMaterialDataField()
+                        }
+                        matrixMaterialDataBaseAlterController.addAction(action)
+                        
+                    }
+                }
+            }
+            
+        } catch {
+            print("Could not load data from database \(error.localizedDescription)")
+        }
+        
     }
     
 
