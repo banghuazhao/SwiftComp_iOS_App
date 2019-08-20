@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="UserFiberMaterial" representedClassName="UserFiberMaterial" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="UserLaminaMaterial" representedClassName="UserLaminaMaterial" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="UserMatrixMaterial" representedClassName="UserMatrixMaterial" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="UserStackingSequence" representedClassName="UserStackingSequence" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stackingSequence" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="UserFiberMaterial" positionX="-63" positionY="-18" width="128" height="90"/>
+        <element name="UserLaminaMaterial" positionX="-54" positionY="-9" width="128" height="90"/>
+        <element name="UserMatrixMaterial" positionX="-36" positionY="9" width="128" height="90"/>
+        <element name="UserStackingSequence" positionX="-18" positionY="27" width="128" height="75"/>
+    </elements>
+</model>

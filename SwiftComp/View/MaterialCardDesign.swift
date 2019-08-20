@@ -8,8 +8,23 @@
 
 import UIKit
 
+var materialPropertyLabel = MaterialPropertyLabel()
+var materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
 
-func createMaterialCard(materialCard: UIView, materialName: UILabel, label: [UILabel], value: [UITextField], aboveConstraint: NSLayoutAnchor<NSLayoutYAxisAnchor>, under: UIView) {
+
+func createMaterialCard(materialCard: inout UIView, materialName: UILabel, label: inout [UILabel], value: inout [UITextField], aboveConstraint: NSLayoutAnchor<NSLayoutYAxisAnchor>, under: UIView, typeOfAnalysis: typeOfAnalysis, materialType: materialType) {
+    
+    var elasticConstants = 0
+    var thermalConstants = 0
+    label = []
+    value = []
+    
+    materialCard.removeFromSuperview()
+    
+    materialCard = UIView()
+    
+    under.addSubview(materialCard)
+    
     materialCard.materialCardViewDesign()
     materialCard.widthAnchor.constraint(equalTo: under.widthAnchor, multiplier: 0.8).isActive = true
     materialCard.topAnchor.constraint(equalTo: aboveConstraint, constant: 8).isActive = true
@@ -22,37 +37,139 @@ func createMaterialCard(materialCard: UIView, materialName: UILabel, label: [UIL
     materialName.rightAnchor.constraint(equalTo: materialCard.rightAnchor, constant: -8).isActive = true
     materialName.heightAnchor.constraint(equalToConstant: 25).isActive = true
     
-    for i in 0...label.count-1 {
+    switch materialType {
+    case .isotropic:
+        elasticConstants = 2
+        thermalConstants = 1
+    case .transverselyIsotropic:
+        elasticConstants = 5
+        thermalConstants = 2
+    case .inPlateMonoclinic:
+        elasticConstants = 6
+        thermalConstants = 0
+    case .orthotropic:
+        elasticConstants = 9
+        thermalConstants = 3
+    case .monoclinic:
+        elasticConstants = 13
+        thermalConstants = 4
+    case .anisotropic:
+        elasticConstants = 21
+        thermalConstants = 6
+    }
+    
+    
+    // first to last row for elastic constants
+    
+    for i in 0...elasticConstants-1 {
+        
+        label.append(UILabel())
+        value.append(UITextField())
+        
         materialCard.addSubview(label[i])
+        materialCard.addSubview(value[i])
+        
+        switch materialType {
+        case .isotropic:
+            label[i].text = materialPropertyLabel.isotropic[i]
+            value[i].placeholder = materialPropertyPlaceHolder.isotropic[i]
+        case .transverselyIsotropic:
+            label[i].text = materialPropertyLabel.transverselyIsotropic[i]
+            value[i].placeholder = materialPropertyPlaceHolder.transverselyIsotropic[i]
+        case .inPlateMonoclinic:
+            break
+        case .orthotropic:
+            label[i].text = materialPropertyLabel.orthotropic[i]
+            value[i].placeholder = materialPropertyPlaceHolder.orthotropic[i]
+        case .monoclinic:
+            label[i].text = materialPropertyLabel.monoclinic[i]
+            value[i].placeholder = materialPropertyPlaceHolder.monoclinic[i]
+        case .anisotropic:
+            label[i].text = materialPropertyLabel.anisotropic[i]
+            value[i].placeholder = materialPropertyPlaceHolder.anisotropic[i]
+        }
+        
         label[i].materialCardLabelDesign()
+        value[i].materialCardTextFieldDesign()
+        value[i].keyboardType = UIKeyboardType.decimalPad
         
         label[i].leftAnchor.constraint(equalTo: materialCard.leftAnchor, constant: 8).isActive = true
+        value[i].rightAnchor.constraint(equalTo: materialCard.rightAnchor, constant: -8).isActive = true
+        
         label[i].widthAnchor.constraint(equalTo: materialCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
+        value[i].widthAnchor.constraint(equalTo: materialCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
+        
         label[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
+        value[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
+        
         if i == 0 {
             label[i].topAnchor.constraint(equalTo: materialName.bottomAnchor, constant: 8).isActive = true
+        } else {
+            label[i].topAnchor.constraint(equalTo: label[i-1].bottomAnchor, constant: 6).isActive = true
         }
-        else if i == label.count-1 {
-            label[i].topAnchor.constraint(equalTo: label[i-1].bottomAnchor, constant: 8).isActive = true
+        value[i].centerYAnchor.constraint(equalTo: label[i].centerYAnchor, constant: 0).isActive = true
+        
+        if typeOfAnalysis == .elastic &&  i == elasticConstants-1 {
             label[i].bottomAnchor.constraint(equalTo: materialCard.bottomAnchor, constant: -8).isActive = true
         }
-        else {
-            label[i].topAnchor.constraint(equalTo: label[i-1].bottomAnchor, constant: 8).isActive = true
+        
+    }
+    
+    // Addtional row
+    
+    if typeOfAnalysis == .thermalElatic {
+    
+        for i in elasticConstants...elasticConstants + thermalConstants-1 {
+            
+            label.append(UILabel())
+            value.append(UITextField())
+            
+            materialCard.addSubview(label[i])
+            materialCard.addSubview(value[i])
+            
+            switch materialType {
+            case .isotropic:
+                label[i].text = materialPropertyLabel.isotropicThermal[i - elasticConstants]
+                value[i].placeholder = materialPropertyPlaceHolder.isotropicThermal[i - elasticConstants]
+            case .transverselyIsotropic:
+                label[i].text = materialPropertyLabel.transverselyIsotropicThermal[i - elasticConstants]
+                value[i].placeholder = materialPropertyPlaceHolder.transverselyIsotropicThermal[i - elasticConstants]
+            case .inPlateMonoclinic:
+                break
+            case .orthotropic:
+                label[i].text = materialPropertyLabel.orthotropicThermal[i - elasticConstants]
+                value[i].placeholder = materialPropertyPlaceHolder.orthotropicThermal[i - elasticConstants]
+            case .monoclinic:
+                label[i].text = materialPropertyLabel.monoclinicThermal[i - elasticConstants]
+                value[i].placeholder = materialPropertyPlaceHolder.monoclinicThermal[i - elasticConstants]
+            case .anisotropic:
+                label[i].text = materialPropertyLabel.anisotropicThermal[i - elasticConstants]
+                value[i].placeholder = materialPropertyPlaceHolder.anisotropicThermal[i - elasticConstants]
+            }
+            
+            label[i].materialCardLabelDesign()
+            value[i].materialCardTextFieldDesign()
+            value[i].keyboardType = UIKeyboardType.decimalPad
+            
+            label[i].leftAnchor.constraint(equalTo: materialCard.leftAnchor, constant: 8).isActive = true
+            value[i].rightAnchor.constraint(equalTo: materialCard.rightAnchor, constant: -8).isActive = true
+            
+            label[i].widthAnchor.constraint(equalTo: materialCard.widthAnchor, multiplier: 0.55, constant: -16).isActive = true
+            value[i].widthAnchor.constraint(equalTo: materialCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
+            
+            label[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
+            value[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
+            
+            label[i].topAnchor.constraint(equalTo: label[i-1].bottomAnchor, constant: 6).isActive = true
+            value[i].centerYAnchor.constraint(equalTo: label[i].centerYAnchor, constant: 0).isActive = true
+            
+            if i == elasticConstants + thermalConstants-1 {
+                label[i].bottomAnchor.constraint(equalTo: materialCard.bottomAnchor, constant: -8).isActive = true
+            }
         }
     }
-    
-    for i in 0...label.count-1 {
-        materialCard.addSubview(value[i])
-        value[i].materialCardTextFieldDesign()
-        
-        value[i].rightAnchor.constraint(equalTo: materialCard.rightAnchor, constant: -8).isActive = true
-        value[i].widthAnchor.constraint(equalTo: materialCard.widthAnchor, multiplier: 0.45, constant: -16).isActive = true
-        value[i].heightAnchor.constraint(equalToConstant: 25).isActive = true
-        value[i].centerYAnchor.constraint(equalTo: label[i].centerYAnchor, constant: 0).isActive = true
-    }
-    
-}
 
+}
 
 
 extension UIView {
@@ -86,7 +203,7 @@ extension UILabel {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
         self.textColor = UIColor(red: 130/255, green: 138/255, blue: 145/255, alpha: 1.0)
-        self.font = UIFont.boldSystemFont(ofSize: 17)
+        self.font = UIFont.boldSystemFont(ofSize: 15)
         self.textAlignment = .center
         self.adjustsFontSizeToFitWidth = true
     }

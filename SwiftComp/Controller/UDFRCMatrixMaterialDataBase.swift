@@ -9,9 +9,18 @@
 import UIKit
 import CoreData
 
-class UserSavedMatrixMaterial: UITableViewController {
+
+protocol MatrixMaterialDataBaseDelegate {
+    func userTypeMatrixMaterialDataBase(materialName: String)
+}
+
+
+class UDFRCMatrixMaterialDataBase: UITableViewController {
+    let predefinedMaterial: [String] = ["Empty Material", "Epoxy", "Polyester", "Polyimide", "PEEK", "Copper", "Silicon Carbide"]
 
     var userSavedMaterial: [UserMatrixMaterial] = []
+    
+    var delegate: MatrixMaterialDataBaseDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,33 +35,57 @@ class UserSavedMatrixMaterial: UITableViewController {
         
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "User Saved Matrix Material"
+        if section == 0 {
+            return "Predefined"
+        } else {
+            return "User Saved (Sweep Left to Delete)"
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return userSavedMaterial.count
+        if section == 0 {
+            return predefinedMaterial.count
+        } else {
+            return userSavedMaterial.count
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellID", for: indexPath) as! UserSavedMaterialCell
-        let name = userSavedMaterial[indexPath.row].name
-        cell.nameLabel.text = name
+        
+        if indexPath.section == 0 {
+            let name = predefinedMaterial[indexPath.row]
+            cell.nameLabel.text = name
+        } else {
+            let name = userSavedMaterial[indexPath.row].name
+            cell.nameLabel.text = name
+        }
         
         return cell
         
     }
     
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if indexPath.section == 0 {
+            return UITableViewCell.EditingStyle.none
+        } else {
+            return UITableViewCell.EditingStyle.delete
+        }
+    }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
@@ -75,6 +108,19 @@ class UserSavedMatrixMaterial: UITableViewController {
         tableView.reloadData()
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var materialName: String
+        if indexPath.section == 0 {
+            materialName = predefinedMaterial[indexPath.row]
+        } else {
+            materialName = userSavedMaterial[indexPath.row].name!
+        }
+        
+        delegate?.userTypeMatrixMaterialDataBase(materialName: materialName)
+        
+        _ = navigationController?.popViewController(animated: true)
+    }
+    
     func fetchData() {
         
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -89,3 +135,4 @@ class UserSavedMatrixMaterial: UITableViewController {
     }
 
 }
+

@@ -9,9 +9,17 @@
 import UIKit
 import CoreData
 
-class UserSavedFiberMaterial: UITableViewController {
+protocol FiberMaterialDataBaseDelegate {
+    func userTypeFiberMaterialDataBase(materialName: String)
+}
+
+class UDFRCFiberMaterialDataBase: UITableViewController {
+    
+    let predefinedMaterial: [String] = ["Empty Material", "E-Glass", "S-Glass", "Carbon (IM)", "Carbon (HM)", "Boron", "Kelvar-49"]
 
     var userSavedMaterial: [UserFiberMaterial] = []
+    
+    var delegate: FiberMaterialDataBaseDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,33 +34,56 @@ class UserSavedFiberMaterial: UITableViewController {
         
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "User Saved Fiber Material"
+        if section == 0 {
+            return "Predefined"
+        } else {
+            return "User Saved (Sweep Left to Delete)"
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return userSavedMaterial.count
+        if section == 0 {
+            return predefinedMaterial.count
+        } else {
+            return userSavedMaterial.count
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellID", for: indexPath) as! UserSavedMaterialCell
-        let name = userSavedMaterial[indexPath.row].name
-        cell.nameLabel.text = name
+        
+        if indexPath.section == 0 {
+            let name = predefinedMaterial[indexPath.row]
+            cell.nameLabel.text = name
+        } else {
+            let name = userSavedMaterial[indexPath.row].name
+            cell.nameLabel.text = name
+        }
         
         return cell
-        
+    }
+    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if indexPath.section == 0 {
+            return UITableViewCell.EditingStyle.none
+        } else {
+            return UITableViewCell.EditingStyle.delete
+        }
     }
     
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
@@ -75,6 +106,19 @@ class UserSavedFiberMaterial: UITableViewController {
         tableView.reloadData()
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var materialName: String
+        if indexPath.section == 0 {
+            materialName = predefinedMaterial[indexPath.row]
+        } else {
+            materialName = userSavedMaterial[indexPath.row].name!
+        }
+        
+        delegate?.userTypeFiberMaterialDataBase(materialName: materialName)
+        
+        _ = navigationController?.popViewController(animated: true)
+    }
+    
     func fetchData() {
         
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -89,3 +133,4 @@ class UserSavedFiberMaterial: UITableViewController {
     }
 
 }
+

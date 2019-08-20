@@ -10,11 +10,20 @@ import UIKit
 
 class LaminateResult: UIViewController {
     
-    var effective3DProperties = [Double](repeating: 0, count: 17)
+    var typeOfAnalysis : typeOfAnalysis = .elastic
+    var resultMaterialType : materialType = .monoclinic
+    var resultInPlaneMaterialType: materialType = .inPlateMonoclinic
+    
+    var effective3DPropertiesMonoclinic = [Double](repeating: 0.0, count: 13)
+    var effective3DPropertiesMonoclinicThermal = [Double](repeating: 0.0, count: 4)
+    
+    var effective3DPropertiesAnisotropic = [Double](repeating: 0.0, count: 21)
+    var effective3DPropertiesAnisotropicThermal = [Double](repeating: 0.0, count: 6)
+    
     var effectiveInPlaneProperties = [Double](repeating: 0, count: 6)
     var effectiveFlexuralProperties = [Double](repeating: 0, count: 6)
     
-    var  materialPropertyName = MaterialPropertyName()
+    var materialPropertyLabel = MaterialPropertyLabel()
     
     var scrollView: UIScrollView = UIScrollView()
     
@@ -64,6 +73,9 @@ class LaminateResult: UIViewController {
         
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     // MARK: Create layout
     
@@ -84,39 +96,22 @@ class LaminateResult: UIViewController {
         // first section
         
         threeDPropertiesTitleLabel.text = "3D Properties"
-        for i in 0...16 {
-            threeDPropertiesLabel.append(UILabel())
-            threeDPropertiesLabel[i].text = materialPropertyName.monoclinic[i]
-            
-            threeDPropertiesResultLabel.append(UILabel())
-        }
         
-        creatResultListCard(resultCard: threeDPropertiesCard, title: threeDPropertiesTitleLabel, label: threeDPropertiesLabel, result: threeDPropertiesResultLabel, aboveConstraint: scrollView.topAnchor, under: scrollView)
+        creatResultListCard(resultCard: threeDPropertiesCard, title: threeDPropertiesTitleLabel, label: &threeDPropertiesLabel, result: &threeDPropertiesResultLabel, aboveConstraint: scrollView.topAnchor, under: scrollView, typeOfAnalysis: typeOfAnalysis, materialType: resultMaterialType)
         
         // second section
 
         inPlanePropertiesTitleLabel.text = "In-plane Properties"
-        for i in 0...5 {
-            inPlanePropertiesLabel.append(UILabel())
-            inPlanePropertiesLabel[i].text = materialPropertyName.plate[i]
 
-            inPlanePropertiesResultLabel.append(UILabel())
-        }
-
-        creatResultListCard(resultCard: inPlanePropertiesCard, title: inPlanePropertiesTitleLabel, label: inPlanePropertiesLabel, result: inPlanePropertiesResultLabel, aboveConstraint: threeDPropertiesCard.bottomAnchor, under: scrollView)
+        creatResultListCard(resultCard: inPlanePropertiesCard, title: inPlanePropertiesTitleLabel, label: &inPlanePropertiesLabel, result: &inPlanePropertiesResultLabel, aboveConstraint: threeDPropertiesCard.bottomAnchor, under: scrollView, typeOfAnalysis: typeOfAnalysis, materialType: resultInPlaneMaterialType)
 
         
         // third section
         
         flexuralPropertiesTitleLabel.text = "Flexural Properties"
-        for i in 0...5 {
-            flexuralPropertiesLabel.append(UILabel())
-            flexuralPropertiesLabel[i].text = materialPropertyName.plate[i]
-            
-            flexuralPropertiesResultLabel.append(UILabel())
-        }
         
-        creatResultListCard(resultCard: flexuralPropertiesCard, title: flexuralPropertiesTitleLabel, label: flexuralPropertiesLabel, result: flexuralPropertiesResultLabel, aboveConstraint: inPlanePropertiesCard.bottomAnchor, under: scrollView)
+        creatResultListCard(resultCard: flexuralPropertiesCard, title: flexuralPropertiesTitleLabel, label: &flexuralPropertiesLabel, result: &flexuralPropertiesResultLabel, aboveConstraint: inPlanePropertiesCard.bottomAnchor, under: scrollView, typeOfAnalysis: typeOfAnalysis, materialType: resultInPlaneMaterialType)
+        
         flexuralPropertiesCard.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
     }
@@ -126,21 +121,78 @@ class LaminateResult: UIViewController {
     
     func applyResult() {
         
-        for i in 0...16 {
+        if resultMaterialType != .anisotropic {
+            for i in 0...effective3DPropertiesMonoclinic.count - 1 {
+                
+                if abs(effective3DPropertiesMonoclinic[i]) > 100000 {
+                    threeDPropertiesResultLabel[i].text = String(format: "%.3e", effective3DPropertiesMonoclinic[i])
+                }
+                else if abs(effective3DPropertiesMonoclinic[i]) > 0.0001 {
+                    threeDPropertiesResultLabel[i].text = String(format: "%.3f", effective3DPropertiesMonoclinic[i])
+                }
+                else if abs(effective3DPropertiesMonoclinic[i]) < 0.000000000000001 {
+                    threeDPropertiesResultLabel[i].text = "0"
+                }
+                else {
+                    threeDPropertiesResultLabel[i].text = String(format: "%.3e", effective3DPropertiesMonoclinic[i])
+                }
+                threeDPropertiesResultLabel[i].adjustsFontSizeToFitWidth = true
+            }
             
-            if abs(effective3DProperties[i]) > 100000 {
-                threeDPropertiesResultLabel[i].text = String(format: "%.3e", effective3DProperties[i])
+            if typeOfAnalysis == .thermalElatic {
+                for i in 0...effective3DPropertiesMonoclinicThermal.count - 1 {
+                    
+                    if abs(effective3DPropertiesMonoclinicThermal[i]) > 100000 {
+                        threeDPropertiesResultLabel[i+effective3DPropertiesMonoclinic.count].text = String(format: "%.3e", effective3DPropertiesMonoclinicThermal[i])
+                    }
+                    else if abs(effective3DPropertiesMonoclinicThermal[i]) > 0.0001 {
+                        threeDPropertiesResultLabel[i+effective3DPropertiesMonoclinic.count].text = String(format: "%.3f", effective3DPropertiesMonoclinicThermal[i])
+                    }
+                    else if abs(effective3DPropertiesMonoclinicThermal[i]) < 0.000000000000001 {
+                        threeDPropertiesResultLabel[i+effective3DPropertiesMonoclinic.count].text = "0"
+                    }
+                    else {
+                        threeDPropertiesResultLabel[i+effective3DPropertiesMonoclinic.count].text = String(format: "%.3e", effective3DPropertiesMonoclinicThermal[i])
+                    }
+                    threeDPropertiesResultLabel[i+effective3DPropertiesMonoclinic.count].adjustsFontSizeToFitWidth = true
+                }
             }
-            else if abs(effective3DProperties[i]) > 0.0001 {
-                threeDPropertiesResultLabel[i].text = String(format: "%.3f", effective3DProperties[i])
+        } else {
+            for i in 0...effective3DPropertiesAnisotropic.count - 1 {
+                
+                if abs(effective3DPropertiesAnisotropic[i]) > 100000 {
+                    threeDPropertiesResultLabel[i].text = String(format: "%.3e", effective3DPropertiesAnisotropic[i])
+                }
+                else if abs(effective3DPropertiesAnisotropic[i]) > 0.0001 {
+                    threeDPropertiesResultLabel[i].text = String(format: "%.3f", effective3DPropertiesAnisotropic[i])
+                }
+                else if abs(effective3DPropertiesAnisotropic[i]) < 0.000000000000001 {
+                    threeDPropertiesResultLabel[i].text = "0"
+                }
+                else {
+                    threeDPropertiesResultLabel[i].text = String(format: "%.3e", effective3DPropertiesAnisotropic[i])
+                }
+                threeDPropertiesResultLabel[i].adjustsFontSizeToFitWidth = true
             }
-            else if abs(effective3DProperties[i]) < 0.000000000000001 {
-                threeDPropertiesResultLabel[i].text = "0"
+            
+            if typeOfAnalysis == .thermalElatic {
+                for i in 0...effective3DPropertiesAnisotropicThermal.count - 1 {
+                    
+                    if abs(effective3DPropertiesAnisotropicThermal[i]) > 100000 {
+                        threeDPropertiesResultLabel[i+effective3DPropertiesAnisotropic.count].text = String(format: "%.3e", effective3DPropertiesAnisotropicThermal[i])
+                    }
+                    else if abs(effective3DPropertiesAnisotropicThermal[i]) > 0.0001 {
+                        threeDPropertiesResultLabel[i+effective3DPropertiesAnisotropic.count].text = String(format: "%.3f", effective3DPropertiesAnisotropicThermal[i])
+                    }
+                    else if abs(effective3DPropertiesAnisotropicThermal[i]) < 0.000000000000001 {
+                        threeDPropertiesResultLabel[i+effective3DPropertiesAnisotropic.count].text = "0"
+                    }
+                    else {
+                        threeDPropertiesResultLabel[i+effective3DPropertiesAnisotropic.count].text = String(format: "%.3e", effective3DPropertiesAnisotropicThermal[i])
+                    }
+                    threeDPropertiesResultLabel[i+effective3DPropertiesAnisotropic.count].adjustsFontSizeToFitWidth = true
+                }
             }
-            else {
-                threeDPropertiesResultLabel[i].text = String(format: "%.3e", effective3DProperties[i])
-            }
-            threeDPropertiesResultLabel[i].adjustsFontSizeToFitWidth = true
         }
         
         for i in 0...5 {
@@ -192,22 +244,40 @@ class LaminateResult: UIViewController {
         var str : String = ""
         
         str = "3D Properties:\n"
-        for i in 0...16 {
-            str +=  materialPropertyName.monoclinic[i] + ": \t" + threeDPropertiesResultLabel[i].text! + "\n"
+        if resultMaterialType != .anisotropic {
+            for i in 0...effective3DPropertiesMonoclinic.count - 1 {
+                str +=  materialPropertyLabel.monoclinic[i] + ": \t" + threeDPropertiesResultLabel[i].text! + "\n"
+            }
+            
+            if typeOfAnalysis == .thermalElatic {
+                for i in 0...effective3DPropertiesMonoclinicThermal.count - 1 {
+                    str +=  materialPropertyLabel.monoclinicThermal[i] + ": \t" + threeDPropertiesResultLabel[i + effective3DPropertiesMonoclinic.count].text! + "\n"
+                }
+            }
+        } else {
+            for i in 0...effective3DPropertiesAnisotropic.count - 1 {
+                str +=  materialPropertyLabel.anisotropic[i] + ": \t" + threeDPropertiesResultLabel[i].text! + "\n"
+            }
+            
+            if typeOfAnalysis == .thermalElatic {
+                for i in 0...effective3DPropertiesAnisotropicThermal.count - 1 {
+                    str +=  materialPropertyLabel.anisotropicThermal[i] + ": \t" + threeDPropertiesResultLabel[i + effective3DPropertiesAnisotropic.count].text! + "\n"
+                }
+            }
         }
         
         str += "\n"
         
         str += "In-plane Properties:\n"
         for i in 0...5 {
-            str += materialPropertyName.plate[i] + ": \t" + inPlanePropertiesResultLabel[i].text! + "\n"
+            str += materialPropertyLabel.inPlateMonoclinic[i] + ": \t" + inPlanePropertiesResultLabel[i].text! + "\n"
         }
         
         str += "\n"
         
         str += "Flexural Properties:\n"
         for i in 0...5 {
-            str += materialPropertyName.plate[i] + ": \t" + flexuralPropertiesResultLabel[i].text! + "\n"
+            str += materialPropertyLabel.inPlateMonoclinic[i] + ": \t" + flexuralPropertiesResultLabel[i].text! + "\n"
         }
         
         let file = getDocumentsDirectory().appendingPathComponent("Result.txt")

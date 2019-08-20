@@ -7,13 +7,16 @@
 //
 
 import UIKit
+import CoreData
 
-class Home: UITableViewController {
+class Home: UITableViewController, UIGestureRecognizerDelegate {
     
     var compositeModels: [CompositeModel]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         
         setupCompositeModels()
         
@@ -22,17 +25,38 @@ class Home: UITableViewController {
         tableView.register(CompositeModelCell.self, forCellReuseIdentifier: "cellID")
         
         tableView.tableFooterView = UIView()
+        
+        // clearCoreDataStore()
 
     }
     
+    func clearCoreDataStore() {
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let context = delegate.persistentContainer.viewContext
+        
+        for i in 0...delegate.persistentContainer.managedObjectModel.entities.count-1 {
+            let entity = delegate.persistentContainer.managedObjectModel.entities[i]
+            
+            do {
+                let query = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name!)
+                let deleterequest = NSBatchDeleteRequest(fetchRequest: query)
+                try context.execute(deleterequest)
+                try context.save()
+                
+            } catch let error as NSError {
+                print("Error: \(error.localizedDescription)")
+                abort()
+            }
+        }
+    }
     
-    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     // MARK: set up navigation bar
     
-    func editNavigationBar() {
-        navigationController?.navigationBar.backgroundColor = .black
-        
+    func editNavigationBar() {        
         navigationItem.title = "Home"
         
         let backItem = UIBarButtonItem()

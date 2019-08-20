@@ -9,13 +9,24 @@
 import UIKit
 
 class UDFRCResult: UIViewController {
-
-    var engineeringConstants = [Double](repeating: 0.0, count: 7)
-    var planeStressReducedCompliance = [Double](repeating: 0.0, count: 9)
-    var planeStressReducedStiffness = [Double](repeating: 0.0, count: 9)
+    
     
     var materialPropertyName = MaterialPropertyName()
     var materialPropertyLabel = MaterialPropertyLabel()
+    
+    var typeOfAnalysis: typeOfAnalysis = .elastic
+    var resultMaterialType: materialType = .transverselyIsotropic
+    
+    var engineeringConstantsTransverselyIsotropic = [Double](repeating: 0.0, count: 5)
+    var engineeringConstantsTransverselyIsotropicThermal = [Double](repeating: 0.0, count: 2)
+    
+    var engineeringConstantsOrthotropic = [Double](repeating: 0.0, count: 9)
+    var engineeringConstantsOrthotropicThermal = [Double](repeating: 0.0, count: 3)
+    
+    var planeStressReducedCompliance = [Double](repeating: 0.0, count: 9)
+    var planeStressReducedStiffness = [Double](repeating: 0.0, count: 9)
+    
+    // layout
     
     var scrollView: UIScrollView = UIScrollView()
     
@@ -62,7 +73,9 @@ class UDFRCResult: UIViewController {
         
     }
     
-    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     // MARK: Create layout
     
@@ -83,31 +96,20 @@ class UDFRCResult: UIViewController {
         // first section
         
         engineeringConstantsTitleLabel.text = "Engineering Constants"
-        for i in 0...6 {
-            engineeringConstantsLabel.append(UILabel())
-            engineeringConstantsLabel[i].text = materialPropertyName.transverseIsotropic[i]
-            
-            engineeringConstantsResultLabel.append(UILabel())
-        }
         
-        creatResultListCard(resultCard: engineeringConstantsCard, title: engineeringConstantsTitleLabel, label: engineeringConstantsLabel, result: engineeringConstantsResultLabel, aboveConstraint: scrollView.topAnchor, under: scrollView)
+        creatResultListCard(resultCard: engineeringConstantsCard, title: engineeringConstantsTitleLabel, label: &engineeringConstantsLabel, result: &engineeringConstantsResultLabel, aboveConstraint: scrollView.topAnchor, under: scrollView, typeOfAnalysis: typeOfAnalysis, materialType: resultMaterialType)
         
         
         // second section
-        for _ in 0...8 {
-            planeStressReducedComplianceResultLabel.append(UILabel())
-        }
+
         planeStressReducedComplianceTitleLabel.text = " Plane-stress Reduced Compliance "
-        createResult3by3MatrixCard(resultCard: planeStressReducedComplianceCard, title: planeStressReducedComplianceTitleLabel, result: planeStressReducedComplianceResultLabel, aboveConstraint: engineeringConstantsCard.bottomAnchor, under: scrollView)
+        createResult3by3MatrixCard(resultCard: planeStressReducedComplianceCard, title: planeStressReducedComplianceTitleLabel, result: &planeStressReducedComplianceResultLabel, aboveConstraint: engineeringConstantsCard.bottomAnchor, under: scrollView)
         
   
         // third section
-        
-        for _ in 0...8 {
-            planeStressReducedStiffnessResultLabel.append(UILabel())
-        }
+    
         planeStressReducedStiffnessTitleLabel.text = " Plane-stress Reduced Stiffness "
-        createResult3by3MatrixCard(resultCard: planeStressReducedStiffnessCard, title: planeStressReducedStiffnessTitleLabel, result: planeStressReducedStiffnessResultLabel, aboveConstraint: planeStressReducedComplianceCard.bottomAnchor, under: scrollView)
+        createResult3by3MatrixCard(resultCard: planeStressReducedStiffnessCard, title: planeStressReducedStiffnessTitleLabel, result: &planeStressReducedStiffnessResultLabel, aboveConstraint: planeStressReducedComplianceCard.bottomAnchor, under: scrollView)
         planeStressReducedStiffnessCard.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
     }
@@ -120,21 +122,78 @@ class UDFRCResult: UIViewController {
     
     func applyResult() {
         
-        for i in 0...6 {
+        if resultMaterialType != .orthotropic {
+            for i in 0...engineeringConstantsTransverselyIsotropic.count - 1 {
+                
+                if abs(engineeringConstantsTransverselyIsotropic[i]) > 100000 {
+                    engineeringConstantsResultLabel[i].text = String(format: "%.3e", engineeringConstantsTransverselyIsotropic[i])
+                }
+                else if abs(engineeringConstantsTransverselyIsotropic[i]) > 0.0001 {
+                    engineeringConstantsResultLabel[i].text = String(format: "%.3f", engineeringConstantsTransverselyIsotropic[i])
+                }
+                else if abs(engineeringConstantsTransverselyIsotropic[i]) < 0.000000000000001 {
+                    engineeringConstantsResultLabel[i].text = "0"
+                }
+                else {
+                    engineeringConstantsResultLabel[i].text = String(format: "%.3e", engineeringConstantsTransverselyIsotropic[i])
+                }
+                engineeringConstantsResultLabel[i].adjustsFontSizeToFitWidth = true
+            }
+
+            if typeOfAnalysis == .thermalElatic {
+                for i in 0...engineeringConstantsTransverselyIsotropicThermal.count - 1 {
+                    
+                    if abs(engineeringConstantsTransverselyIsotropicThermal[i]) > 100000 {
+                        engineeringConstantsResultLabel[i+engineeringConstantsTransverselyIsotropic.count].text = String(format: "%.3e", engineeringConstantsTransverselyIsotropicThermal[i])
+                    }
+                    else if abs(engineeringConstantsTransverselyIsotropicThermal[i]) > 0.0001 {
+                        engineeringConstantsResultLabel[i+engineeringConstantsTransverselyIsotropic.count].text = String(format: "%.3f", engineeringConstantsTransverselyIsotropicThermal[i])
+                    }
+                    else if abs(engineeringConstantsTransverselyIsotropicThermal[i]) < 0.000000000000001 {
+                        engineeringConstantsResultLabel[i+engineeringConstantsTransverselyIsotropic.count].text = "0"
+                    }
+                    else {
+                        engineeringConstantsResultLabel[i+engineeringConstantsTransverselyIsotropic.count].text = String(format: "%.3e", engineeringConstantsTransverselyIsotropicThermal[i])
+                    }
+                    engineeringConstantsResultLabel[i+engineeringConstantsTransverselyIsotropic.count].adjustsFontSizeToFitWidth = true
+                }
+            }
+        } else {
+            for i in 0...engineeringConstantsOrthotropic.count - 1 {
+                
+                if abs(engineeringConstantsOrthotropic[i]) > 100000 {
+                    engineeringConstantsResultLabel[i].text = String(format: "%.3e", engineeringConstantsOrthotropic[i])
+                }
+                else if abs(engineeringConstantsOrthotropic[i]) > 0.0001 {
+                    engineeringConstantsResultLabel[i].text = String(format: "%.3f", engineeringConstantsOrthotropic[i])
+                }
+                else if abs(engineeringConstantsOrthotropic[i]) < 0.000000000000001 {
+                    engineeringConstantsResultLabel[i].text = "0"
+                }
+                else {
+                    engineeringConstantsResultLabel[i].text = String(format: "%.3e", engineeringConstantsOrthotropic[i])
+                }
+                engineeringConstantsResultLabel[i].adjustsFontSizeToFitWidth = true
+            }
             
-            if abs(engineeringConstants[i]) > 100000 {
-                engineeringConstantsResultLabel[i].text = String(format: "%.3e", engineeringConstants[i])
+            if typeOfAnalysis == .thermalElatic {
+                for i in 0...engineeringConstantsOrthotropicThermal.count - 1 {
+                    
+                    if abs(engineeringConstantsOrthotropicThermal[i]) > 100000 {
+                        engineeringConstantsResultLabel[i+engineeringConstantsOrthotropic.count].text = String(format: "%.3e", engineeringConstantsOrthotropicThermal[i])
+                    }
+                    else if abs(engineeringConstantsOrthotropicThermal[i]) > 0.0001 {
+                        engineeringConstantsResultLabel[i+engineeringConstantsOrthotropic.count].text = String(format: "%.3f", engineeringConstantsOrthotropicThermal[i])
+                    }
+                    else if abs(engineeringConstantsOrthotropicThermal[i]) < 0.000000000000001 {
+                        engineeringConstantsResultLabel[i+engineeringConstantsOrthotropic.count].text = "0"
+                    }
+                    else {
+                        engineeringConstantsResultLabel[i+engineeringConstantsOrthotropic.count].text = String(format: "%.3e", engineeringConstantsOrthotropicThermal[i])
+                    }
+                    engineeringConstantsResultLabel[i+engineeringConstantsOrthotropic.count].adjustsFontSizeToFitWidth = true
+                }
             }
-            else if abs(engineeringConstants[i]) > 0.0001 {
-                engineeringConstantsResultLabel[i].text = String(format: "%.3f", engineeringConstants[i])
-            }
-            else if abs(engineeringConstants[i]) < 0.000000000000001 {
-                engineeringConstantsResultLabel[i].text = "0"
-            }
-            else {
-                engineeringConstantsResultLabel[i].text = String(format: "%.3e", engineeringConstants[i])
-            }
-            engineeringConstantsResultLabel[i].adjustsFontSizeToFitWidth = true
         }
         
         for i in 0...8 {
@@ -189,10 +248,27 @@ class UDFRCResult: UIViewController {
         var str : String = ""
         
         str = "Engineering Constants:\n"
-        for i in 0...6 {
-            str +=  materialPropertyName.transverseIsotropic[i] + ": \t" + engineeringConstantsResultLabel[i].text! + "\n"
+        if resultMaterialType != .orthotropic {
+            for i in 0...engineeringConstantsTransverselyIsotropic.count - 1 {
+                str +=  materialPropertyLabel.transverselyIsotropic[i] + ": \t" + engineeringConstantsResultLabel[i].text! + "\n"
+            }
+            
+            if typeOfAnalysis == .thermalElatic {
+                for i in 0...engineeringConstantsTransverselyIsotropicThermal.count - 1 {
+                    str +=  materialPropertyLabel.transverselyIsotropicThermal[i] + ": \t" + engineeringConstantsResultLabel[i + engineeringConstantsTransverselyIsotropic.count].text! + "\n"
+                }
+            }
+        } else {
+            for i in 0...engineeringConstantsOrthotropic.count - 1 {
+                str +=  materialPropertyLabel.orthotropic[i] + ": \t" + engineeringConstantsResultLabel[i].text! + "\n"
+            }
+            
+            if typeOfAnalysis == .thermalElatic {
+                for i in 0...engineeringConstantsOrthotropicThermal.count - 1 {
+                    str +=  materialPropertyLabel.orthotropicThermal[i] + ": \t" + engineeringConstantsResultLabel[i + engineeringConstantsOrthotropic.count].text! + "\n"
+                }
+            }
         }
-        
         str += "\n"
         
         str += "Plane-stress Reduced Compliance:\n"
