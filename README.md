@@ -21,7 +21,7 @@ We are constantly adding more functionalities into this App.
 
 ## Download
 
-[[](./docs/app-store-icon.jpg)](https://apps.apple.com/us/app/swiftcomp/id1297825946)
+[![](./docs/app-store-icon.jpg)](https://apps.apple.com/us/app/swiftcomp/id1297825946)
 
 
 ## License
