@@ -14,27 +14,45 @@
 		9904AFF31FA9001A0018FD55 /* ButtonDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFF21FA9001A0018FD55 /* ButtonDesign.swift */; };
 		9904AFF51FA900690018FD55 /* KeyboardDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFF41FA900690018FD55 /* KeyboardDesign.swift */; };
 		9904AFF71FAB888A0018FD55 /* ViewCardDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904AFF61FAB888A0018FD55 /* ViewCardDesign.swift */; };
+		9904DEE82313B5A2005E4C14 /* SwiftCompCalculationStatusModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904DEE72313B5A2005E4C14 /* SwiftCompCalculationStatusModel.swift */; };
+		9904DEEA23140C8B005E4C14 /* ResultCardTypeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904DEE923140C8B005E4C14 /* ResultCardTypeModel.swift */; };
+		9904DEEE2317A36D005E4C14 /* SwiftCompCalculationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9904DEED2317A36D005E4C14 /* SwiftCompCalculationInfo.swift */; };
 		990F76C41F85BFCF0073E459 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76C31F85BFCF0073E459 /* AppDelegate.swift */; };
-		990F76C91F85BFCF0073E459 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 990F76C71F85BFCF0073E459 /* Main.storyboard */; };
 		990F76CB1F85BFCF0073E459 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 990F76CA1F85BFCF0073E459 /* Assets.xcassets */; };
 		990F76CE1F85BFCF0073E459 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */; };
 		990F76D61F85C0280073E459 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76D51F85C0280073E459 /* Home.swift */; };
-		9920DBF82231A76E00AB303E /* LaminateStackingSequenceDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DBF72231A76E00AB303E /* LaminateStackingSequenceDataBase.swift */; };
+		99112DDE230E3C9C0064C306 /* HomeHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99112DDD230E3C9C0064C306 /* HomeHelp.swift */; };
+		99112DE0230E54A90064C306 /* HomeAbout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99112DDF230E54A90064C306 /* HomeAbout.swift */; };
+		9920DBF82231A76E00AB303E /* StackingSequenceDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DBF72231A76E00AB303E /* StackingSequenceDataBase.swift */; };
 		9920DBFA2231AD9900AB303E /* UserSavedStackingSequenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DBF92231AD9900AB303E /* UserSavedStackingSequenceCell.swift */; };
 		9920DC0122358EE400AB303E /* CircleTransitionDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DC0022358EE400AB303E /* CircleTransitionDesign.swift */; };
-		992285851FAEAF64004C1E34 /* LaminateLaminaMaterialDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992285841FAEAF64004C1E34 /* LaminateLaminaMaterialDataBase.swift */; };
+		992285851FAEAF64004C1E34 /* LaminaMaterialDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992285841FAEAF64004C1E34 /* LaminaMaterialDataBase.swift */; };
 		992285871FAEB1F2004C1E34 /* UserSavedMaterialCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992285861FAEB1F2004C1E34 /* UserSavedMaterialCell.swift */; };
-		992285891FAF5C93004C1E34 /* UDFRCFiberMaterialDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992285881FAF5C93004C1E34 /* UDFRCFiberMaterialDataBase.swift */; };
-		9922858B1FAF5EAD004C1E34 /* UDFRCMatrixMaterialDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9922858A1FAF5EAD004C1E34 /* UDFRCMatrixMaterialDataBase.swift */; };
-		9945CF861FA565C7002F2F30 /* LaminateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF851FA565C7002F2F30 /* LaminateResult.swift */; };
-		9945CF891FA66432002F2F30 /* Laminate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5BF821F9CD78400D87360 /* Laminate.swift */; };
-		9945CF8B1FA678C0002F2F30 /* UDFRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF8A1FA678C0002F2F30 /* UDFRC.swift */; };
+		992285891FAF5C93004C1E34 /* FiberMaterialDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992285881FAF5C93004C1E34 /* FiberMaterialDataBase.swift */; };
+		9922858B1FAF5EAD004C1E34 /* MatrixMaterialDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9922858A1FAF5EAD004C1E34 /* MatrixMaterialDataBase.swift */; };
+		9929959523212BAA00925595 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929959423212BAA00925595 /* NetworkManager.swift */; };
+		993B8183230C36F1001AE3CF /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993B8182230C36F1001AE3CF /* Utilities.swift */; };
+		993B8185230D7EE4001AE3CF /* ExplainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993B8184230D7EE4001AE3CF /* ExplainModel.swift */; };
+		9945CF861FA565C7002F2F30 /* HomogenizationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF851FA565C7002F2F30 /* HomogenizationResult.swift */; };
 		9945CF8D1FA67AF0002F2F30 /* CompositeModelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */; };
-		9945CF8F1FA6BF04002F2F30 /* UDFRCResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF8E1FA6BF04002F2F30 /* UDFRCResult.swift */; };
-		99531902224B122C002923C5 /* ExplainPopovers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99531901224B122B002923C5 /* ExplainPopovers.swift */; };
+		99531902224B122C002923C5 /* ExplainBoxDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99531901224B122B002923C5 /* ExplainBoxDesign.swift */; };
 		99531905224B2179002923C5 /* UserDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 99531903224B2179002923C5 /* UserDataModel.xcdatamodeld */; };
+		998FB89C2328C083008885EB /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998FB89B2328C083008885EB /* CoreDataManager.swift */; };
+		9994A27A23128AF100A99F6B /* SwiftCompResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9994A27923128AF100A99F6B /* SwiftCompResultModel.swift */; };
+		999DCF6A2333714600EA8AE0 /* HoneycombSandwich.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999DCF692333714600EA8AE0 /* HoneycombSandwich.swift */; };
+		999DCF6C233381E800EA8AE0 /* CoreMaterialDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999DCF6B233381E800EA8AE0 /* CoreMaterialDataBase.swift */; };
+		999DCF712333ABAB00EA8AE0 /* ErrorHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999DCF702333ABAB00EA8AE0 /* ErrorHandle.swift */; };
 		99B508C51F86872200B6BC47 /* MaterialDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B508C41F86872200B6BC47 /* MaterialDataModel.swift */; };
 		99C5BF7F1F9CD54E00D87360 /* CompositeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */; };
+		99F0EE13232C7AAC00F84CA4 /* SwiftCompTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE12232C7AAC00F84CA4 /* SwiftCompTemplateViewController.swift */; };
+		99F0EE15232C88DF00F84CA4 /* Laminate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE14232C88DF00F84CA4 /* Laminate.swift */; };
+		99F0EE17232D240200F84CA4 /* UDFRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE16232D240200F84CA4 /* UDFRC.swift */; };
+		99FB919A2317FAF000FA1373 /* ResultDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB91992317FAF000FA1373 /* ResultDataModel.swift */; };
+		99FB919C2318083300FA1373 /* AnalysisSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB919B2318083300FA1373 /* AnalysisSettingsModel.swift */; };
+		99FB919E23189BC400FA1373 /* HomeTheory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB919D23189BC400FA1373 /* HomeTheory.swift */; };
+		99FB91A02318BE3900FA1373 /* HomeUserManual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB919F2318BE3900FA1373 /* HomeUserManual.swift */; };
+		99FB91A32318BE9700FA1373 /* SwiftComp User Manual.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 99FB91A22318BE9700FA1373 /* SwiftComp User Manual.pdf */; };
+		99FB91A7231CCA4C00FA1373 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB91A6231CCA4C00FA1373 /* Config.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,29 +65,47 @@
 		9904AFF21FA9001A0018FD55 /* ButtonDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonDesign.swift; sourceTree = "<group>"; };
 		9904AFF41FA900690018FD55 /* KeyboardDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDesign.swift; sourceTree = "<group>"; };
 		9904AFF61FAB888A0018FD55 /* ViewCardDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCardDesign.swift; sourceTree = "<group>"; };
+		9904DEE72313B5A2005E4C14 /* SwiftCompCalculationStatusModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCompCalculationStatusModel.swift; sourceTree = "<group>"; };
+		9904DEE923140C8B005E4C14 /* ResultCardTypeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCardTypeModel.swift; sourceTree = "<group>"; };
+		9904DEED2317A36D005E4C14 /* SwiftCompCalculationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCompCalculationInfo.swift; sourceTree = "<group>"; };
 		990F76C01F85BFCF0073E459 /* SwiftComp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftComp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		990F76C31F85BFCF0073E459 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		990F76C81F85BFCF0073E459 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		990F76CA1F85BFCF0073E459 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		990F76CD1F85BFCF0073E459 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		990F76CF1F85BFCF0073E459 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		990F76D51F85C0280073E459 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
-		9920DBF72231A76E00AB303E /* LaminateStackingSequenceDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaminateStackingSequenceDataBase.swift; sourceTree = "<group>"; };
+		99112DDD230E3C9C0064C306 /* HomeHelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHelp.swift; sourceTree = "<group>"; };
+		99112DDF230E54A90064C306 /* HomeAbout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAbout.swift; sourceTree = "<group>"; };
+		9920DBF72231A76E00AB303E /* StackingSequenceDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackingSequenceDataBase.swift; sourceTree = "<group>"; };
 		9920DBF92231AD9900AB303E /* UserSavedStackingSequenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavedStackingSequenceCell.swift; sourceTree = "<group>"; };
 		9920DC0022358EE400AB303E /* CircleTransitionDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleTransitionDesign.swift; sourceTree = "<group>"; };
-		992285841FAEAF64004C1E34 /* LaminateLaminaMaterialDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaminateLaminaMaterialDataBase.swift; sourceTree = "<group>"; };
+		992285841FAEAF64004C1E34 /* LaminaMaterialDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaminaMaterialDataBase.swift; sourceTree = "<group>"; };
 		992285861FAEB1F2004C1E34 /* UserSavedMaterialCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavedMaterialCell.swift; sourceTree = "<group>"; };
-		992285881FAF5C93004C1E34 /* UDFRCFiberMaterialDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDFRCFiberMaterialDataBase.swift; sourceTree = "<group>"; };
-		9922858A1FAF5EAD004C1E34 /* UDFRCMatrixMaterialDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDFRCMatrixMaterialDataBase.swift; sourceTree = "<group>"; };
-		9945CF851FA565C7002F2F30 /* LaminateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaminateResult.swift; sourceTree = "<group>"; };
-		9945CF8A1FA678C0002F2F30 /* UDFRC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDFRC.swift; sourceTree = "<group>"; };
+		992285881FAF5C93004C1E34 /* FiberMaterialDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiberMaterialDataBase.swift; sourceTree = "<group>"; };
+		9922858A1FAF5EAD004C1E34 /* MatrixMaterialDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixMaterialDataBase.swift; sourceTree = "<group>"; };
+		9929959423212BAA00925595 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		993B8182230C36F1001AE3CF /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		993B8184230D7EE4001AE3CF /* ExplainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplainModel.swift; sourceTree = "<group>"; };
+		9945CF851FA565C7002F2F30 /* HomogenizationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomogenizationResult.swift; sourceTree = "<group>"; };
 		9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositeModelCell.swift; sourceTree = "<group>"; };
-		9945CF8E1FA6BF04002F2F30 /* UDFRCResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDFRCResult.swift; sourceTree = "<group>"; };
-		99531901224B122B002923C5 /* ExplainPopovers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplainPopovers.swift; sourceTree = "<group>"; };
+		99531901224B122B002923C5 /* ExplainBoxDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplainBoxDesign.swift; sourceTree = "<group>"; };
 		99531904224B2179002923C5 /* UserDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserDataModel.xcdatamodel; sourceTree = "<group>"; };
+		998FB89B2328C083008885EB /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		9994A27923128AF100A99F6B /* SwiftCompResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCompResultModel.swift; sourceTree = "<group>"; };
+		999DCF692333714600EA8AE0 /* HoneycombSandwich.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneycombSandwich.swift; sourceTree = "<group>"; };
+		999DCF6B233381E800EA8AE0 /* CoreMaterialDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMaterialDataBase.swift; sourceTree = "<group>"; };
+		999DCF702333ABAB00EA8AE0 /* ErrorHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandle.swift; sourceTree = "<group>"; };
 		99B508C41F86872200B6BC47 /* MaterialDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialDataModel.swift; sourceTree = "<group>"; };
 		99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeModel.swift; sourceTree = "<group>"; };
-		99C5BF821F9CD78400D87360 /* Laminate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laminate.swift; sourceTree = "<group>"; };
+		99F0EE12232C7AAC00F84CA4 /* SwiftCompTemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCompTemplateViewController.swift; sourceTree = "<group>"; };
+		99F0EE14232C88DF00F84CA4 /* Laminate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laminate.swift; sourceTree = "<group>"; };
+		99F0EE16232D240200F84CA4 /* UDFRC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDFRC.swift; sourceTree = "<group>"; };
+		99FB91992317FAF000FA1373 /* ResultDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDataModel.swift; sourceTree = "<group>"; };
+		99FB919B2318083300FA1373 /* AnalysisSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisSettingsModel.swift; sourceTree = "<group>"; };
+		99FB919D23189BC400FA1373 /* HomeTheory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTheory.swift; sourceTree = "<group>"; };
+		99FB919F2318BE3900FA1373 /* HomeUserManual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUserManual.swift; sourceTree = "<group>"; };
+		99FB91A22318BE9700FA1373 /* SwiftComp User Manual.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "SwiftComp User Manual.pdf"; path = "../../../MSG/SwiftComp User Manual.pdf"; sourceTree = "<group>"; };
+		99FB91A6231CCA4C00FA1373 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +150,7 @@
 		990F76C21F85BFCF0073E459 /* SwiftComp */ = {
 			isa = PBXGroup;
 			children = (
+				99FB91A12318BE6A00FA1373 /* Doc */,
 				9986553F1F867FCE0004876A /* Model */,
 				998655401F867FDC0004876A /* View */,
 				998655411F867FE70004876A /* Controller */,
@@ -127,9 +164,15 @@
 		9986553F1F867FCE0004876A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */,
+				99FB919B2318083300FA1373 /* AnalysisSettingsModel.swift */,
 				99B508C41F86872200B6BC47 /* MaterialDataModel.swift */,
 				9904AFEC1FA779310018FD55 /* MaterialTypeModel.swift */,
-				99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */,
+				993B8184230D7EE4001AE3CF /* ExplainModel.swift */,
+				9904DEE72313B5A2005E4C14 /* SwiftCompCalculationStatusModel.swift */,
+				9904DEE923140C8B005E4C14 /* ResultCardTypeModel.swift */,
+				9994A27923128AF100A99F6B /* SwiftCompResultModel.swift */,
+				99FB91992317FAF000FA1373 /* ResultDataModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -138,7 +181,6 @@
 			isa = PBXGroup;
 			children = (
 				990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */,
-				990F76C71F85BFCF0073E459 /* Main.storyboard */,
 				9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */,
 				992285861FAEB1F2004C1E34 /* UserSavedMaterialCell.swift */,
 				9920DBF92231AD9900AB303E /* UserSavedStackingSequenceCell.swift */,
@@ -148,7 +190,7 @@
 				9904AFF21FA9001A0018FD55 /* ButtonDesign.swift */,
 				9904AFF41FA900690018FD55 /* KeyboardDesign.swift */,
 				9920DC0022358EE400AB303E /* CircleTransitionDesign.swift */,
-				99531901224B122B002923C5 /* ExplainPopovers.swift */,
+				99531901224B122B002923C5 /* ExplainBoxDesign.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -156,18 +198,46 @@
 		998655411F867FE70004876A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				999DCF6D2333823900EA8AE0 /* DataBaseController */,
 				990F76C31F85BFCF0073E459 /* AppDelegate.swift */,
+				99FB91A6231CCA4C00FA1373 /* Config.swift */,
+				993B8182230C36F1001AE3CF /* Utilities.swift */,
+				999DCF702333ABAB00EA8AE0 /* ErrorHandle.swift */,
+				9929959423212BAA00925595 /* NetworkManager.swift */,
+				998FB89B2328C083008885EB /* CoreDataManager.swift */,
 				990F76D51F85C0280073E459 /* Home.swift */,
-				99C5BF821F9CD78400D87360 /* Laminate.swift */,
-				9945CF851FA565C7002F2F30 /* LaminateResult.swift */,
-				9920DBF72231A76E00AB303E /* LaminateStackingSequenceDataBase.swift */,
-				992285841FAEAF64004C1E34 /* LaminateLaminaMaterialDataBase.swift */,
-				9945CF8A1FA678C0002F2F30 /* UDFRC.swift */,
-				9945CF8E1FA6BF04002F2F30 /* UDFRCResult.swift */,
-				992285881FAF5C93004C1E34 /* UDFRCFiberMaterialDataBase.swift */,
-				9922858A1FAF5EAD004C1E34 /* UDFRCMatrixMaterialDataBase.swift */,
+				99112DDF230E54A90064C306 /* HomeAbout.swift */,
+				99FB919D23189BC400FA1373 /* HomeTheory.swift */,
+				99112DDD230E3C9C0064C306 /* HomeHelp.swift */,
+				99FB919F2318BE3900FA1373 /* HomeUserManual.swift */,
+				99F0EE12232C7AAC00F84CA4 /* SwiftCompTemplateViewController.swift */,
+				99F0EE14232C88DF00F84CA4 /* Laminate.swift */,
+				99F0EE16232D240200F84CA4 /* UDFRC.swift */,
+				999DCF692333714600EA8AE0 /* HoneycombSandwich.swift */,
+				9945CF851FA565C7002F2F30 /* HomogenizationResult.swift */,
+				9904DEED2317A36D005E4C14 /* SwiftCompCalculationInfo.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		999DCF6D2333823900EA8AE0 /* DataBaseController */ = {
+			isa = PBXGroup;
+			children = (
+				9920DBF72231A76E00AB303E /* StackingSequenceDataBase.swift */,
+				992285841FAEAF64004C1E34 /* LaminaMaterialDataBase.swift */,
+				992285881FAF5C93004C1E34 /* FiberMaterialDataBase.swift */,
+				9922858A1FAF5EAD004C1E34 /* MatrixMaterialDataBase.swift */,
+				999DCF6B233381E800EA8AE0 /* CoreMaterialDataBase.swift */,
+			);
+			path = DataBaseController;
+			sourceTree = "<group>";
+		};
+		99FB91A12318BE6A00FA1373 /* Doc */ = {
+			isa = PBXGroup;
+			children = (
+				99FB91A22318BE9700FA1373 /* SwiftComp User Manual.pdf */,
+			);
+			path = Doc;
 			sourceTree = "<group>";
 		};
 		D89B077CC58375267E780BBC /* Frameworks */ = {
@@ -240,9 +310,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99FB91A32318BE9700FA1373 /* SwiftComp User Manual.pdf in Resources */,
 				990F76CE1F85BFCF0073E459 /* LaunchScreen.storyboard in Resources */,
 				990F76CB1F85BFCF0073E459 /* Assets.xcassets in Resources */,
-				990F76C91F85BFCF0073E459 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,17 +328,19 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-SwiftComp/Pods-SwiftComp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FontAwesome.swift/FontAwesome_swift.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 				"${BUILT_PRODUCTS_DIR}/JGProgressHUD/JGProgressHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/TransitionButton/TransitionButton.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontAwesome_swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JGProgressHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TransitionButton.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -306,26 +378,44 @@
 			files = (
 				9945CF8D1FA67AF0002F2F30 /* CompositeModelCell.swift in Sources */,
 				9904AFEF1FA8FF430018FD55 /* ResultCardDesign.swift in Sources */,
+				99FB919A2317FAF000FA1373 /* ResultDataModel.swift in Sources */,
 				990F76D61F85C0280073E459 /* Home.swift in Sources */,
-				9920DBF82231A76E00AB303E /* LaminateStackingSequenceDataBase.swift in Sources */,
-				992285891FAF5C93004C1E34 /* UDFRCFiberMaterialDataBase.swift in Sources */,
+				9994A27A23128AF100A99F6B /* SwiftCompResultModel.swift in Sources */,
+				9920DBF82231A76E00AB303E /* StackingSequenceDataBase.swift in Sources */,
+				992285891FAF5C93004C1E34 /* FiberMaterialDataBase.swift in Sources */,
+				999DCF6A2333714600EA8AE0 /* HoneycombSandwich.swift in Sources */,
 				9904AFF31FA9001A0018FD55 /* ButtonDesign.swift in Sources */,
+				99FB919C2318083300FA1373 /* AnalysisSettingsModel.swift in Sources */,
+				99112DE0230E54A90064C306 /* HomeAbout.swift in Sources */,
 				99C5BF7F1F9CD54E00D87360 /* CompositeModel.swift in Sources */,
+				999DCF712333ABAB00EA8AE0 /* ErrorHandle.swift in Sources */,
+				9929959523212BAA00925595 /* NetworkManager.swift in Sources */,
 				99531905224B2179002923C5 /* UserDataModel.xcdatamodeld in Sources */,
 				992285871FAEB1F2004C1E34 /* UserSavedMaterialCell.swift in Sources */,
+				99F0EE15232C88DF00F84CA4 /* Laminate.swift in Sources */,
 				990F76C41F85BFCF0073E459 /* AppDelegate.swift in Sources */,
+				999DCF6C233381E800EA8AE0 /* CoreMaterialDataBase.swift in Sources */,
 				9920DBFA2231AD9900AB303E /* UserSavedStackingSequenceCell.swift in Sources */,
-				9945CF8B1FA678C0002F2F30 /* UDFRC.swift in Sources */,
-				9945CF861FA565C7002F2F30 /* LaminateResult.swift in Sources */,
+				99FB919E23189BC400FA1373 /* HomeTheory.swift in Sources */,
+				9945CF861FA565C7002F2F30 /* HomogenizationResult.swift in Sources */,
+				9904DEE82313B5A2005E4C14 /* SwiftCompCalculationStatusModel.swift in Sources */,
+				99FB91A02318BE3900FA1373 /* HomeUserManual.swift in Sources */,
 				99B508C51F86872200B6BC47 /* MaterialDataModel.swift in Sources */,
+				998FB89C2328C083008885EB /* CoreDataManager.swift in Sources */,
+				9904DEEA23140C8B005E4C14 /* ResultCardTypeModel.swift in Sources */,
 				9904AFF11FA8FFA50018FD55 /* MaterialCardDesign.swift in Sources */,
-				99531902224B122C002923C5 /* ExplainPopovers.swift in Sources */,
-				9945CF891FA66432002F2F30 /* Laminate.swift in Sources */,
-				9922858B1FAF5EAD004C1E34 /* UDFRCMatrixMaterialDataBase.swift in Sources */,
-				9945CF8F1FA6BF04002F2F30 /* UDFRCResult.swift in Sources */,
+				99FB91A7231CCA4C00FA1373 /* Config.swift in Sources */,
+				99F0EE13232C7AAC00F84CA4 /* SwiftCompTemplateViewController.swift in Sources */,
+				99531902224B122C002923C5 /* ExplainBoxDesign.swift in Sources */,
+				99112DDE230E3C9C0064C306 /* HomeHelp.swift in Sources */,
+				9922858B1FAF5EAD004C1E34 /* MatrixMaterialDataBase.swift in Sources */,
+				993B8185230D7EE4001AE3CF /* ExplainModel.swift in Sources */,
 				9920DC0122358EE400AB303E /* CircleTransitionDesign.swift in Sources */,
-				992285851FAEAF64004C1E34 /* LaminateLaminaMaterialDataBase.swift in Sources */,
+				992285851FAEAF64004C1E34 /* LaminaMaterialDataBase.swift in Sources */,
+				993B8183230C36F1001AE3CF /* Utilities.swift in Sources */,
 				9904AFED1FA779310018FD55 /* MaterialTypeModel.swift in Sources */,
+				9904DEEE2317A36D005E4C14 /* SwiftCompCalculationInfo.swift in Sources */,
+				99F0EE17232D240200F84CA4 /* UDFRC.swift in Sources */,
 				9904AFF71FAB888A0018FD55 /* ViewCardDesign.swift in Sources */,
 				9904AFF51FA900690018FD55 /* KeyboardDesign.swift in Sources */,
 			);
@@ -334,14 +424,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		990F76C71F85BFCF0073E459 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				990F76C81F85BFCF0073E459 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -403,7 +485,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -456,7 +538,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -470,10 +552,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = E6968P466E;
 				INFOPLIST_FILE = SwiftComp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cdmHUB.SwiftComp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -487,10 +571,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = E6968P466E;
 				INFOPLIST_FILE = SwiftComp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cdmHUB.SwiftComp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

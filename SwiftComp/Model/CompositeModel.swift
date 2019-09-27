@@ -10,12 +10,27 @@ import UIKit
 
 class CompositeModel {
     let name: String
+    let subname: String
     let image: UIImage
     
-    init(name: String, image: UIImage) {
+    init(name: String, subname: String, image: UIImage) {
         self.name = name
+        self.subname = subname
         self.image = image
     }
     
 }
 
+
+class CompoisteModels {
+    
+    var models: [CompositeModel]
+    
+    init() {
+        let compositeModel1 = CompositeModel(name: "Laminate",subname: "1D SG of laminate", image: #imageLiteral(resourceName: "laminate"))
+        let compositeModel2 = CompositeModel(name: "Unidirectional Fiber Reinforced Composite (UDFRC)", subname: "2D SG of square pack microstructure", image: #imageLiteral(resourceName: "spuarePack"))
+        let compositeModel3 = CompositeModel(name: "Honeycomb Sandwich Structure", subname: "3D SG of honeycomb sandwich", image: #imageLiteral(resourceName: "honeycomb_sandwich"))
+        
+        self.models = [compositeModel1, compositeModel2, compositeModel3]
+    }
+}

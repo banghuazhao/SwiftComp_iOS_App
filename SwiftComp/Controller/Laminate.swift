@@ -2,84 +2,53 @@
 //  Laminate.swift
 //  SwiftComp
 //
-//  Created by Banghua Zhao on 10/22/17.
-//  Copyright © 2017 Banghua Zhao. All rights reserved.
+//  Created by Banghua Zhao on 9/14/19.
+//  Copyright © 2019 Banghua Zhao. All rights reserved.
 //
 
 import UIKit
 import Accelerate
-import CoreData
-import JGProgressHUD
 
-class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, LaminateStackingSequenceDataBaseDelegate, LaminateMaterialDataBaseDelegate {
+class Laminate: SwiftCompTemplateViewController, LaminateStackingSequenceDataBaseDelegate, LaminateMaterialDataBaseDelegate, UITextFieldDelegate {
     
-    // Global variables
+    // Data
     
-    var typeOfAnalysis : typeOfAnalysis = .elastic
-    var structuralModel : structuralModel = . plate
-    var laminaMaterialType : materialType = .orthotropic
-    
-    var materialPropertyName = MaterialPropertyName()
-    var materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
-    
-    // Transition
-    
-    let transition = CircleTransitionDesign()
-    var touchLocation: CGPoint = CGPoint.zero
+    var layupSequence = [Double]()
+    var layerThickness = 0.0
+    var (e1, e2, e3, g12, g13, g23, nu12, nu13, nu23) = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    var (c11, c12, c13, c14, c15, c16, c22, c23, c24, c25, c26, c33, c34, c35, c36, c44, c45, c46, c55, c56, c66) = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    var (alpha11, alpha22, alpha33, alpha23, alpha13, alpha12) = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     
     // Core data
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var userSavedStackingSequences = [UserStackingSequence]()
     var userSavedLaminaMaterials = [UserLaminaMaterial]()
     
-    // layout
-    
-    var scrollView: UIScrollView = UIScrollView()
-    
-    // Navigation bar
-    
-    let calculationButton = UIButton()
-    var laminateResultViewController = LaminateResult()
-    
-    var effective3DPropertiesMonoclinic = [Double](repeating: 0.0, count: 13)
-    var effective3DPropertiesMonoclinicThermal = [Double](repeating: 0.0, count: 4)
-    
-    var effective3DPropertiesAnisotropic = [Double](repeating: 0.0, count: 21)
-    var effective3DPropertiesAnisotropicThermal = [Double](repeating: 0.0, count: 6)
-    
-    var effectiveInplaneProperties = [Double](repeating: 0.0, count: 6)
-    var effectiveFlexuralProperties = [Double](repeating: 0.0, count: 6)
-    
-    // first section: Type of Analysis
-    
-    var typeOfAnalysisView: UIView = UIView()
-    var typeOfAnalysisLabelButton: UIButton = UIButton()
-    var typeOfAnalysisDataBaseAlterController : UIAlertController!
-    
-    // Structural Model
-    
-    var structuralModelView: UIView = UIView()
-    var structuralModelLabelButton: UIButton = UIButton()
-    var structuralModelDataBaseAlterController : UIAlertController!
-    
-    // second section: stacking sequence
+    // geometry
     
     var stackingSequenceView: UIView = UIView()
     var stackingSequenceDataBase: UIButton = UIButton()
-    var LaminateStackingSequenceDataBaseViewController = LaminateStackingSequenceDataBase()
+    var stackingSequenceSave: UIButton = UIButton()
+    var LaminateStackingSequenceDataBaseViewController = StackingSequenceDataBase()
+    var stackingSequenceFigureView: UIView = UIView()
+    var laminateOutlineLayer: CAShapeLayer = CAShapeLayer()
     var stackingSequenceTextField: UITextField = UITextField()
     var stackingSequenceNameLabel: UITextField = UITextField()
-    var stackingSequenceSave: UIButton = UIButton()
+    var laminaThicknessLabel: UILabel = UILabel()
+    var laminaThicknessTextField: UITextField = UITextField()
     
-    // third section: lamina material
+    // lamina material
+    
+    var laminaMaterialType : MaterialType = .orthotropic
     
     var laminaMaterialView: UIView = UIView()
+    var laminaMateriaQuestionButton: UIButton = UIButton()
     var laminaMaterialDataBase: UIButton = UIButton()
-    var laminateLaminaMaterialDataBaseViewController = LaminateLaminaMaterialDataBase()
+    var laminateLaminaMaterialDataBaseViewController = LaminaMaterialDataBase()
     let laminaMaterialTypeSegementedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Transversely", "Orthotropic", "Anisotropic"])
         sc.selectedSegmentIndex = 1
+        sc.apportionsSegmentWidthsByContent = true
         return sc
     }()
     var laminaMaterialCard: UIView = UIView()
@@ -93,28 +62,11 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
         
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.white
+        navigationItem.title = "Laminate"
         
-        self.navigationController?.delegate = self
-        
-        editNavigationBar()
-        
-        createLayout()
-        
-        loadCoreData()
-        
-        createActionSheet()
-        
-        changeStackingSequenceDataField()
-        
-        changeMaterialDataField()
-        
-        hideKeyboardWhenTappedAround()
-        
+        self.stackingSequenceTextField.delegate = self
         
     }
-    
-    
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -125,206 +77,48 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
     }
     
     
+    // MARK: creaete layout
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
+    override func createLayout() {
+        super .createLayout()
         
-        return .lightContent
+        typeOfAnalysisView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -40).isActive = false
+        scrollView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
         
-    }
-    
-    
-    
-    // MARk: Add transition animation
-    
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        
-        transition.startingPoint = touchLocation
-        
-        if operation == .push {
-            transition.transitionMode = .present
-            switch toVC {
-            case LaminateStackingSequenceDataBaseViewController:
-                transition.circleColor = stackingSequenceDataBase.backgroundColor!
-            case laminateLaminaMaterialDataBaseViewController:
-                transition.circleColor = laminaMaterialDataBase.backgroundColor!
-            default:
-                return nil
-            }
-        } else {
-            transition.transitionMode = .dismiss
-            switch fromVC {
-            case LaminateStackingSequenceDataBaseViewController:
-                transition.circleColor = stackingSequenceDataBase.backgroundColor!
-            case laminateLaminaMaterialDataBaseViewController:
-                transition.circleColor = laminaMaterialDataBase.backgroundColor!
-            default:
-                return nil
-            }
-        }
-        
-        return transition
-        
-    }
-    
-    
-    
-    // MARK: Edit navigation bar
-    
-    func editNavigationBar() {
-        
-        navigationItem.title = "Laminate"
-        
-        calculationButton.calculateButtonDesign()
-        calculationButton.addTarget(self, action: #selector(calculate), for: .touchUpInside)
-        calculationButton.widthAnchor.constraint(equalToConstant: calculationButton.intrinsicContentSize.width + 20).isActive = true
-        let item = UIBarButtonItem(customView: calculationButton)
-        self.navigationItem.setRightBarButtonItems([item], animated: true)
-    }
-    
-    
-    
-    @objc func calculate(_ sender: UIButton, event: UIEvent) {
-        
-        sender.flash()
-        
-        laminateResultViewController = LaminateResult()
-        
-        let touch = event.touches(for: sender)?.first
-        touchLocation = touch?.location(in: self.view) ?? CGPoint.zero
-        
-        let hud = JGProgressHUD(style: .dark)
-        hud.textLabel.text = "Calculating"
-        hud.show(in: self.view)
-        
-        let start = DispatchTime.now()
-        
-        if self.calculateResult() {
-                
-            laminateResultViewController.typeOfAnalysis = self.typeOfAnalysis
-            
-            
-            if laminaMaterialType == .transverselyIsotropic {
-                laminateResultViewController.resultMaterialType = .monoclinic
-                for i in 0...effective3DPropertiesMonoclinic.count-1 {
-                    laminateResultViewController.effective3DPropertiesMonoclinic[i] = self.effective3DPropertiesMonoclinic[i]
-                }
-                
-                for i in 0...effective3DPropertiesMonoclinicThermal.count-1 {
-                    laminateResultViewController.effective3DPropertiesMonoclinicThermal[i] = self.effective3DPropertiesMonoclinicThermal[i]
-                }
-            } else if laminaMaterialType == .orthotropic {
-                laminateResultViewController.resultMaterialType = .monoclinic
-                for i in 0...effective3DPropertiesMonoclinic.count-1 {
-                    laminateResultViewController.effective3DPropertiesMonoclinic[i] = self.effective3DPropertiesMonoclinic[i]
-                }
-                
-                for i in 0...effective3DPropertiesMonoclinicThermal.count-1 {
-                    laminateResultViewController.effective3DPropertiesMonoclinicThermal[i] = self.effective3DPropertiesMonoclinicThermal[i]
-                }
-            } else if laminaMaterialType == .anisotropic {
-                laminateResultViewController.resultMaterialType = .anisotropic
-                for i in 0...effective3DPropertiesAnisotropic.count-1 {
-                    laminateResultViewController.effective3DPropertiesAnisotropic[i] = self.effective3DPropertiesAnisotropic[i]
-                }
-                
-                for i in 0...effective3DPropertiesAnisotropicThermal.count-1 {
-                    laminateResultViewController.effective3DPropertiesAnisotropicThermal[i] = self.effective3DPropertiesAnisotropicThermal[i]
-                }
-            }
-            
-            for i in 0...5 {
-                laminateResultViewController.effectiveInPlaneProperties[i] = self.effectiveInplaneProperties[i]
-                laminateResultViewController.effectiveFlexuralProperties[i] = self.effectiveFlexuralProperties[i]
-            }
-            
-            let end = DispatchTime.now()
-            
-            let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds // <<<<< Difference in nano seconds (UInt64)
-            let timeInterval = Double(nanoTime) / 1_000_000_000
-            
-            if timeInterval >= 1 {
-                UIView.animate(withDuration: 0.1, animations: {
-                    hud.textLabel.text = "Finished"
-                    hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                })
-                hud.dismiss(afterDelay: 0.5)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-                    
-                    self.navigationController?.pushViewController(self.laminateResultViewController, animated: true)
-                }
-            } else {
-                hud.dismiss(afterDelay: 0.0)
-                self.navigationController?.pushViewController(self.laminateResultViewController, animated: true)
-            }
-            
-        } else {
-            hud.dismiss(afterDelay: 0.0)
-        }
-        
-    }
-    
-    
-    
-    // MARK: Create layout
-    
-    func createLayout() {
-        
-        self.view.addSubview(scrollView)
-        
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
-        scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        scrollView.addSubview(typeOfAnalysisView)
-        scrollView.addSubview(structuralModelView)
-        scrollView.addSubview(stackingSequenceView)
-        scrollView.addSubview(laminaMaterialView)
-        
-        // first section
-        
-        creatViewCard(viewCard: typeOfAnalysisView, title: "Type of Analysis", aboveConstraint: scrollView.topAnchor, under: scrollView)
-        
-        typeOfAnalysisView.addSubview(typeOfAnalysisLabelButton)
-        
-        typeOfAnalysisLabelButton.setTitle("Elastic Analysis", for: UIControl.State.normal)
-        typeOfAnalysisLabelButton.addTarget(self, action: #selector(changeTypeOfAnalysisLabel(_:)), for: .touchUpInside)
-        typeOfAnalysisLabelButton.methodButtonDesign()
-        typeOfAnalysisLabelButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        typeOfAnalysisLabelButton.widthAnchor.constraint(greaterThanOrEqualToConstant: typeOfAnalysisLabelButton.intrinsicContentSize.width + 100).isActive = true
-        typeOfAnalysisLabelButton.topAnchor.constraint(equalTo: typeOfAnalysisView.topAnchor, constant: 40).isActive = true
-        typeOfAnalysisLabelButton.centerXAnchor.constraint(equalTo: typeOfAnalysisView.centerXAnchor).isActive = true
-        typeOfAnalysisLabelButton.bottomAnchor.constraint(equalTo: typeOfAnalysisView.bottomAnchor, constant: -20).isActive = true
-        
-        // Structural Model
-        
-        creatViewCard(viewCard: structuralModelView, title: "Structural Model", aboveConstraint: typeOfAnalysisView.bottomAnchor, under: scrollView)
-        
-        structuralModelView.addSubview(structuralModelLabelButton)
-        
-        structuralModelLabelButton.setTitle("Plate Model", for: UIControl.State.normal)
-        structuralModelLabelButton.addTarget(self, action: #selector(changeStructuralMOdelLabel(_:)), for: .touchUpInside)
-        structuralModelLabelButton.methodButtonDesign()
-        structuralModelLabelButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        structuralModelLabelButton.widthAnchor.constraint(greaterThanOrEqualToConstant: structuralModelLabelButton.intrinsicContentSize.width + 100).isActive = true
-        structuralModelLabelButton.topAnchor.constraint(equalTo: structuralModelView.topAnchor, constant: 40).isActive = true
-        structuralModelLabelButton.centerXAnchor.constraint(equalTo: structuralModelView.centerXAnchor).isActive = true
-        structuralModelLabelButton.bottomAnchor.constraint(equalTo: structuralModelView.bottomAnchor, constant: -20).isActive = true
-        
+        scrollView.addSubviews(stackingSequenceView, laminaMaterialView)
         
         // geometry
-
-        creatViewCard(viewCard: stackingSequenceView, title: "Geometry", aboveConstraint: structuralModelView.bottomAnchor, under: scrollView)
-        stackingSequenceView.addSubview(stackingSequenceDataBase)
-        stackingSequenceView.addSubview(stackingSequenceSave)
-        stackingSequenceView.addSubview(stackingSequenceTextField)
         
-        stackingSequenceDataBase.dataBaseButtonDesign(title: "\u{2630} Database", under: stackingSequenceView)
+        var stackingSequenceQuestionButton: UIButton = UIButton()
+        
+        createViewCardWithTitleHelpButtonDatabaseButton(viewCard: stackingSequenceView, title: "Geometry", helpButton: &stackingSequenceQuestionButton, databaseButton: &stackingSequenceDataBase, saveDatabaseButton: &stackingSequenceSave, aboveConstraint: typeOfAnalysisView.bottomAnchor, under: scrollView)
+        
+        
+        stackingSequenceQuestionButton.addTarget(self, action: #selector(stackingSequenceQuestionExplain), for: .touchUpInside)
+        
         stackingSequenceDataBase.addTarget(self, action: #selector(enterStackingSequenceDataBase), for: .touchUpInside)
         
-        stackingSequenceSave.saveButtonDesign(title: "\u{21E9} Save", under: stackingSequenceView)
         stackingSequenceSave.addTarget(self, action: #selector(saveStackingSequence), for: .touchUpInside)
+        
+        stackingSequenceView.addSubview(stackingSequenceFigureView)
+        stackingSequenceView.addSubview(stackingSequenceTextField)
+        
+        stackingSequenceFigureView.translatesAutoresizingMaskIntoConstraints = false
+        stackingSequenceFigureView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        stackingSequenceFigureView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        stackingSequenceFigureView.topAnchor.constraint(equalTo: stackingSequenceDataBase.bottomAnchor, constant: 8).isActive = true
+        stackingSequenceFigureView.centerXAnchor.constraint(equalTo: stackingSequenceView.centerXAnchor).isActive = true
+        stackingSequenceFigureView.layer.addSublayer(laminateOutlineLayer)
+        
+        let rectPath = UIBezierPath()
+        rectPath.move(to: CGPoint(x: stackingSequenceFigureView.frame.minX, y: stackingSequenceFigureView.frame.minY))
+        rectPath.addLine(to: CGPoint(x: stackingSequenceFigureView.frame.minX + 200, y: stackingSequenceFigureView.frame.minY))
+        rectPath.addLine(to: CGPoint(x: stackingSequenceFigureView.frame.minX + 200, y: stackingSequenceFigureView.frame.minY+100))
+        rectPath.addLine(to: CGPoint(x: stackingSequenceFigureView.frame.minX, y: stackingSequenceFigureView.frame.minY+100))
+        rectPath.close()
+        laminateOutlineLayer.path = rectPath.cgPath
+        laminateOutlineLayer.fillColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+        laminateOutlineLayer.strokeColor = UIColor.attributedTextWhiteColor.cgColor
         
         stackingSequenceNameLabel.text = "[0/90/45/-45]s"
         stackingSequenceTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -333,26 +127,61 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
         stackingSequenceTextField.borderStyle = .roundedRect
         stackingSequenceTextField.textAlignment = .center
         stackingSequenceTextField.placeholder = "[xx/xx/xx/xx/..]msn"
-        stackingSequenceTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        stackingSequenceTextField.font = UIFont.systemFont(ofSize: 14)
+        stackingSequenceTextField.heightAnchor.constraint(equalToConstant: 25).isActive = true
         stackingSequenceTextField.widthAnchor.constraint(equalTo: stackingSequenceView.widthAnchor, multiplier: 0.6).isActive = true
-        stackingSequenceTextField.topAnchor.constraint(equalTo: stackingSequenceDataBase.bottomAnchor, constant: 8).isActive = true
+        stackingSequenceTextField.topAnchor.constraint(equalTo: stackingSequenceFigureView.bottomAnchor, constant: 8).isActive = true
         stackingSequenceTextField.centerXAnchor.constraint(equalTo: stackingSequenceView.centerXAnchor).isActive = true
-
-
-        stackingSequenceTextField.bottomAnchor.constraint(equalTo: stackingSequenceView.bottomAnchor, constant: -20).isActive = true
+        
+        stackingSequenceTextField.bottomAnchor.constraint(equalTo: stackingSequenceView.bottomAnchor, constant: -12).isActive = true
+        
+        changeStackingSequenceDataField()
+        
+        generateLayupFigure()
+        
+        stackingSequenceView.addSubview(laminaThicknessLabel)
+        stackingSequenceView.addSubview(laminaThicknessTextField)
+        
+        laminaThicknessLabel.translatesAutoresizingMaskIntoConstraints = false
+        laminaThicknessLabel.text = "Layer Thickness"
+        laminaThicknessLabel.font = UIFont.systemFont(ofSize: 14)
+        laminaThicknessLabel.topAnchor.constraint(equalTo: stackingSequenceTextField.bottomAnchor, constant: 8).isActive = true
+        laminaThicknessLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        laminaThicknessLabel.centerXAnchor.constraint(equalTo: stackingSequenceView.centerXAnchor, constant: -64).isActive = true
+        laminaThicknessLabel.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        
+        laminaThicknessTextField.translatesAutoresizingMaskIntoConstraints = false
+        laminaThicknessTextField.placeholder = "Layer Thickness"
+        laminaThicknessTextField.text = "1.0"
+        laminaThicknessTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
+        laminaThicknessTextField.borderStyle = .roundedRect
+        laminaThicknessTextField.font = UIFont.systemFont(ofSize: 14)
+        laminaThicknessTextField.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        laminaThicknessTextField.topAnchor.constraint(equalTo: stackingSequenceTextField.bottomAnchor, constant: 8).isActive = true
+        laminaThicknessTextField.centerXAnchor.constraint(equalTo: stackingSequenceView.centerXAnchor, constant: 64).isActive = true
+        laminaThicknessTextField.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        
+        laminaThicknessTextField.bottomAnchor.constraint(equalTo: stackingSequenceView.bottomAnchor, constant: -12).isActive = false
+        
+        laminaThicknessLabel.isHidden = true
+        laminaThicknessTextField.isHidden = true
         
         // lamina material
-
-        creatViewCard(viewCard: laminaMaterialView, title: "Lamina Material", aboveConstraint: stackingSequenceView.bottomAnchor, under: scrollView)
+        
+        createViewCard(viewCard: laminaMaterialView, title: "Lamina Material", aboveConstraint: stackingSequenceView.bottomAnchor, under: scrollView)
+        laminaMaterialView.addSubview(laminaMateriaQuestionButton)
         laminaMaterialView.addSubview(laminaMaterialDataBase)
         laminaMaterialView.addSubview(saveLaminaMaterialButton)
         laminaMaterialView.addSubview(laminaMaterialTypeSegementedControl)
         laminaMaterialView.addSubview(laminaMaterialCard)
         
-        laminaMaterialDataBase.dataBaseButtonDesign(title: "\u{2630} Database", under: laminaMaterialView)
+        laminaMateriaQuestionButton.questionButtonDesign(under: laminaMaterialView)
+        laminaMateriaQuestionButton.addTarget(self, action: #selector(laminaMaterialQuestionExplain), for: .touchUpInside)
+        
+        laminaMaterialDataBase.dataBaseButtonDesign(under: laminaMaterialView)
         laminaMaterialDataBase.addTarget(self, action: #selector(enterlaminaMaterialDataBase), for: .touchUpInside)
         
-        saveLaminaMaterialButton.saveButtonDesign(title: "\u{21E9} Save", under: laminaMaterialView)
+        saveLaminaMaterialButton.saveButtonDesign(under: laminaMaterialView)
         saveLaminaMaterialButton.addTarget(self, action: #selector(saveLaminaMaterial), for: .touchUpInside)
         
         laminaMaterialTypeSegementedControl.translatesAutoresizingMaskIntoConstraints = false
@@ -362,73 +191,598 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
         laminaMaterialTypeSegementedControl.centerXAnchor.constraint(equalTo: laminaMaterialView.centerXAnchor).isActive = true
         
         laminaMaterialNameLabel.text = "IM7/8552"
-        createMaterialCard(materialCard: &laminaMaterialCard, materialName: laminaMaterialNameLabel, label: &laminaMaterialPropertiesLabel, value: &laminaMaterialPropertiesTextField, aboveConstraint: laminaMaterialTypeSegementedControl.bottomAnchor, under: laminaMaterialView, typeOfAnalysis: typeOfAnalysis, materialType: .orthotropic)
+        createMaterialCard(materialCard: &laminaMaterialCard, materialName: laminaMaterialNameLabel, label: &laminaMaterialPropertiesLabel, value: &laminaMaterialPropertiesTextField, aboveConstraint: laminaMaterialTypeSegementedControl.bottomAnchor, under: laminaMaterialView, typeOfAnalysis: analysisSettings.typeOfAnalysis, materialType: .orthotropic)
+        
+        changeMaterialDataField()
         
         laminaMaterialCard.bottomAnchor.constraint(equalTo: laminaMaterialView.bottomAnchor, constant: -20).isActive = true
         
-        laminaMaterialView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
+        laminaMaterialView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -40).isActive = true
+        
+        scrollView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
         
     }
     
+    // MARK: question button section
     
-    
-    
-    // First section
-    
-    @objc func changeTypeOfAnalysisLabel(_ sender: UIButton) {
+    override func methodQuestionExplain(_ sender: UIButton) {
         sender.flash()
-        self.present(typeOfAnalysisDataBaseAlterController, animated: true, completion: nil)
+        
+        let explainDetialView : UIView = UIView()
+        explainDetialView.explainDetialViewPureTextDesign(pureText: ExplainModel().methodExplain + "\n\n" + ExplainModel().laminateMethodExplain)
+        
+        methodExplain.showExplain(boxHeight: 300, title: "Method", explainDetailView: explainDetialView)
+    }
+    
+    
+    override func structuralModelQuestionExplain(_ sender: UIButton) {
+        sender.flash()
+        
+        let explainDetialView : UIView = UIView()
+        explainDetialView.explainDetialViewPureTextDesign(pureText: ExplainModel().structureModel + "\n\n" + ExplainModel().laminateStructureModel)
+        
+        structuralModelExplain.showExplain(boxHeight: 300, title: "Structural Model", explainDetailView: explainDetialView)
         
     }
     
-    // Structural Model
-    
-    @objc func changeStructuralMOdelLabel(_ sender: UIButton) {
+    let laminaGeometryExplain = ExplainBoxDesign()
+    @objc func stackingSequenceQuestionExplain(_ sender: UIButton, event: UIEvent) {
         sender.flash()
-        self.present(structuralModelDataBaseAlterController, animated: true, completion: nil)
+        
+        let explainDetialView : UIView = UIView()
+        explainDetialView.explainDetialViewPureTextDesign(pureText: ExplainModel().laminateGeometryExplain)
+        
+        laminaGeometryExplain.showExplain(boxHeight: 400, title: "Geometry", explainDetailView: explainDetialView)
     }
     
     
+    let laminaMaterialExplain = ExplainBoxDesign()
+    @objc func laminaMaterialQuestionExplain(_ sender: UIButton, event: UIEvent) {
+        
+        let explainDetialView : UIView = UIView()
+        explainDetialView.explainDetialViewPureTextDesign(pureText: ExplainModel().laminateMaterialExplain + "\n\n" +  ExplainModel().materialExplain )
+        
+        laminaMaterialExplain.showExplain(boxHeight: 400, title: "Lamina Material", explainDetailView: explainDetialView)
+    }
     
-    // Second section: Stacking sequence
     
     @objc func enterStackingSequenceDataBase(_ sender: UIButton, event: UIEvent) {
         sender.flash()
         
-        let touch = event.touches(for: sender)?.first
-        touchLocation = touch?.location(in: self.view) ?? CGPoint.zero
-        
-        LaminateStackingSequenceDataBaseViewController = LaminateStackingSequenceDataBase()
+        LaminateStackingSequenceDataBaseViewController = StackingSequenceDataBase()
         
         LaminateStackingSequenceDataBaseViewController.delegate = self
         self.navigationController?.pushViewController(LaminateStackingSequenceDataBaseViewController, animated: true)
     }
     
     
-    
     func userTypeStackingSequenceDataBase(stackingSequence: String) {
         self.stackingSequenceNameLabel.text = stackingSequence
         changeStackingSequenceDataField()
+        generateLayupFigure()
     }
     
-    
-    /*
-    @objc func explainStackingSequence(_ sender: UIButton) {
-        
-        let viewController = stackingSequenceExplainPopover()
-
-        let popover = viewController.popoverPresentationController
-        popover?.delegate = self
-        popover?.sourceView = sender
-        popover?.sourceRect = sender.bounds
-        popover?.permittedArrowDirections = .up
-        popover?.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.0)
-        
-        present(viewController, animated: true, completion: nil)
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        generateLayupFigure()
     }
-    */
     
+    func changeStackingSequenceDataField() {
+        
+        let stackingSequenceCurrectName = stackingSequenceNameLabel.text!
+        if stackingSequenceCurrectName == "Empty Stacking Sequence" {
+            stackingSequenceTextField.text = ""
+        } else if ["[0/90]", "[45/-45]", "[0/30/-30]", "[0/60/-60]s", "[0/90/45/-45]s"].contains(stackingSequenceCurrectName) {
+            stackingSequenceTextField.text = stackingSequenceCurrectName
+        } else {
+            for userSavedStackingSequence in userSavedStackingSequences {
+                if stackingSequenceCurrectName == userSavedStackingSequence.name {
+                    stackingSequenceTextField.text = userSavedStackingSequence.stackingSequence
+                }
+            }
+        }
+        
+    }
     
+    //  generate layup figure
+    
+    func generateLayupFigure() {
+        
+        let wrongStackingSequenceText: UITextView = UITextView()
+        
+        stackingSequenceFigureView.subviews.forEach({ $0.removeFromSuperview() }) // first remove all subviews
+        stackingSequenceFigureView.layer.sublayers?.forEach({ $0.removeFromSuperlayer() }) // first remove all sublayers
+        
+        stackingSequenceFigureView.layer.addSublayer(laminateOutlineLayer)
+        laminateOutlineLayer.fillColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+        stackingSequenceFigureView.addSubview(wrongStackingSequenceText)
+        
+        wrongStackingSequenceText.translatesAutoresizingMaskIntoConstraints = false
+        wrongStackingSequenceText.text = "Wrong Stacking Sequence"
+        wrongStackingSequenceText.font = UIFont.systemFont(ofSize: 14)
+        wrongStackingSequenceText.isScrollEnabled = false
+        wrongStackingSequenceText.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+        wrongStackingSequenceText.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: 0).isActive = true
+        wrongStackingSequenceText.isHidden = true
+        wrongStackingSequenceText.backgroundColor = .clear
+        
+        let layupSequence = getlayupSequence(textFieldValue: stackingSequenceTextField.text ?? "")
+        
+        if layupSequence == [] {
+            wrongStackingSequenceText.isHidden = false
+            laminateOutlineLayer.fillColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 0.5)
+        }
+        
+        let nPly = layupSequence.count
+        
+        // plot stacking sequence figure
+        
+        if nPly == 1 {
+            
+            let laminateDividerLayer1: CAShapeLayer = CAShapeLayer()
+            
+            var angle1Alpha : CGFloat = 0
+            if abs(layupSequence[0]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[0] != 0.0 {
+                angle1Alpha = CGFloat(0)
+            } else {
+                angle1Alpha = CGFloat(0.9 - abs(layupSequence[0]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            let linePath1 = UIBezierPath()
+            linePath1.move(to: CGPoint(x: 0, y: 0))
+            linePath1.addLine(to: CGPoint(x: 200, y: 0))
+            linePath1.addLine(to: CGPoint(x: 200, y: 100))
+            linePath1.addLine(to: CGPoint(x: 0, y: 100))
+            linePath1.close()
+            laminateDividerLayer1.path = linePath1.cgPath
+            laminateDividerLayer1.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle1Alpha).cgColor
+            laminateDividerLayer1.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer1)
+            
+            let angle1: UITextView = UITextView()
+            
+            stackingSequenceFigureView.addSubview(angle1)
+            
+            angle1.translatesAutoresizingMaskIntoConstraints = false
+            angle1.text = String(format:"%.1f", layupSequence[0])
+            angle1.font = UIFont.systemFont(ofSize: 14)
+            angle1.isScrollEnabled = false
+            angle1.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle1.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: 0).isActive = true
+            angle1.backgroundColor = .clear
+            
+            
+        } else if nPly == 2 {
+            
+            let laminateDividerLayer1: CAShapeLayer = CAShapeLayer()
+            let laminateDividerLayer2: CAShapeLayer = CAShapeLayer()
+            
+            var angle1Alpha : CGFloat = 0
+            if abs(layupSequence[1]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[1] != 0.0 {
+                angle1Alpha = CGFloat(0)
+            } else {
+                angle1Alpha = CGFloat(0.9 - abs(layupSequence[1]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            var angle2Alpha : CGFloat = 0
+            if abs(layupSequence[0]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[0] != 0.0 {
+                angle2Alpha = CGFloat(0)
+            } else {
+                angle2Alpha = CGFloat(0.9 - abs(layupSequence[0]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            let linePath1 = UIBezierPath()
+            linePath1.move(to: CGPoint(x: 0, y: 0))
+            linePath1.addLine(to: CGPoint(x: 200, y: 0))
+            linePath1.addLine(to: CGPoint(x: 200, y: 50))
+            linePath1.addLine(to: CGPoint(x: 0, y: 50))
+            linePath1.close()
+            laminateDividerLayer1.path = linePath1.cgPath
+            laminateDividerLayer1.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle1Alpha).cgColor
+            laminateDividerLayer1.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let linePath2 = UIBezierPath()
+            linePath2.move(to: CGPoint(x: 0, y: 50))
+            linePath2.addLine(to: CGPoint(x: 200, y: 50))
+            linePath2.addLine(to: CGPoint(x: 200, y: 100))
+            linePath2.addLine(to: CGPoint(x: 0, y: 100))
+            linePath2.close()
+            laminateDividerLayer2.path = linePath2.cgPath
+            laminateDividerLayer2.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle2Alpha).cgColor
+            laminateDividerLayer2.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer1)
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer2)
+            
+            let angle1: UITextView = UITextView()
+            let angle2: UITextView = UITextView()
+            
+            stackingSequenceFigureView.addSubview(angle1)
+            stackingSequenceFigureView.addSubview(angle2)
+            
+            angle1.translatesAutoresizingMaskIntoConstraints = false
+            angle1.text = String(format:"%.1f", layupSequence[1])
+            angle1.font = UIFont.systemFont(ofSize: 14)
+            angle1.isScrollEnabled = false
+            angle1.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle1.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: -16.6-10).isActive = true
+            angle1.backgroundColor = .clear
+            
+            angle2.translatesAutoresizingMaskIntoConstraints = false
+            angle2.text = String(format:"%.1f", layupSequence[0])
+            angle2.font = UIFont.systemFont(ofSize: 14)
+            angle2.isScrollEnabled = false
+            angle2.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle2.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: 16.6+10).isActive = true
+            angle2.backgroundColor = .clear
+            
+        } else if nPly == 3 {
+            
+            var angle1Alpha : CGFloat = 0
+            if abs(layupSequence[2]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[2] != 0.0 {
+                angle1Alpha = CGFloat(0)
+            } else {
+                angle1Alpha = CGFloat(0.9 - abs(layupSequence[2]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            var angle2Alpha : CGFloat = 0
+            if abs(layupSequence[1]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[1] != 0.0 {
+                angle2Alpha = CGFloat(0)
+            } else {
+                angle2Alpha = CGFloat(0.9 - abs(layupSequence[1]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            var angle3Alpha : CGFloat = 0
+            if abs(layupSequence[0]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[0] != 0.0 {
+                angle3Alpha = CGFloat(0)
+            } else {
+                angle3Alpha = CGFloat(0.9 - abs(layupSequence[0]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            let laminateDividerLayer1: CAShapeLayer = CAShapeLayer()
+            let laminateDividerLayer2: CAShapeLayer = CAShapeLayer()
+            let laminateDividerLayer3: CAShapeLayer = CAShapeLayer()
+            
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer1)
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer2)
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer3)
+            
+            let linePath1 = UIBezierPath()
+            linePath1.move(to: CGPoint(x: 0, y: 0))
+            linePath1.addLine(to: CGPoint(x: 200, y: 0))
+            linePath1.addLine(to: CGPoint(x: 200, y: 33.3))
+            linePath1.addLine(to: CGPoint(x: 0, y: 33.3))
+            linePath1.close()
+            laminateDividerLayer1.path = linePath1.cgPath
+            laminateDividerLayer1.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle1Alpha).cgColor
+            laminateDividerLayer1.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let linePath2 = UIBezierPath()
+            linePath2.move(to: CGPoint(x: 0, y: 33.3))
+            linePath2.addLine(to: CGPoint(x: 200, y: 33.3))
+            linePath2.addLine(to: CGPoint(x: 200, y: 66.6))
+            linePath2.addLine(to: CGPoint(x: 0, y: 66.6))
+            linePath2.close()
+            laminateDividerLayer2.path = linePath2.cgPath
+            laminateDividerLayer2.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle2Alpha).cgColor
+            laminateDividerLayer2.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let linePath3 = UIBezierPath()
+            linePath3.move(to: CGPoint(x: 0, y: 66.6))
+            linePath3.addLine(to: CGPoint(x: 200, y: 66.6))
+            linePath3.addLine(to: CGPoint(x: 200, y: 100))
+            linePath3.addLine(to: CGPoint(x: 0, y: 100))
+            linePath3.close()
+            laminateDividerLayer3.path = linePath3.cgPath
+            laminateDividerLayer3.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle3Alpha).cgColor
+            laminateDividerLayer3.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let angle1: UITextView = UITextView()
+            let angle2: UITextView = UITextView()
+            let angle3: UITextView = UITextView()
+            
+            stackingSequenceFigureView.addSubview(angle1)
+            stackingSequenceFigureView.addSubview(angle2)
+            stackingSequenceFigureView.addSubview(angle3)
+            
+            angle1.translatesAutoresizingMaskIntoConstraints = false
+            angle1.text = String(format:"%.1f", layupSequence[2])
+            angle1.font = UIFont.systemFont(ofSize: 14)
+            angle1.isScrollEnabled = false
+            angle1.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle1.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: -25-10).isActive = true
+            angle1.backgroundColor = .clear
+            
+            angle2.translatesAutoresizingMaskIntoConstraints = false
+            angle2.text = String(format:"%.1f", layupSequence[1])
+            angle2.font = UIFont.systemFont(ofSize: 14)
+            angle2.isScrollEnabled = false
+            angle2.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle2.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: 0).isActive = true
+            angle2.backgroundColor = .clear
+            
+            angle3.translatesAutoresizingMaskIntoConstraints = false
+            angle3.text = String(format:"%.1f", layupSequence[0])
+            angle3.font = UIFont.systemFont(ofSize: 14)
+            angle3.isScrollEnabled = false
+            angle3.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle3.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: 25+10).isActive = true
+            angle3.backgroundColor = .clear
+            
+        } else if nPly == 4 {
+            
+            var angle1Alpha : CGFloat = 0
+            if abs(layupSequence[3]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[3] != 0.0 {
+                angle1Alpha = CGFloat(0)
+            } else {
+                angle1Alpha = CGFloat(0.9 - abs(layupSequence[3]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            var angle2Alpha : CGFloat = 0
+            if abs(layupSequence[2]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[2] != 0.0 {
+                angle2Alpha = CGFloat(0)
+            } else {
+                angle2Alpha = CGFloat(0.9 - abs(layupSequence[2]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            var angle3Alpha : CGFloat = 0
+            if abs(layupSequence[1]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[1] != 0.0 {
+                angle3Alpha = CGFloat(0)
+            } else {
+                angle3Alpha = CGFloat(0.9 - abs(layupSequence[1]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            var angle4Alpha : CGFloat = 0
+            if abs(layupSequence[0]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[0] != 0.0 {
+                angle4Alpha = CGFloat(0)
+            } else {
+                angle4Alpha = CGFloat(0.9 - abs(layupSequence[0]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            let laminateDividerLayer1: CAShapeLayer = CAShapeLayer()
+            let laminateDividerLayer2: CAShapeLayer = CAShapeLayer()
+            let laminateDividerLayer3: CAShapeLayer = CAShapeLayer()
+            let laminateDividerLayer4: CAShapeLayer = CAShapeLayer()
+            
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer1)
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer2)
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer3)
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer4)
+            
+            let linePath1 = UIBezierPath()
+            linePath1.move(to: CGPoint(x: 0, y: 0))
+            linePath1.addLine(to: CGPoint(x: 200, y: 0))
+            linePath1.addLine(to: CGPoint(x: 200, y: 25))
+            linePath1.addLine(to: CGPoint(x: 0, y: 25))
+            linePath1.close()
+            laminateDividerLayer1.path = linePath1.cgPath
+            laminateDividerLayer1.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle1Alpha).cgColor
+            laminateDividerLayer1.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let linePath2 = UIBezierPath()
+            linePath2.move(to: CGPoint(x: 0, y: 25))
+            linePath2.addLine(to: CGPoint(x: 200, y: 25))
+            linePath2.addLine(to: CGPoint(x: 200, y: 50))
+            linePath2.addLine(to: CGPoint(x: 0, y: 50))
+            linePath2.close()
+            laminateDividerLayer2.path = linePath2.cgPath
+            laminateDividerLayer2.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle2Alpha).cgColor
+            laminateDividerLayer2.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let linePath3 = UIBezierPath()
+            linePath3.move(to: CGPoint(x: 0, y: 50))
+            linePath3.addLine(to: CGPoint(x: 200, y: 50))
+            linePath3.addLine(to: CGPoint(x: 200, y: 75))
+            linePath3.addLine(to: CGPoint(x: 0, y: 75))
+            linePath3.close()
+            laminateDividerLayer3.path = linePath3.cgPath
+            laminateDividerLayer3.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle3Alpha).cgColor
+            laminateDividerLayer3.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let linePath4 = UIBezierPath()
+            linePath4.move(to: CGPoint(x: 0, y: 75))
+            linePath4.addLine(to: CGPoint(x: 200, y: 75))
+            linePath4.addLine(to: CGPoint(x: 200, y: 100))
+            linePath4.addLine(to: CGPoint(x: 0, y: 100))
+            linePath4.close()
+            laminateDividerLayer4.path = linePath4.cgPath
+            laminateDividerLayer4.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle4Alpha).cgColor
+            laminateDividerLayer4.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let angle1: UITextView = UITextView()
+            let angle2: UITextView = UITextView()
+            let angle3: UITextView = UITextView()
+            let angle4: UITextView = UITextView()
+            
+            stackingSequenceFigureView.addSubview(angle1)
+            stackingSequenceFigureView.addSubview(angle2)
+            stackingSequenceFigureView.addSubview(angle3)
+            stackingSequenceFigureView.addSubview(angle4)
+            
+            angle1.translatesAutoresizingMaskIntoConstraints = false
+            angle1.text = String(format:"%.1f", layupSequence[3])
+            angle1.font = UIFont.systemFont(ofSize: 14)
+            angle1.isScrollEnabled = false
+            angle1.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle1.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: -38).isActive = true
+            angle1.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+            
+            angle2.translatesAutoresizingMaskIntoConstraints = false
+            angle2.text = String(format:"%.1f", layupSequence[2])
+            angle2.font = UIFont.systemFont(ofSize: 14)
+            angle2.isScrollEnabled = false
+            angle2.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle2.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: -13).isActive = true
+            angle2.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+            
+            angle3.translatesAutoresizingMaskIntoConstraints = false
+            angle3.text = String(format:"%.1f", layupSequence[1])
+            angle3.font = UIFont.systemFont(ofSize: 14)
+            angle3.isScrollEnabled = false
+            angle3.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle3.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: 13).isActive = true
+            angle3.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+            
+            angle4.translatesAutoresizingMaskIntoConstraints = false
+            angle4.text = String(format:"%.1f", layupSequence[0])
+            angle4.font = UIFont.systemFont(ofSize: 14)
+            angle4.isScrollEnabled = false
+            angle4.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle4.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: 38).isActive = true
+            angle4.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+            
+        } else if nPly > 4 {
+            
+            var angle1Alpha : CGFloat = 0
+            if abs(layupSequence[layupSequence.endIndex - 1]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[layupSequence.endIndex - 1] != 0.0 {
+                angle1Alpha = CGFloat(0)
+            } else {
+                angle1Alpha = CGFloat(0.9 - abs(layupSequence[layupSequence.endIndex - 1]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            var angle2Alpha : CGFloat = 0
+            if abs(layupSequence[layupSequence.endIndex - 2]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[layupSequence.endIndex - 2] != 0.0 {
+                angle2Alpha = CGFloat(0)
+            } else {
+                angle2Alpha = CGFloat(0.9 - abs(layupSequence[layupSequence.endIndex - 2]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            var angle3Alpha : CGFloat = 0
+            if abs(layupSequence[1]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[1] != 0.0 {
+                angle3Alpha = CGFloat(0)
+            } else {
+                angle3Alpha = CGFloat(0.9 - abs(layupSequence[1]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            var angle4Alpha : CGFloat = 0
+            if abs(layupSequence[0]).truncatingRemainder(dividingBy: 90) == 0 && layupSequence[0] != 0.0 {
+                angle4Alpha = CGFloat(0)
+            } else {
+                angle4Alpha = CGFloat(0.9 - abs(layupSequence[0]).truncatingRemainder(dividingBy: 90) / 100)
+            }
+            
+            let moreAngleAlpha : CGFloat = 0.45
+            
+            let laminateDividerLayer1: CAShapeLayer = CAShapeLayer()
+            let laminateDividerLayer2: CAShapeLayer = CAShapeLayer()
+            let laminateDividerLayer3: CAShapeLayer = CAShapeLayer()
+            let laminateDividerLayer4: CAShapeLayer = CAShapeLayer()
+            let laminateDividerLayerMore: CAShapeLayer = CAShapeLayer()
+            
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer1)
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer2)
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer3)
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayer4)
+            stackingSequenceFigureView.layer.addSublayer(laminateDividerLayerMore)
+            
+            let linePath1 = UIBezierPath()
+            linePath1.move(to: CGPoint(x: 0, y: 0))
+            linePath1.addLine(to: CGPoint(x: 200, y: 0))
+            linePath1.addLine(to: CGPoint(x: 200, y: 20))
+            linePath1.addLine(to: CGPoint(x: 0, y: 20))
+            linePath1.close()
+            laminateDividerLayer1.path = linePath1.cgPath
+            laminateDividerLayer1.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle1Alpha).cgColor
+            laminateDividerLayer1.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let linePath2 = UIBezierPath()
+            linePath2.move(to: CGPoint(x: 0, y: 20))
+            linePath2.addLine(to: CGPoint(x: 200, y: 20))
+            linePath2.addLine(to: CGPoint(x: 200, y: 40))
+            linePath2.addLine(to: CGPoint(x: 0, y: 40))
+            linePath2.close()
+            laminateDividerLayer2.path = linePath2.cgPath
+            laminateDividerLayer2.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle2Alpha).cgColor
+            laminateDividerLayer2.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let linePath3 = UIBezierPath()
+            linePath3.move(to: CGPoint(x: 0, y: 60))
+            linePath3.addLine(to: CGPoint(x: 200, y: 60))
+            linePath3.addLine(to: CGPoint(x: 200, y: 80))
+            linePath3.addLine(to: CGPoint(x: 0, y: 80))
+            linePath3.close()
+            laminateDividerLayer3.path = linePath3.cgPath
+            laminateDividerLayer3.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle3Alpha).cgColor
+            laminateDividerLayer3.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let linePath4 = UIBezierPath()
+            linePath4.move(to: CGPoint(x: 0, y: 80))
+            linePath4.addLine(to: CGPoint(x: 200, y: 80))
+            linePath4.addLine(to: CGPoint(x: 200, y: 100))
+            linePath4.addLine(to: CGPoint(x: 0, y: 100))
+            linePath4.close()
+            laminateDividerLayer4.path = linePath4.cgPath
+            laminateDividerLayer4.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: angle4Alpha).cgColor
+            laminateDividerLayer4.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            let linePathMore = UIBezierPath()
+            linePathMore.move(to: CGPoint(x: 0, y: 40))
+            linePathMore.addLine(to: CGPoint(x: 200, y: 40))
+            linePathMore.addLine(to: CGPoint(x: 200, y: 60))
+            linePathMore.addLine(to: CGPoint(x: 0, y: 60))
+            linePathMore.close()
+            laminateDividerLayerMore.path = linePathMore.cgPath
+            laminateDividerLayerMore.fillColor = UIColor(displayP3Red: 0.6, green: 0.6, blue: 0.6, alpha: moreAngleAlpha).cgColor
+            laminateDividerLayerMore.strokeColor = UIColor.attributedTextWhiteColor.cgColor
+            
+            
+            let angle1: UITextView = UITextView()
+            let angle2: UITextView = UITextView()
+            let angle3: UITextView = UITextView()
+            let angle4: UITextView = UITextView()
+            let moreAngleText: UITextView = UITextView()
+            
+            stackingSequenceFigureView.addSubview(angle1)
+            stackingSequenceFigureView.addSubview(angle2)
+            stackingSequenceFigureView.addSubview(angle3)
+            stackingSequenceFigureView.addSubview(angle4)
+            stackingSequenceFigureView.addSubview(moreAngleText)
+            
+            angle1.translatesAutoresizingMaskIntoConstraints = false
+            angle1.text = String(format:"%.1f", layupSequence[layupSequence.endIndex - 1])
+            angle1.font = UIFont.systemFont(ofSize: 12)
+            angle1.isScrollEnabled = false
+            angle1.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle1.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: -40).isActive = true
+            angle1.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+            
+            angle2.translatesAutoresizingMaskIntoConstraints = false
+            angle2.text = String(format:"%.1f", layupSequence[layupSequence.endIndex - 2])
+            angle2.font = UIFont.systemFont(ofSize: 12)
+            angle2.isScrollEnabled = false
+            angle2.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle2.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: -20).isActive = true
+            angle2.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+            
+            angle3.translatesAutoresizingMaskIntoConstraints = false
+            angle3.text = String(format:"%.1f", layupSequence[1])
+            angle3.font = UIFont.systemFont(ofSize: 12)
+            angle3.isScrollEnabled = false
+            angle3.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle3.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: 20).isActive = true
+            angle3.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+            
+            angle4.translatesAutoresizingMaskIntoConstraints = false
+            angle4.text = String(format:"%.1f", layupSequence[0])
+            angle4.font = UIFont.systemFont(ofSize: 12)
+            angle4.isScrollEnabled = false
+            angle4.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            angle4.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: 40).isActive = true
+            angle4.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+            
+            moreAngleText.translatesAutoresizingMaskIntoConstraints = false
+            let remainLayerCount = layupSequence.count - 4
+            moreAngleText.text = "... omit \(remainLayerCount) layers"
+            moreAngleText.font = UIFont.systemFont(ofSize: 12)
+            moreAngleText.isScrollEnabled = false
+            moreAngleText.centerXAnchor.constraint(equalTo: stackingSequenceFigureView.centerXAnchor, constant: 0).isActive = true
+            moreAngleText.centerYAnchor.constraint(equalTo: stackingSequenceFigureView.centerYAnchor, constant: 0).isActive = true
+            moreAngleText.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+            
+        }
+        
+        
+    }
     
     @objc func saveStackingSequence(_ sender: UIButton) {
         sender.flash()
@@ -494,13 +848,33 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                 }
             }
             
-            let currentUserStackingSequence = UserStackingSequence(context: self.context)
+            let currentUserStackingSequence = UserStackingSequence(context: context)
             currentUserStackingSequence.setValue(userStackingSequenceName, forKey: "name")
             currentUserStackingSequence.setValue(self.stackingSequenceTextField.text, forKey: "stackingSequence")
             
             do {
-                try self.context.save()
+                try context.save()
                 self.loadCoreData()
+                
+                // stacking sequence saving animation
+                
+                let stackingSequenceImage: UIImage = UIImage(named: "stacking_sequence")!
+                let stackingSequenceImageView: UIImageView = UIImageView(image: stackingSequenceImage)
+                
+                self.stackingSequenceView.addSubview(stackingSequenceImageView)
+                
+                stackingSequenceImageView.frame.origin.x = self.stackingSequenceTextField.frame.origin.x + self.stackingSequenceTextField.frame.width / 2 - stackingSequenceImageView.frame.width / 2
+                stackingSequenceImageView.frame.origin.y = self.stackingSequenceTextField.frame.origin.y + self.stackingSequenceTextField.frame.height / 2
+                
+                UIView.animate(withDuration: 0.8, animations: {
+                    stackingSequenceImageView.frame.origin.x = self.stackingSequenceDataBase.frame.origin.x + self.stackingSequenceDataBase.frame.width / 2 - stackingSequenceImageView.frame.width / 2
+                    stackingSequenceImageView.frame.origin.y = self.stackingSequenceDataBase.frame.origin.y + self.stackingSequenceDataBase.frame.height / 2
+                }, completion: { (true) in
+                    UIView.animate(withDuration: 0.2, animations: {
+                        stackingSequenceImageView.removeFromSuperview()
+                    })
+                })
+                
             } catch {
                 print("Could not save data: \(error.localizedDescription)")
             }
@@ -511,22 +885,14 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
         
     }
     
-    
-    
-    // Third Section: Lamina material
-    
     @objc func enterlaminaMaterialDataBase(_ sender: UIButton, event: UIEvent) {
         sender.flash()
         
-        let touch = event.touches(for: sender)?.first
-        touchLocation = touch?.location(in: self.view) ?? CGPoint.zero
-        
-        laminateLaminaMaterialDataBaseViewController = LaminateLaminaMaterialDataBase()
+        laminateLaminaMaterialDataBaseViewController = LaminaMaterialDataBase()
         
         laminateLaminaMaterialDataBaseViewController.delegate = self
         self.navigationController?.pushViewController(laminateLaminaMaterialDataBaseViewController, animated: true)
     }
-    
     
     
     func userTypeLaminaMaterialDataBase(materialName: String) {
@@ -535,7 +901,6 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
         changeLaminaMaterialType()
         changeMaterialDataField()
     }
-    
     
     
     func determineLaminaMaterialType() {
@@ -549,17 +914,21 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                 laminaMaterialType = material.materialType
             }
         }
-
+        
         for userSaveMaterial in userSavedLaminaMaterials {
             if materialCurrectName == userSaveMaterial.name {
                 switch userSaveMaterial.type {
-                case "Transversely Isotropic":
+                case "Transversely Isotropic", "Transversely isotropic":
                     laminaMaterialType = .transverselyIsotropic
-                case "orthotropic":
+                    break
+                case "Orthotropic", "orthotropic":
                     laminaMaterialType = .orthotropic
-                case "anisotropic":
+                    break
+                case "Anisotropic", "anisotropic":
                     laminaMaterialType = .anisotropic
+                    break
                 default:
+                    laminaMaterialType = .orthotropic
                     continue
                 }
             }
@@ -578,7 +947,6 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
     }
     
     
-    
     @objc func changeLaminaMaterialType() {
         switch laminaMaterialTypeSegementedControl.selectedSegmentIndex {
         case 0:
@@ -591,7 +959,7 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
             laminaMaterialType = .orthotropic
         }
         
-        createMaterialCard(materialCard: &self.laminaMaterialCard, materialName: self.laminaMaterialNameLabel, label: &self.laminaMaterialPropertiesLabel, value: &self.laminaMaterialPropertiesTextField, aboveConstraint: self.laminaMaterialTypeSegementedControl.bottomAnchor, under: self.laminaMaterialView, typeOfAnalysis: typeOfAnalysis, materialType: laminaMaterialType)
+        createMaterialCard(materialCard: &self.laminaMaterialCard, materialName: self.laminaMaterialNameLabel, label: &self.laminaMaterialPropertiesLabel, value: &self.laminaMaterialPropertiesTextField, aboveConstraint: self.laminaMaterialTypeSegementedControl.bottomAnchor, under: self.laminaMaterialView, typeOfAnalysis: analysisSettings.typeOfAnalysis, materialType: laminaMaterialType)
         
         self.laminaMaterialCard.bottomAnchor.constraint(equalTo: self.laminaMaterialView.bottomAnchor, constant: -20).isActive = true
         
@@ -600,12 +968,11 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
     }
     
     
-    
     @objc func saveLaminaMaterial(_ sender: UIButton) {
-
+        
         sender.flash()
         
-        let inputAlter = UIAlertController(title: "Save Material", message: "Enter the material name.", preferredStyle: UIAlertController.Style.alert)
+        let inputAlter = UIAlertController(title: "Save Lamina Material", message: "Enter the material name.", preferredStyle: UIAlertController.Style.alert)
         inputAlter.addTextField { (textField: UITextField) in
             textField.placeholder = "Material Name"
         }
@@ -642,10 +1009,10 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
             
             if self.laminaMaterialType == .transverselyIsotropic {
                 userLaminaMaterialType = "Transversely Isotropic"
-                for i in 0...self.materialPropertyName.transverselyIsotropic.count - 1 {
+                for i in 0...materialPropertyName.transverselyIsotropic.count - 1 {
                     if let valueString = self.laminaMaterialPropertiesTextField[i].text {
                         if let value = Double(valueString) {
-                            userLaminaMaterialDictionary[self.materialPropertyName.transverselyIsotropic[i]] = value
+                            userLaminaMaterialDictionary[materialPropertyName.transverselyIsotropic[i]] = value
                         } else {
                             self.present(wrongMaterialValueAlter, animated: true, completion: nil)
                             return
@@ -655,11 +1022,11 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                         return
                     }
                 }
-                if self.typeOfAnalysis == .thermalElatic {
-                    for i in 0...self.materialPropertyName.transverselyIsotropicThermal.count - 1 {
-                        if let valueString = self.laminaMaterialPropertiesTextField[i + self.materialPropertyName.transverselyIsotropic.count].text {
+                if self.analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.transverselyIsotropicThermal.count - 1 {
+                        if let valueString = self.laminaMaterialPropertiesTextField[i + materialPropertyName.transverselyIsotropic.count].text {
                             if let value = Double(valueString) {
-                                userLaminaMaterialDictionary[self.materialPropertyName.transverselyIsotropicThermal[i]] = value
+                                userLaminaMaterialDictionary[materialPropertyName.transverselyIsotropicThermal[i]] = value
                             } else {
                                 self.present(wrongMaterialValueAlter, animated: true, completion: nil)
                                 return
@@ -671,11 +1038,11 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                     }
                 }
             } else if self.laminaMaterialType == .orthotropic {
-                userLaminaMaterialType = "orthotropic"
-                for i in 0...self.materialPropertyName.orthotropic.count - 1 {
+                userLaminaMaterialType = "Orthotropic"
+                for i in 0...materialPropertyName.orthotropic.count - 1 {
                     if let valueString = self.laminaMaterialPropertiesTextField[i].text {
                         if let value = Double(valueString) {
-                            userLaminaMaterialDictionary[self.materialPropertyName.orthotropic[i]] = value
+                            userLaminaMaterialDictionary[materialPropertyName.orthotropic[i]] = value
                         } else {
                             self.present(wrongMaterialValueAlter, animated: true, completion: nil)
                             return
@@ -685,11 +1052,11 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                         return
                     }
                 }
-                if self.typeOfAnalysis == .thermalElatic {
-                    for i in 0...self.materialPropertyName.orthotropicThermal.count - 1 {
-                        if let valueString = self.laminaMaterialPropertiesTextField[i + self.materialPropertyName.orthotropic.count].text {
+                if self.analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.orthotropicThermal.count - 1 {
+                        if let valueString = self.laminaMaterialPropertiesTextField[i + materialPropertyName.orthotropic.count].text {
                             if let value = Double(valueString) {
-                                userLaminaMaterialDictionary[self.materialPropertyName.orthotropicThermal[i]] = value
+                                userLaminaMaterialDictionary[materialPropertyName.orthotropicThermal[i]] = value
                             } else {
                                 self.present(wrongMaterialValueAlter, animated: true, completion: nil)
                                 return
@@ -701,11 +1068,11 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                     }
                 }
             } else if self.laminaMaterialType == .anisotropic {
-                userLaminaMaterialType = "anisotropic"
-                for i in 0...self.materialPropertyName.anisotropic.count - 1 {
+                userLaminaMaterialType = "Anisotropic"
+                for i in 0...materialPropertyName.anisotropic.count - 1 {
                     if let valueString = self.laminaMaterialPropertiesTextField[i].text {
                         if let value = Double(valueString) {
-                            userLaminaMaterialDictionary[self.materialPropertyName.anisotropic[i]] = value
+                            userLaminaMaterialDictionary[materialPropertyName.anisotropic[i]] = value
                         } else {
                             self.present(wrongMaterialValueAlter, animated: true, completion: nil)
                             return
@@ -715,11 +1082,11 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                         return
                     }
                 }
-                if self.typeOfAnalysis == .thermalElatic {
-                    for i in 0...self.materialPropertyName.anisotropicThermal.count - 1 {
-                        if let valueString = self.laminaMaterialPropertiesTextField[i + self.materialPropertyName.anisotropic.count].text {
+                if self.analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.anisotropicThermal.count - 1 {
+                        if let valueString = self.laminaMaterialPropertiesTextField[i + materialPropertyName.anisotropic.count].text {
                             if let value = Double(valueString) {
-                                userLaminaMaterialDictionary[self.materialPropertyName.anisotropicThermal[i]] = value
+                                userLaminaMaterialDictionary[materialPropertyName.anisotropicThermal[i]] = value
                             } else {
                                 self.present(wrongMaterialValueAlter, animated: true, completion: nil)
                                 return
@@ -731,7 +1098,7 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                     }
                 }
             }
-
+            
             
             // check same material name
             
@@ -744,7 +1111,7 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                     return
                 }
             }
-
+            
             for userSavedLaminaMaterial in self.userSavedLaminaMaterials {
                 if let name = userSavedLaminaMaterial.name {
                     if userMaterialName == name {
@@ -754,19 +1121,24 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                 }
             }
             
-            let currentUserLaminaMaterial = UserLaminaMaterial(context: self.context)
+            let currentUserLaminaMaterial = UserLaminaMaterial(context: context)
             currentUserLaminaMaterial.setValue(userMaterialName, forKey: "name")
             currentUserLaminaMaterial.setValue(userLaminaMaterialType, forKey: "type")
             currentUserLaminaMaterial.setValue(userLaminaMaterialDictionary, forKey: "properties")
-
+            
             do {
-                try self.context.save()
+                try context.save()
                 self.loadCoreData()
+                
+                // change material card material name
+                
+                self.laminaMaterialNameLabel.text = userMaterialName
                 
                 // material card saving animation
                 
-                let MaterialCardImage: UIImage = UIImage(named: "MaterialCardImg")!
+                let MaterialCardImage: UIImage = UIImage(named: "user_defined_material_card")!
                 let MaterialCardImageView: UIImageView = UIImageView(image: MaterialCardImage)
+                
                 self.laminaMaterialView.addSubview(MaterialCardImageView)
                 
                 MaterialCardImageView.frame.origin.x = self.laminaMaterialCard.frame.origin.x + self.laminaMaterialCard.frame.width / 2 - MaterialCardImageView.frame.width / 2
@@ -793,6 +1165,479 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
     }
     
     
+    // MARK: create action sheet
+    
+    override func createActionSheet() {
+        super .createActionSheet()
+        
+        let m0 = UIAlertAction(title: "SwiftComp", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            
+            guard let self = self else {return}
+            
+            self.methodLabelButton.setTitle("SwiftComp", for: .normal)
+            self.methodLabelButton.layoutIfNeeded()
+            
+            self.analysisSettings.calculationMethod = .SwiftComp
+            
+            self.editToolBar()
+            
+            if self.analysisSettings.structuralModel == .plate {
+                if self.analysisSettings.structuralSubmodel != .KirchhoffLovePlateShellModel && self.analysisSettings.structuralSubmodel != .ReissnerMindlinPlateShellModel {
+                    self.analysisSettings.structuralSubmodel = .KirchhoffLovePlateShellModel
+                }
+                
+                self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
+                self.structuralModelLabelButton.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+                self.plateSubmodelView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+                self.plateInitialCurvaturesView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = true
+                self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
+                
+                UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                    self.view.layoutIfNeeded()
+                }, completion: { (true) in
+                    self.plateSubmodelView.isHidden = false
+                    self.plateInitialCurvaturesView.isHidden = false
+                })
+            } else {
+                self.analysisSettings.structuralSubmodel = .CauchyContinuumModel
+            }
+            
+        }
+        
+        let m1 = UIAlertAction(title: "Classical Laminated Plate Theory (CLPT)", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            
+            guard let self = self else {return}
+            
+            self.methodLabelButton.setTitle("CLPT", for: .normal)
+            self.methodLabelButton.layoutIfNeeded()
+            
+            self.analysisSettings.calculationMethod = .NonSwiftComp
+            self.editToolBar()
+            
+            if self.analysisSettings.structuralModel == .plate {
+                self.analysisSettings.structuralSubmodel = .KirchhoffLovePlateShellModel
+                self.plateSubmodelView.isHidden = false
+                self.plateInitialCurvaturesView.isHidden = true
+                
+                self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
+                self.structuralModelLabelButton.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+                self.plateSubmodelView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = true
+                self.plateInitialCurvaturesView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+                self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
+                
+                UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                    self.view.layoutIfNeeded()
+                }, completion: nil)
+            } else {
+                self.analysisSettings.structuralSubmodel = .CauchyContinuumModel
+            }
+            
+        }
+        
+        methodDataBaseAlterController.addAction(m0)
+        methodDataBaseAlterController.addAction(m1)
+        
+        
+        let s0 = UIAlertAction(title: "Plate Model", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            
+            guard let self = self else {return}
+            
+            self.structuralModelLabelButton.setTitle("Plate Model", for: .normal)
+            self.structuralModelLabelButton.layoutIfNeeded()
+            
+            self.analysisSettings.structuralModel = .plate
+            self.plateSubmodelLabelButton.setTitle("Kirchho-Love Model", for: .normal)
+            self.analysisSettings.structuralSubmodel = .KirchhoffLovePlateShellModel
+       
+            self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
+            self.structuralModelLabelButton.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+            if self.analysisSettings.calculationMethod == .SwiftComp {
+                self.plateSubmodelView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+                self.plateInitialCurvaturesView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = true
+            }  else {
+                self.plateSubmodelView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = true
+                self.plateInitialCurvaturesView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+            }
+            self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
+            
+            self.stackingSequenceView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
+            self.laminaThicknessTextField.bottomAnchor.constraint(equalTo: self.stackingSequenceView.bottomAnchor, constant: -12).isActive = true
+            self.stackingSequenceTextField.bottomAnchor.constraint(equalTo: self.stackingSequenceView.bottomAnchor, constant: -12).isActive = false
+            self.stackingSequenceView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
+            
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.view.layoutIfNeeded()
+            }, completion: { (true) in
+                self.plateSubmodelView.isHidden = false
+                self.plateInitialCurvaturesView.isHidden = false
+                self.laminaThicknessLabel.isHidden = false
+                self.laminaThicknessTextField.isHidden = false
+            })
+        }
+        
+        let s1 = UIAlertAction(title: "Solid Model", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            
+            guard let self = self else {return}
+            
+            self.structuralModelLabelButton.setTitle("Solid Model", for: .normal)
+            self.structuralModelLabelButton.layoutIfNeeded()
+            
+            self.analysisSettings.structuralModel = .solid
+            self.analysisSettings.structuralSubmodel = .CauchyContinuumModel
+            
+            // hide submodel and initial curvatures subsection
+            
+            self.plateSubmodelView.isHidden = true
+            self.plateInitialCurvaturesView.isHidden = true
+            
+            self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
+            self.structuralModelLabelButton.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = true
+            self.plateSubmodelView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+            self.plateInitialCurvaturesView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+            self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
+            
+            // hide layup thickness field
+            
+            self.laminaThicknessLabel.isHidden = true
+            self.laminaThicknessTextField.isHidden = true
+            
+            self.stackingSequenceView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
+            self.laminaThicknessTextField.bottomAnchor.constraint(equalTo: self.stackingSequenceView.bottomAnchor, constant: -12).isActive = false
+            self.stackingSequenceTextField.bottomAnchor.constraint(equalTo: self.stackingSequenceView.bottomAnchor, constant: -12).isActive = true
+            self.stackingSequenceView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
+            
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+            
+        }
+        
+        let s0NonSwiftComp = UIAlertAction(title: "Plate Model", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            
+            guard let self = self else {return}
+            
+            self.structuralModelLabelButton.setTitle("Plate Model", for: .normal)
+            self.structuralModelLabelButton.layoutIfNeeded()
+            
+            self.analysisSettings.structuralModel = .plate
+            self.plateSubmodelLabelButton.setTitle("Kirchho-Love Model", for: .normal)
+            self.analysisSettings.structuralSubmodel = .KirchhoffLovePlateShellModel
+            
+            self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
+            self.structuralModelLabelButton.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+            if self.analysisSettings.calculationMethod == .SwiftComp {
+                self.plateSubmodelView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+                self.plateInitialCurvaturesView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = true
+            }  else {
+                self.plateSubmodelView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = true
+                self.plateInitialCurvaturesView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+            }
+            self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
+            
+            self.stackingSequenceView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
+            self.laminaThicknessTextField.bottomAnchor.constraint(equalTo: self.stackingSequenceView.bottomAnchor, constant: -12).isActive = true
+            self.stackingSequenceTextField.bottomAnchor.constraint(equalTo: self.stackingSequenceView.bottomAnchor, constant: -12).isActive = false
+            self.stackingSequenceView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
+            
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.view.layoutIfNeeded()
+            }, completion: { (true) in
+                self.plateSubmodelView.isHidden = false
+                self.plateInitialCurvaturesView.isHidden = true
+                self.laminaThicknessLabel.isHidden = false
+                self.laminaThicknessTextField.isHidden = false
+            })
+        }
+        
+        let s1NonSwiftComp = UIAlertAction(title: "Solid Model", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            
+            guard let self = self else {return}
+            
+            self.structuralModelLabelButton.setTitle("Solid Model", for: .normal)
+            self.structuralModelLabelButton.layoutIfNeeded()
+            
+            self.analysisSettings.structuralModel = .solid
+            self.analysisSettings.structuralSubmodel = .CauchyContinuumModel
+            
+            // hide submodel and initial curvatures subsection
+            
+            self.plateSubmodelView.isHidden = true
+            self.plateInitialCurvaturesView.isHidden = true
+            
+            self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
+            self.structuralModelLabelButton.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = true
+            self.plateSubmodelView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+            self.plateInitialCurvaturesView.bottomAnchor.constraint(equalTo: self.structuralModelView.bottomAnchor, constant: -12).isActive = false
+            self.structuralModelView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
+            
+            // hide layup thickness field
+            
+            self.laminaThicknessLabel.isHidden = true
+            self.laminaThicknessTextField.isHidden = true
+            
+            self.stackingSequenceView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = false }
+            self.laminaThicknessTextField.bottomAnchor.constraint(equalTo: self.stackingSequenceView.bottomAnchor, constant: -12).isActive = false
+            self.stackingSequenceTextField.bottomAnchor.constraint(equalTo: self.stackingSequenceView.bottomAnchor, constant: -12).isActive = true
+            self.stackingSequenceView.constraints.filter({$0.firstAttribute == NSLayoutConstraint.Attribute.bottom}).forEach{ $0.isActive = true }
+            
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+            
+        }
+        
+        structuralModelDataBaseAlterController.addAction(s0)
+        structuralModelDataBaseAlterController.addAction(s1)
+        
+        structuralModelDataBaseAlterControllerNonSwiftComp.addAction(s0NonSwiftComp)
+        structuralModelDataBaseAlterControllerNonSwiftComp.addAction(s1NonSwiftComp)
+        
+        let sub0 = UIAlertAction(title: "Kirchho-Love Model", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            guard let self = self else {return}
+            self.plateSubmodelLabelButton.setTitle("Kirchho-Love Model", for: .normal)
+            self.analysisSettings.structuralSubmodel = .KirchhoffLovePlateShellModel
+        }
+        
+        let sub1 = UIAlertAction(title: "Reissner-Mindlin Model", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            guard let self = self else {return}
+            self.plateSubmodelLabelButton.setTitle("Reissner-Mindlin Model", for: .normal)
+            self.analysisSettings.structuralSubmodel = .ReissnerMindlinPlateShellModel
+        }
+        
+        let sub0NonSwiftComp = UIAlertAction(title: "Kirchho-Love Model", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            guard let self = self else {return}
+            self.plateSubmodelLabelButton.setTitle("Kirchho-Love Model", for: .normal)
+            self.analysisSettings.structuralSubmodel = .KirchhoffLovePlateShellModel
+        }
+        
+        plateSubmodelDataBaseAlterController.addAction(sub0)
+        plateSubmodelDataBaseAlterController.addAction(sub1)
+        
+        plateSubmodelDataBaseAlterControllerNonSwiftComp.addAction(sub0NonSwiftComp)
+        
+        
+        let t0 = UIAlertAction(title: "Elastic Analysis", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            guard let self = self else {return}
+            self.typeOfAnalysisLabelButton.setTitle("Elastic Analysis", for: .normal)
+            self.analysisSettings.typeOfAnalysis = .elastic
+            self.changeTypeOfAnalysis(typeOfAnalysis: .elastic)
+            
+        }
+        
+        let t1 = UIAlertAction(title: "Thermoelastic Analysis", style: UIAlertAction.Style.default) { [weak self] (action) -> Void in
+            guard let self = self else {return}
+            self.typeOfAnalysisLabelButton.setTitle("Thermoelastic Analysis", for: .normal)
+            self.analysisSettings.typeOfAnalysis = .thermoElastic
+            self.changeTypeOfAnalysis(typeOfAnalysis: .thermoElastic)
+        }
+        
+        typeOfAnalysisDataBaseAlterController.addAction(t0)
+        typeOfAnalysisDataBaseAlterController.addAction(t1)
+        
+    }
+    
+    
+    
+    // change type of analysis
+    
+    func changeTypeOfAnalysis(typeOfAnalysis: TypeOfAnalysis) {
+        
+        createMaterialCard(materialCard: &self.laminaMaterialCard, materialName: self.laminaMaterialNameLabel, label: &self.laminaMaterialPropertiesLabel, value: &self.laminaMaterialPropertiesTextField, aboveConstraint: self.laminaMaterialTypeSegementedControl.bottomAnchor, under: self.laminaMaterialView, typeOfAnalysis: typeOfAnalysis, materialType: laminaMaterialType)
+        
+        laminaMaterialCard.bottomAnchor.constraint(equalTo: laminaMaterialView.bottomAnchor, constant: -12).isActive = true
+        
+        self.changeMaterialDataField()
+        
+    }
+    
+    
+    
+    // MARK: Change material data field
+    
+    func changeMaterialDataField() {
+        
+        let allMaterials = MaterialBank()
+        
+        let materialCurrectName = laminaMaterialNameLabel.text!
+        
+        // empty material
+        
+        if materialCurrectName == "Empty Material" {
+            if laminaMaterialType == .transverselyIsotropic {
+                for i in 0...materialPropertyName.transverselyIsotropic.count - 1 {
+                    laminaMaterialPropertiesTextField[i].text = ""
+                }
+                if analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.transverselyIsotropicThermal.count - 1 {
+                        laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = ""
+                    }
+                }
+            } else if laminaMaterialType == .orthotropic {
+                for i in 0...materialPropertyName.orthotropic.count - 1 {
+                    laminaMaterialPropertiesTextField[i].text = ""
+                }
+                if analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.orthotropicThermal.count - 1 {
+                        laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = ""
+                    }
+                }
+            } else if laminaMaterialType == .anisotropic {
+                for i in 0...materialPropertyName.anisotropic.count - 1 {
+                    laminaMaterialPropertiesTextField[i].text = ""
+                }
+                if analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.anisotropicThermal.count - 1 {
+                        laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = ""
+                    }
+                }
+            }
+            return
+        }
+        
+        // predefined material
+        
+        if let material = allMaterials.list.first(where: {$0.materialName == materialCurrectName}) {
+            if laminaMaterialType == .transverselyIsotropic {
+                for i in 0...materialPropertyName.transverselyIsotropic.count - 1 {
+                    if let property = material.materialProperties[materialPropertyName.transverselyIsotropic[i]] {
+                        laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", property)
+                    } else {
+                        laminaMaterialPropertiesTextField[i].text = ""
+                    }
+                }
+                if analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.transverselyIsotropicThermal.count - 1 {
+                        if let property = material.materialProperties[materialPropertyName.transverselyIsotropicThermal[i]] {
+                            laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = String(format: "%.2f", property)
+                        } else {
+                            laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = ""
+                        }
+                    }
+                }
+            } else if laminaMaterialType == .orthotropic {
+                for i in 0...materialPropertyName.orthotropic.count - 1 {
+                    if let property = material.materialProperties[materialPropertyName.orthotropic[i]] {
+                        laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", property)
+                    } else {
+                        laminaMaterialPropertiesTextField[i].text = ""
+                    }
+                }
+                if analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.orthotropicThermal.count - 1 {
+                        if let property = material.materialProperties[materialPropertyName.orthotropicThermal[i]] {
+                            laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = String(format: "%.2f", property)
+                        } else {
+                            laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = ""
+                        }
+                    }
+                }
+            } else if laminaMaterialType == .anisotropic {
+                for i in 0...materialPropertyName.anisotropic.count - 1 {
+                    if let property = material.materialProperties[materialPropertyName.anisotropic[i]] {
+                        laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", property)
+                    } else {
+                        laminaMaterialPropertiesTextField[i].text = ""
+                    }
+                }
+                if analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.anisotropicThermal.count - 1 {
+                        if let property = material.materialProperties[materialPropertyName.anisotropicThermal[i]] {
+                            laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = String(format: "%.2f", property)
+                        } else {
+                            laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = ""
+                        }
+                    }
+                }
+            }
+            return
+        }
+        
+        // user defined material
+        
+        if let userSaveMaterial = userSavedLaminaMaterials.first(where: {$0.name == materialCurrectName}) {
+            if laminaMaterialType == .transverselyIsotropic {
+                for i in 0...materialPropertyName.transverselyIsotropic.count - 1 {
+                    if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
+                        if let value = valueDictionary[materialPropertyName.transverselyIsotropic[i]] {
+                            laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", value)
+                        } else {
+                            laminaMaterialPropertiesTextField[i].text = ""
+                        }
+                    } else {
+                        laminaMaterialPropertiesTextField[i].text = ""
+                    }
+                }
+                if analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.transverselyIsotropicThermal.count - 1 {
+                        if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
+                            if let value = valueDictionary[materialPropertyName.transverselyIsotropicThermal[i]] {
+                                laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = String(format: "%.2f", value)
+                            } else {
+                                laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = ""
+                            }
+                        } else {
+                            laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = ""
+                        }
+                    }
+                }
+            } else if laminaMaterialType == .orthotropic {
+                for i in 0...materialPropertyName.orthotropic.count - 1 {
+                    if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
+                        if let value = valueDictionary[materialPropertyName.orthotropic[i]] {
+                            laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", value)
+                        } else {
+                            laminaMaterialPropertiesTextField[i].text = ""
+                        }
+                    } else {
+                        laminaMaterialPropertiesTextField[i].text = ""
+                    }
+                }
+                if analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.orthotropicThermal.count - 1 {
+                        if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
+                            if let value = valueDictionary[materialPropertyName.orthotropicThermal[i]] {
+                                laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = String(format: "%.2f", value)
+                            } else {
+                                laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = ""
+                            }
+                        } else {
+                            laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = ""
+                        }
+                    }
+                }
+            } else if laminaMaterialType == .anisotropic {
+                for i in 0...materialPropertyName.anisotropic.count - 1 {
+                    if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
+                        if let value = valueDictionary[materialPropertyName.anisotropic[i]] {
+                            laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", value)
+                        } else {
+                            laminaMaterialPropertiesTextField[i].text = ""
+                        }
+                    } else {
+                        laminaMaterialPropertiesTextField[i].text = ""
+                    }
+                }
+                if analysisSettings.typeOfAnalysis == .thermoElastic {
+                    for i in 0...materialPropertyName.anisotropicThermal.count - 1 {
+                        if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
+                            if let value = valueDictionary[materialPropertyName.anisotropicThermal[i]] {
+                                laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = String(format: "%.2f", value)
+                            } else {
+                                laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = ""
+                            }
+                        } else {
+                            laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = ""
+                        }
+                    }
+                }
+            }
+            return
+        }
+        
+    }
+    
+    
+    
     
     // MARK: Load core data
     
@@ -812,533 +1657,133 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
     }
     
     
+    // get calculation parameters
     
-    // MARK: Create action sheet
-    
-    func createActionSheet() {
+    override func getCalculationParameters() -> GetParametersStatus {
         
-        typeOfAnalysisDataBaseAlterController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        analysisSettings.compositeModelName = .Laminate
         
-        let s0 = UIAlertAction(title: "Elastic Analysis", style: UIAlertAction.Style.default) { (action) -> Void in
-            self.typeOfAnalysisLabelButton.setTitle("Elastic Analysis", for: UIControl.State.normal)
-            self.typeOfAnalysisLabelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-            self.typeOfAnalysis = .elastic
-            self.changeTypeOfAnalysis(typeOfAnalysis: .elastic)
+        (k12_plate, k21_plate) = (0.0, 0.0)
+        layupSequence = [Double]()
+        layerThickness = 0.0
+        (e1, e2, e3, g12, g13, g23, nu12, nu13, nu23) = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        (c11, c12, c13, c14, c15, c16, c22, c23, c24, c25, c26, c33, c34, c35, c36, c44, c45, c46, c55, c56, c66) = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        (alpha11, alpha22, alpha33, alpha23, alpha13, alpha12) = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        
+        
+        if analysisSettings.calculationMethod == .SwiftComp && analysisSettings.structuralModel == .plate {
+            guard let k12Guard = Double(plateInitialCurvaturesk12TextField.text!), let k21Guard = Double(plateInitialCurvaturesk21TextField.text!) else {
+                return .wrongPlateInitialCurvatures
+            }
+            (k12_plate, k21_plate) = (k12Guard, k21Guard)
         }
         
-        let s1 = UIAlertAction(title: "Thermoelastic Analysis", style: UIAlertAction.Style.default) { (action) -> Void in
-            self.typeOfAnalysisLabelButton.setTitle("Thermoelastic Analysis", for: UIControl.State.normal)
-            self.typeOfAnalysisLabelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-            self.typeOfAnalysis = .thermalElatic
-            self.changeTypeOfAnalysis(typeOfAnalysis: .thermalElatic)
+        
+        // create wrong alert controllers
+        
+        layupSequence = getlayupSequence(textFieldValue: stackingSequenceTextField.text ?? "")
+        
+        if layupSequence == [] {
+            return .wrongStackingSequence
         }
         
-        typeOfAnalysisDataBaseAlterController.addAction(s0)
-        typeOfAnalysisDataBaseAlterController.addAction(s1)
-        typeOfAnalysisDataBaseAlterController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-        
-        structuralModelDataBaseAlterController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
-        
-        let m0 = UIAlertAction(title: "Plate Model", style: UIAlertAction.Style.default) { (action) -> Void in
-            self.structuralModelLabelButton.setTitle("Plate Model", for: UIControl.State.normal)
-            self.structuralModelLabelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-            self.structuralModel = .plate
-        }
-        
-        let m1 = UIAlertAction(title: "Solid Model", style: UIAlertAction.Style.default) { (action) -> Void in
-            self.structuralModelLabelButton.setTitle("Solid Model", for: UIControl.State.normal)
-            self.structuralModelLabelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-            self.structuralModel = .solid
-        }
-        
-        structuralModelDataBaseAlterController.addAction(m0)
-        structuralModelDataBaseAlterController.addAction(m1)
-        structuralModelDataBaseAlterController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-        
-    }
-    
-    
-    
-    // change type of analysis
-    
-    func changeTypeOfAnalysis(typeOfAnalysis: typeOfAnalysis) {
-    
-        createMaterialCard(materialCard: &self.laminaMaterialCard, materialName: self.laminaMaterialNameLabel, label: &self.laminaMaterialPropertiesLabel, value: &self.laminaMaterialPropertiesTextField, aboveConstraint: self.laminaMaterialTypeSegementedControl.bottomAnchor, under: self.laminaMaterialView, typeOfAnalysis: typeOfAnalysis, materialType: laminaMaterialType)
-        
-        self.changeMaterialDataField()
-            
-
-    }
-    
-    
-    
-    // MARK: Change stacking sequence data field
-    
-    func changeStackingSequenceDataField() {
-        
-        let stackingSequenceCurrectName = stackingSequenceNameLabel.text!
-        if stackingSequenceCurrectName == "Empty Stacking Sequence" {
-            stackingSequenceTextField.text = ""
-        } else if ["[0/90]", "[45/-45]", "[0/30/-30]", "[0/60/-60]s", "[0/90/45/-45]s"].contains(stackingSequenceCurrectName) {
-            stackingSequenceTextField.text = stackingSequenceCurrectName
+        if analysisSettings.structuralModel == .plate {
+            guard let tGuard = Double(laminaThicknessTextField.text!) else {
+                return .wrongLayerThickness
+            }
+            if tGuard == 0.0 {
+                return .wrongLayerThickness
+            }
+            layerThickness = tGuard
         } else {
-            for userSavedStackingSequence in userSavedStackingSequences {
-                if stackingSequenceCurrectName == userSavedStackingSequence.name {
-                    stackingSequenceTextField.text = userSavedStackingSequence.stackingSequence
-                }
-            }
+            layerThickness = 1.0
         }
-
-    }
-    
-    
-    
-    // MARK: Change material data field
-    
-    func changeMaterialDataField() {
-        let allMaterials = MaterialBank()
         
-        let materialCurrectName = laminaMaterialNameLabel.text!
-        
-        for material in allMaterials.list {
-            
-            if materialCurrectName == material.materialName {
-                if laminaMaterialType == .transverselyIsotropic {
-                    for i in 0...materialPropertyName.transverselyIsotropic.count - 1 {
-                        if let property = material.materialProperties[materialPropertyName.transverselyIsotropic[i]] {
-                            laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", property)
-                        } else {
-                            laminaMaterialPropertiesTextField[i].text = ""
-                        }
-                    }
-                    if typeOfAnalysis == .thermalElatic {
-                        for i in 0...materialPropertyName.transverselyIsotropicThermal.count - 1 {
-                            if let property = material.materialProperties[materialPropertyName.transverselyIsotropicThermal[i]] {
-                                laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = String(format: "%.2f", property)
-                            } else {
-                                laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = ""
-                            }
-                        }
-                    }
-                } else if laminaMaterialType == .orthotropic {
-                    for i in 0...materialPropertyName.orthotropic.count - 1 {
-                        if let property = material.materialProperties[materialPropertyName.orthotropic[i]] {
-                            laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", property)
-                        } else {
-                            laminaMaterialPropertiesTextField[i].text = ""
-                        }
-                    }
-                    if typeOfAnalysis == .thermalElatic {
-                        for i in 0...materialPropertyName.orthotropicThermal.count - 1 {
-                            if let property = material.materialProperties[materialPropertyName.orthotropicThermal[i]] {
-                                laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = String(format: "%.2f", property)
-                            } else {
-                                laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = ""
-                            }
-                        }
-                    }
-                } else if laminaMaterialType == .anisotropic {
-                    for i in 0...materialPropertyName.anisotropic.count - 1 {
-                        if let property = material.materialProperties[materialPropertyName.anisotropic[i]] {
-                            laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", property)
-                        } else {
-                            laminaMaterialPropertiesTextField[i].text = ""
-                        }
-                    }
-                    if typeOfAnalysis == .thermalElatic {
-                        for i in 0...materialPropertyName.anisotropicThermal.count - 1 {
-                            if let property = material.materialProperties[materialPropertyName.anisotropicThermal[i]] {
-                                laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = String(format: "%.2f", property)
-                            } else {
-                                laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = ""
-                            }
-                        }
-                    }
-                }
-            } else if materialCurrectName == "Empty Material" {
-                if laminaMaterialType == .transverselyIsotropic {
-                    for i in 0...materialPropertyName.transverselyIsotropic.count - 1 {
-                        laminaMaterialPropertiesTextField[i].text = ""
-                    }
-                    if typeOfAnalysis == .thermalElatic {
-                        for i in 0...materialPropertyName.transverselyIsotropicThermal.count - 1 {
-                            laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = ""
-                        }
-                    }
-                } else if laminaMaterialType == .orthotropic {
-                    for i in 0...materialPropertyName.orthotropic.count - 1 {
-                        laminaMaterialPropertiesTextField[i].text = ""
-                    }
-                    if typeOfAnalysis == .thermalElatic {
-                        for i in 0...materialPropertyName.orthotropicThermal.count - 1 {
-                            laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = ""
-                        }
-                    }
-                } else if laminaMaterialType == .anisotropic {
-                    for i in 0...materialPropertyName.anisotropic.count - 1 {
-                        laminaMaterialPropertiesTextField[i].text = ""
-                    }
-                    if typeOfAnalysis == .thermalElatic {
-                        for i in 0...materialPropertyName.anisotropicThermal.count - 1 {
-                            laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = ""
-                        }
-                    }
-                }
-            }
-        }
-
-        for userSaveMaterial in userSavedLaminaMaterials {
-            if materialCurrectName == userSaveMaterial.name {
-                if laminaMaterialType == .transverselyIsotropic {
-                    for i in 0...materialPropertyName.transverselyIsotropic.count - 1 {
-                        if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
-                            if let value = valueDictionary[materialPropertyName.transverselyIsotropic[i]] {
-                                laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", value)
-                            } else {
-                                laminaMaterialPropertiesTextField[i].text = ""
-                            }
-                        } else {
-                            laminaMaterialPropertiesTextField[i].text = ""
-                        }
-                    }
-                    if typeOfAnalysis == .thermalElatic {
-                        for i in 0...materialPropertyName.transverselyIsotropicThermal.count - 1 {
-                            if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
-                                if let value = valueDictionary[materialPropertyName.transverselyIsotropicThermal[i]] {
-                                    laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = String(format: "%.2f", value)
-                                } else {
-                                    laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = ""
-                                }
-                            } else {
-                                laminaMaterialPropertiesTextField[i+materialPropertyName.transverselyIsotropic.count].text = ""
-                            }
-                        }
-                    }
-                } else if laminaMaterialType == .orthotropic {
-                    for i in 0...materialPropertyName.orthotropic.count - 1 {
-                        if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
-                            if let value = valueDictionary[materialPropertyName.orthotropic[i]] {
-                                laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", value)
-                            } else {
-                                laminaMaterialPropertiesTextField[i].text = ""
-                            }
-                        } else {
-                            laminaMaterialPropertiesTextField[i].text = ""
-                        }
-                    }
-                    if typeOfAnalysis == .thermalElatic {
-                        for i in 0...materialPropertyName.orthotropicThermal.count - 1 {
-                            if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
-                                if let value = valueDictionary[materialPropertyName.orthotropicThermal[i]] {
-                                    laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = String(format: "%.2f", value)
-                                } else {
-                                    laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = ""
-                                }
-                            } else {
-                                laminaMaterialPropertiesTextField[i+materialPropertyName.orthotropic.count].text = ""
-                            }
-                        }
-                    }
-                } else if laminaMaterialType == .anisotropic {
-                    for i in 0...materialPropertyName.anisotropic.count - 1 {
-                        if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
-                            if let value = valueDictionary[materialPropertyName.anisotropic[i]] {
-                                laminaMaterialPropertiesTextField[i].text = String(format: "%.2f", value)
-                            } else {
-                                laminaMaterialPropertiesTextField[i].text = ""
-                            }
-                        } else {
-                            laminaMaterialPropertiesTextField[i].text = ""
-                        }
-                    }
-                    if typeOfAnalysis == .thermalElatic {
-                        for i in 0...materialPropertyName.anisotropicThermal.count - 1 {
-                            if let valueDictionary = userSaveMaterial.properties as? [String: Double] {
-                                if let value = valueDictionary[materialPropertyName.anisotropicThermal[i]] {
-                                    laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = String(format: "%.2f", value)
-                                } else {
-                                    laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = ""
-                                }
-                            } else {
-                                laminaMaterialPropertiesTextField[i+materialPropertyName.anisotropic.count].text = ""
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-
-    
-    
-    
-    
-    // MARK: Calculate result functions
-    
-    func calculateResult() -> Bool {
-        
-        let wrongStackingSequence = UIAlertController(title: "Wrong stacking sequence", message: "Please double check", preferredStyle: UIAlertController.Style.alert)
-        wrongStackingSequence.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
-        
-        let emptyStackingSequence = UIAlertController(title: "Empty stacking sequence", message: "Please enter a stacking sequence", preferredStyle: UIAlertController.Style.alert)
-        emptyStackingSequence.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
-        
-        var rBefore : Int = 1
-        var rAfter : Int = 1
-        var symmetry : Int = 1
-        var baseLayup : String
-        var baseLayupSequence = [Double]()
-        var layupSequence = [Double]()
-        var nPly : Int = 0
-        var t : Double = 1.0
-        var bzi = [Double]()
-        
-        // Handle stacking sequence
-        
-        if let layup = stackingSequenceTextField.text {
-            
-            let str = layup
-            
-            if str.split(separator: "]").count == 2 {
-                baseLayup = str.split(separator: "]")[0].replacingOccurrences(of: "[", with: "")
-                let rsr = str.split(separator: "]")[1]
-                if rsr.split(separator: "s").count == 2 {
-                    symmetry = 2
-                    if let i = Int(rsr.split(separator: "s")[0]), let j = Int(rsr.split(separator: "s")[1]) {
-                        rBefore = i
-                        rAfter = j
-                    } else {
-                        self.present(wrongStackingSequence, animated: true, completion: nil)
-                        return false
-                    }
-                } else if rsr.contains("s") {
-                    symmetry = 2
-                    if (rsr[rsr.startIndex] == "s") && (rsr == "s") {
-                        rAfter = 1
-                        rBefore = 1
-                    }
-                    else if rsr[rsr.startIndex] == "s"{
-                        rBefore = 1
-                        if rsr.split(separator: "s") != [] {
-                            if let i = Int(rsr.split(separator: "s")[0]) {
-                                rAfter = i
-                            } else {
-                                self.present(wrongStackingSequence, animated: true, completion: nil)
-                                return false
-                            }
-                        } else {
-                            self.present(wrongStackingSequence, animated: true, completion: nil)
-                            return false
-                        }
-                    } else {
-                        rAfter = 1
-                        if let i = Int(rsr.split(separator: "s")[0]) {
-                            rBefore = i
-                        } else {
-                            self.present(wrongStackingSequence, animated: true, completion: nil)
-                            return false
-                        }
-                    }
-                } else {
-                    symmetry = 1
-                    rBefore = 1
-                    if let i = Int(rsr) {
-                        rAfter = i
-                    } else {
-                        self.present(wrongStackingSequence, animated: true, completion: nil)
-                        return false
-                    }
-                }
-            } else {
-                baseLayup = str.replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "[", with: "")
-                rBefore = 1
-                rAfter = 1
-                symmetry = 1
-            }
-            
-            for i in baseLayup.components(separatedBy: "/") {
-                if let j = Double(i) {
-                    baseLayupSequence.append(j)
-                } else {
-                    self.present(wrongStackingSequence, animated: true, completion: nil)
-                    return false
-                }
-            }
-            
-            nPly = baseLayupSequence.count * rBefore * symmetry * rAfter
-            
-            if nPly > 0 {
-                
-                for i in 1...nPly {
-                    bzi.append((-Double(nPly+1)*t)/2 + Double(i)*t)
-                }
-                
-                for _ in 1...rBefore {
-                    for i in baseLayupSequence {
-                        layupSequence.append(i)
-                    }
-                }
-                
-                baseLayupSequence = layupSequence
-                
-                if symmetry == 2 {
-                    for i in baseLayupSequence.reversed() {
-                        layupSequence.append(i)
-                    }
-                }
-                
-                baseLayupSequence = layupSequence
-                
-                if rAfter > 1 {
-                    for _ in 2...rAfter {
-                        for i in baseLayupSequence {
-                            layupSequence.append(i)
-                        }
-                    }
-                }
-            } else {
-                self.present(wrongStackingSequence, animated: true, completion: nil)
-                return false
-            }
-        } else {
-            self.present(emptyStackingSequence, animated: true, completion: nil)
-            return false
-        }
         
         // Handle material and calculate
         
-        let wrongMaterialValue = UIAlertController(title: "Wrong Material Values", message: "Please double check!", preferredStyle: UIAlertController.Style.alert)
-        wrongMaterialValue.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        if laminaMaterialType == .transverselyIsotropic {
+            guard let e1Guard = Double(laminaMaterialPropertiesTextField[0].text!), let e2Guard = Double(laminaMaterialPropertiesTextField[1].text!), let g12Guard = Double(laminaMaterialPropertiesTextField[2].text!), let nu12Guard = Double(laminaMaterialPropertiesTextField[3].text!), let nu23Guard = Double(laminaMaterialPropertiesTextField[4].text!) else {
+                return .wrongMaterialValue
+            }
+            
+            if nu23Guard == -1.0 {
+                return .wrongNuValue
+            }
+            
+            let e3Guard   = e2Guard
+            let g13Guard  = g12Guard
+            let g23Guard  = e2Guard / (2 * (1 + nu23Guard))
+            let nu13Guard = nu12Guard
+            
+            (e1, e2, e3, g12, g13, g23, nu12, nu13, nu23) = (e1Guard, e2Guard, e3Guard, g12Guard, g13Guard, g23Guard, nu12Guard, nu13Guard, nu23Guard)
+            
+            if analysisSettings.typeOfAnalysis == .thermoElastic {
+                guard let alpha11Guard = Double(laminaMaterialPropertiesTextField[5].text!), let alpha22Guard = Double(laminaMaterialPropertiesTextField[6].text!) else {
+                    return .wrongCTEValue
+                }
+                (alpha11, alpha22, alpha33, alpha23, alpha13, alpha12) = (alpha11Guard, alpha22Guard, alpha22Guard, 0, 0, 0)
+            }
+            
+        } else if laminaMaterialType == .orthotropic {
+            guard let e1Guard = Double(laminaMaterialPropertiesTextField[0].text!),  let e2Guard = Double(laminaMaterialPropertiesTextField[1].text!),  let e3Guard = Double(laminaMaterialPropertiesTextField[2].text!),  let g12Guard = Double(laminaMaterialPropertiesTextField[3].text!),  let g13Guard = Double(laminaMaterialPropertiesTextField[4].text!),  let g23Guard = Double(laminaMaterialPropertiesTextField[5].text!),  let nu12Guard = Double(laminaMaterialPropertiesTextField[6].text!),  let nu13Guard = Double(laminaMaterialPropertiesTextField[7].text!),  let nu23Guard = Double(laminaMaterialPropertiesTextField[8].text!) else {
+                return .wrongMaterialValue
+            }
+            
+            (e1, e2, e3, g12, g13, g23, nu12, nu13, nu23) = (e1Guard, e2Guard, e3Guard, g12Guard, g13Guard, g23Guard, nu12Guard, nu13Guard, nu23Guard)
+            
+            if analysisSettings.typeOfAnalysis == .thermoElastic {
+                guard let alpha11Guard = Double(laminaMaterialPropertiesTextField[9].text!), let alpha22Guard = Double(laminaMaterialPropertiesTextField[10].text!), let alpha33Guard = Double(laminaMaterialPropertiesTextField[11].text!) else {
+                    return .wrongCTEValue
+                }
+                (alpha11, alpha22, alpha33, alpha23, alpha13, alpha12) = (alpha11Guard, alpha22Guard, alpha33Guard, 0, 0, 0)
+            }
+            
+            
+            
+        } else if laminaMaterialType == .anisotropic {
+            guard let c11Guard = Double(laminaMaterialPropertiesTextField[0].text!), let c12Guard = Double(laminaMaterialPropertiesTextField[1].text!), let c13Guard = Double(laminaMaterialPropertiesTextField[2].text!), let c14Guard = Double(laminaMaterialPropertiesTextField[3].text!), let c15Guard = Double(laminaMaterialPropertiesTextField[4].text!), let c16Guard = Double(laminaMaterialPropertiesTextField[5].text!), let c22Guard = Double(laminaMaterialPropertiesTextField[6].text!), let c23Guard = Double(laminaMaterialPropertiesTextField[7].text!), let c24Guard = Double(laminaMaterialPropertiesTextField[8].text!), let c25Guard = Double(laminaMaterialPropertiesTextField[9].text!), let c26Guard = Double(laminaMaterialPropertiesTextField[10].text!), let c33Guard = Double(laminaMaterialPropertiesTextField[11].text!), let c34Guard = Double(laminaMaterialPropertiesTextField[12].text!), let c35Guard = Double(laminaMaterialPropertiesTextField[13].text!), let c36Guard = Double(laminaMaterialPropertiesTextField[14].text!), let c44Guard = Double(laminaMaterialPropertiesTextField[15].text!), let c45Guard = Double(laminaMaterialPropertiesTextField[16].text!), let c46Guard = Double(laminaMaterialPropertiesTextField[17].text!), let c55Guard = Double(laminaMaterialPropertiesTextField[18].text!), let c56Guard = Double(laminaMaterialPropertiesTextField[19].text!), let c66Guard = Double(laminaMaterialPropertiesTextField[20].text!) else {
+                return .wrongMaterialValue
+            }
+            
+            (c11, c12, c13, c14, c15, c16, c22, c23, c24, c25, c26, c33, c34, c35, c36, c44, c45, c46, c55, c56, c66) = (c11Guard, c12Guard, c13Guard, c14Guard, c15Guard, c16Guard, c22Guard, c23Guard, c24Guard, c25Guard, c26Guard, c33Guard, c34Guard, c35Guard, c36Guard, c44Guard, c45Guard, c46Guard, c55Guard, c56Guard, c66Guard)
+            
+            if analysisSettings.typeOfAnalysis == .thermoElastic {
+                guard let alpha11Guard = Double(laminaMaterialPropertiesTextField[21].text!), let alpha22Guard = Double(laminaMaterialPropertiesTextField[22].text!), let alpha33Guard = Double(laminaMaterialPropertiesTextField[23].text!), let alpha23Guard = Double(laminaMaterialPropertiesTextField[24].text!), let alpha13Guard = Double(laminaMaterialPropertiesTextField[25].text!), let alpha12Guard = Double(laminaMaterialPropertiesTextField[26].text!) else {
+                    return .wrongCTEValue
+                }
+                
+                (alpha11, alpha22, alpha33, alpha23, alpha13, alpha12) = (alpha11Guard, alpha22Guard, alpha33Guard, alpha23Guard, alpha13Guard, alpha12Guard)
+            }
+            
+        }
+        
+        return .noError
+    }
+    
+    
+    // calculate result by CLPT
+    
+    override func calculationResultByNonSwiftComp() {
+        
+        var bzi = [Double]()
+        let nPly = layupSequence.count
+        
+        for i in 1...nPly {
+            bzi.append((-Double(nPly+1)*layerThickness)/2 + Double(i)*layerThickness)
+        }
         
         var Cp : [Double] = []
         var Qep : [Double] = []
         
-        if laminaMaterialType == .transverselyIsotropic {
-            guard let e1 = Double(laminaMaterialPropertiesTextField[0].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let e2 = Double(laminaMaterialPropertiesTextField[1].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let g12 = Double(laminaMaterialPropertiesTextField[2].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let v12 = Double(laminaMaterialPropertiesTextField[3].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let v23 = Double(laminaMaterialPropertiesTextField[4].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            
-            let Sp : [Double] = [1/e1, -v12/e1, -v12/e1, 0, 0, 0, -v12/e1, 1/e2, -v23/e2, 0, 0, 0, -v12/e1, -v23/e2, 1/e2, 0, 0, 0, 0, 0, 0, 2*(1+v23)/e2, 0, 0, 0, 0, 0, 0, 1/g12, 0, 0, 0, 0, 0, 0, 1/g12]
+        if laminaMaterialType != .anisotropic {
+            let Sp : [Double] = [1/e1, -nu12/e1, -nu13/e1, 0, 0, 0, -nu12/e1, 1/e2, -nu23/e2, 0, 0, 0, -nu13/e1, -nu23/e2, 1/e3, 0, 0, 0, 0, 0, 0, 1/g23, 0, 0, 0, 0, 0, 0, 1/g13, 0, 0, 0, 0, 0, 0, 1/g12]
             Cp = invert(matrix: Sp)
-            
-            let Sep : [Double] = [1/e1, -v12/e1, 0, -v12/e1, 1/e2, 0, 0, 0, 1/g12]
+            let Sep : [Double] = [1/e1, -nu12/e1, 0, -nu12/e1, 1/e2, 0, 0, 0, 1/g12]
             Qep = invert(matrix: Sep)
             
-        } else if laminaMaterialType == .orthotropic {
-            guard let e1 = Double(laminaMaterialPropertiesTextField[0].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let e2 = Double(laminaMaterialPropertiesTextField[1].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let e3 = Double(laminaMaterialPropertiesTextField[2].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let g12 = Double(laminaMaterialPropertiesTextField[3].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let g13 = Double(laminaMaterialPropertiesTextField[4].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let g23 = Double(laminaMaterialPropertiesTextField[5].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let v12 = Double(laminaMaterialPropertiesTextField[6].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let v13 = Double(laminaMaterialPropertiesTextField[7].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let v23 = Double(laminaMaterialPropertiesTextField[8].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            
-            let Sp : [Double] = [1/e1, -v12/e1, -v13/e1, 0, 0, 0, -v12/e1, 1/e2, -v23/e2, 0, 0, 0, -v13/e1, -v23/e2, 1/e3, 0, 0, 0, 0, 0, 0, 1/g23, 0, 0, 0, 0, 0, 0, 1/g13, 0, 0, 0, 0, 0, 0, 1/g12]
-            Cp = invert(matrix: Sp)
-            
-            let Sep : [Double] = [1/e1, -v12/e1, 0, -v12/e1, 1/e2, 0, 0, 0, 1/g12]
-            Qep = invert(matrix: Sep)
-            
-        } else if laminaMaterialType == .anisotropic {
-            guard let c11 = Double(laminaMaterialPropertiesTextField[0].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c12 = Double(laminaMaterialPropertiesTextField[1].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c13 = Double(laminaMaterialPropertiesTextField[2].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c14 = Double(laminaMaterialPropertiesTextField[3].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c15 = Double(laminaMaterialPropertiesTextField[4].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c16 = Double(laminaMaterialPropertiesTextField[5].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c22 = Double(laminaMaterialPropertiesTextField[6].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c23 = Double(laminaMaterialPropertiesTextField[7].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c24 = Double(laminaMaterialPropertiesTextField[8].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c25 = Double(laminaMaterialPropertiesTextField[9].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c26 = Double(laminaMaterialPropertiesTextField[10].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c33 = Double(laminaMaterialPropertiesTextField[11].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c34 = Double(laminaMaterialPropertiesTextField[12].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c35 = Double(laminaMaterialPropertiesTextField[13].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c36 = Double(laminaMaterialPropertiesTextField[14].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c44 = Double(laminaMaterialPropertiesTextField[15].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c45 = Double(laminaMaterialPropertiesTextField[16].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c46 = Double(laminaMaterialPropertiesTextField[17].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c55 = Double(laminaMaterialPropertiesTextField[18].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c56 = Double(laminaMaterialPropertiesTextField[19].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            guard let c66 = Double(laminaMaterialPropertiesTextField[20].text!) else {            self.present(wrongMaterialValue, animated: true, completion: nil)
-                return false
-            }
-            
+        } else {
             Cp = [c11, c12, c13, c14, c15, c16, c12, c22, c23, c24, c25, c26, c13, c23, c33, c34, c35, c36, c14, c24, c34, c44, c45, c46, c15, c25, c35, c45, c55, c56, c16, c26, c36, c46, c56, c66]
-            
             Qep = [c11, c12, c16, c12, c22, c26, c16, c26, c66]
         }
         
@@ -1413,59 +1858,21 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
         
         let Ss = invert(matrix: Cs)
         
+        // effective solid stiffness
         
-        // Effective 3D properties
-        if laminaMaterialType == .transverselyIsotropic {
-            effective3DPropertiesMonoclinic[0] = 1/Ss[0]
-            effective3DPropertiesMonoclinic[1] = 1/Ss[7]
-            effective3DPropertiesMonoclinic[2] = 1/Ss[14]
-            effective3DPropertiesMonoclinic[3] = 1/Ss[35]
-            effective3DPropertiesMonoclinic[4] = 1/Ss[28]
-            effective3DPropertiesMonoclinic[5] = 1/Ss[21]
-            effective3DPropertiesMonoclinic[6] = -1/Ss[0]*Ss[1]
-            effective3DPropertiesMonoclinic[7] = -1/Ss[0]*Ss[2]
-            effective3DPropertiesMonoclinic[8] = -1/Ss[7]*Ss[8]
-            effective3DPropertiesMonoclinic[9] = -1/Ss[35]*Ss[5]
-            effective3DPropertiesMonoclinic[10] = -1/Ss[35]*Ss[11]
-            effective3DPropertiesMonoclinic[11] = -1/Ss[35]*Ss[17]
-            effective3DPropertiesMonoclinic[12] = -1/Ss[28]*Ss[22]
-        } else if laminaMaterialType == .orthotropic {
-            effective3DPropertiesMonoclinic[0] = 1/Ss[0]
-            effective3DPropertiesMonoclinic[1] = 1/Ss[7]
-            effective3DPropertiesMonoclinic[2] = 1/Ss[14]
-            effective3DPropertiesMonoclinic[3] = 1/Ss[35]
-            effective3DPropertiesMonoclinic[4] = 1/Ss[28]
-            effective3DPropertiesMonoclinic[5] = 1/Ss[21]
-            effective3DPropertiesMonoclinic[6] = -1/Ss[0]*Ss[1]
-            effective3DPropertiesMonoclinic[7] = -1/Ss[0]*Ss[2]
-            effective3DPropertiesMonoclinic[8] = -1/Ss[7]*Ss[8]
-            effective3DPropertiesMonoclinic[9] = -1/Ss[35]*Ss[5]
-            effective3DPropertiesMonoclinic[10] = -1/Ss[35]*Ss[11]
-            effective3DPropertiesMonoclinic[11] = -1/Ss[35]*Ss[17]
-            effective3DPropertiesMonoclinic[12] = -1/Ss[28]*Ss[22]
-        } else if laminaMaterialType == .anisotropic {
-            effective3DPropertiesAnisotropic[0]  = Cs[0]
-            effective3DPropertiesAnisotropic[1]  = Cs[1]
-            effective3DPropertiesAnisotropic[2]  = Cs[2]
-            effective3DPropertiesAnisotropic[3]  = Cs[3]
-            effective3DPropertiesAnisotropic[4]  = Cs[4]
-            effective3DPropertiesAnisotropic[5]  = Cs[5]
-            effective3DPropertiesAnisotropic[6]  = Cs[7]
-            effective3DPropertiesAnisotropic[7]  = Cs[8]
-            effective3DPropertiesAnisotropic[8]  = Cs[9]
-            effective3DPropertiesAnisotropic[9]  = Cs[10]
-            effective3DPropertiesAnisotropic[10] = Cs[11]
-            effective3DPropertiesAnisotropic[11] = Cs[14]
-            effective3DPropertiesAnisotropic[12] = Cs[15]
-            effective3DPropertiesAnisotropic[13] = Cs[16]
-            effective3DPropertiesAnisotropic[14] = Cs[17]
-            effective3DPropertiesAnisotropic[15] = Cs[21]
-            effective3DPropertiesAnisotropic[16] = Cs[22]
-            effective3DPropertiesAnisotropic[17] = Cs[23]
-            effective3DPropertiesAnisotropic[18] = Cs[28]
-            effective3DPropertiesAnisotropic[19] = Cs[29]
-            effective3DPropertiesAnisotropic[20] = Cs[35]
-        }
+        resultData.effectiveSolidStiffnessMatrix = Cs
+        
+        // engineering constants
+        
+        resultData.engineeringConstantsOrthotropic[0] = 1/Ss[0]
+        resultData.engineeringConstantsOrthotropic[1] = 1/Ss[7]
+        resultData.engineeringConstantsOrthotropic[2] = 1/Ss[14]
+        resultData.engineeringConstantsOrthotropic[3] = 1/Ss[35]
+        resultData.engineeringConstantsOrthotropic[4] = 1/Ss[28]
+        resultData.engineeringConstantsOrthotropic[5] = 1/Ss[21]
+        resultData.engineeringConstantsOrthotropic[6] = -1/Ss[0]*Ss[1]
+        resultData.engineeringConstantsOrthotropic[7] = -1/Ss[0]*Ss[2]
+        resultData.engineeringConstantsOrthotropic[8] = -1/Ss[7]*Ss[8]
         
         
         // Calculate A, B, and D matrices
@@ -1473,6 +1880,7 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
         var A = [Double](repeating: 0.0, count: 9)
         var B = [Double](repeating: 0.0, count: 9)
         var D = [Double](repeating: 0.0, count: 9)
+        
         for i in 1...nPly {
             let c = cos(layupSequence[i-1] * Double.pi / 180)
             let s = sin(layupSequence[i-1] * Double.pi / 180)
@@ -1489,12 +1897,12 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
             vDSP_mmulD(Rsigmae,1,Qep,1,&temp1,1,3,3,3)
             vDSP_mmulD(temp1,1,RsigmaeT,1,&Qe,1,3,3,3)
             
-            vDSP_vsmulD(Qe, 1, &t, &Atemp, 1, 9)
+            vDSP_vsmulD(Qe, 1, &layerThickness, &Atemp, 1, 9)
             
-            var temp2 = bzi[i-1]*t
+            var temp2 = bzi[i-1]*layerThickness
             vDSP_vsmulD(Qe, 1, &temp2, &Btemp, 1, 9)
             
-            var temp3 = t*bzi[i-1]*bzi[i-1] + pow(t, 3.0)/12
+            var temp3 = layerThickness*bzi[i-1]*bzi[i-1] + pow(layerThickness, 3.0)/12
             vDSP_vsmulD(Qe, 1, &temp3, &Dtemp, 1, 9)
             
             vDSP_vaddD(A, 1, Atemp, 1, &A, 1, 9)
@@ -1504,9 +1912,9 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
         
         let ABD = [A[0], A[1], A[2], B[0], B[1], B[2], A[3], A[4], A[5], B[3], B[4], B[5], A[6], A[7], A[8], B[6], B[7], B[8], B[0], B[3], B[6], D[0], D[1], D[2], B[1], B[4], B[7], D[3], D[4], D[5], B[2], B[5], B[8], D[6], D[7], D[8]]
         
-        var abd = invert(matrix: ABD)
+        let abd = invert(matrix: ABD)
         
-        var h = nPlyD * t
+        var h = nPlyD * layerThickness
         
         let AI = [abd[0], abd[1], abd[2], abd[6], abd[7], abd[8], abd[12], abd[13], abd[14]]
         
@@ -1519,85 +1927,38 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
         var temph = pow(h, 3.0) / 12.0
         vDSP_vsmulD(DI, 1, &temph, &Sesf, 1, 9)
         
-        effectiveInplaneProperties[0] = 1/Ses[0]
-        effectiveInplaneProperties[1] = 1/Ses[4]
-        effectiveInplaneProperties[2] = 1/Ses[8]
-        effectiveInplaneProperties[3] = -1/Ses[0]*Ses[1]
-        effectiveInplaneProperties[4] = 1/Ses[8]*Ses[2]
-        effectiveInplaneProperties[5] = 1/Ses[8]*Ses[5]
+        resultData.AMatrix = A
+        resultData.BMatrix = B
+        resultData.DMatrix = D
         
-        effectiveFlexuralProperties[0] = 1/Sesf[0]
-        effectiveFlexuralProperties[1] = 1/Sesf[4]
-        effectiveFlexuralProperties[2] = 1/Sesf[8]
-        effectiveFlexuralProperties[3] = -1/Sesf[0]*Sesf[1]
-        effectiveFlexuralProperties[4] = 1/Sesf[8]*Sesf[2]
-        effectiveFlexuralProperties[5] = 1/Sesf[8]*Sesf[5]
+        resultData.effectiveInplaneProperties[0] = 1/Ses[0]
+        resultData.effectiveInplaneProperties[1] = 1/Ses[4]
+        resultData.effectiveInplaneProperties[2] = 1/Ses[8]
+        resultData.effectiveInplaneProperties[3] = -1/Ses[0]*Ses[1]
+        resultData.effectiveInplaneProperties[4] = 1/Ses[8]*Ses[2]
+        resultData.effectiveInplaneProperties[5] = 1/Ses[8]*Ses[5]
         
+        resultData.effectiveFlexuralProperties[0] = 1/Sesf[0]
+        resultData.effectiveFlexuralProperties[1] = 1/Sesf[4]
+        resultData.effectiveFlexuralProperties[2] = 1/Sesf[8]
+        resultData.effectiveFlexuralProperties[3] = -1/Sesf[0]*Sesf[1]
+        resultData.effectiveFlexuralProperties[4] = 1/Sesf[8]*Sesf[2]
+        resultData.effectiveFlexuralProperties[5] = 1/Sesf[8]*Sesf[5]
         
-        if typeOfAnalysisLabelButton.titleLabel?.text == "Thermoelastic Analysis" {
+        if analysisSettings.typeOfAnalysis == .thermoElastic {
             
-            let wrongCTEValue = UIAlertController(title: "Wrong CTE Values", message: "Please double check!", preferredStyle: UIAlertController.Style.alert)
-            wrongCTEValue.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            let alphap : [Double] = [alpha11, alpha22, alpha33, alpha23, alpha13, alpha12]
             
-            var alphap : [Double] = []
-            
-            if laminaMaterialType == .transverselyIsotropic {
-                guard let alpha11 = Double(laminaMaterialPropertiesTextField[5].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                guard let alpha22 = Double(laminaMaterialPropertiesTextField[6].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                
-                alphap = [alpha11, alpha22, alpha22, 0, 0, 0]
-                
-            } else if laminaMaterialType == .orthotropic {
-                guard let alpha11 = Double(laminaMaterialPropertiesTextField[9].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                guard let alpha22 = Double(laminaMaterialPropertiesTextField[10].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                guard let alpha33 = Double(laminaMaterialPropertiesTextField[11].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                
-                alphap = [alpha11, alpha22, alpha33, 0, 0, 0]
-                
-            } else if laminaMaterialType == .anisotropic {
-                guard let alpha11 = Double(laminaMaterialPropertiesTextField[21].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                guard let alpha22 = Double(laminaMaterialPropertiesTextField[22].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                guard let alpha33 = Double(laminaMaterialPropertiesTextField[23].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                guard let alpha23 = Double(laminaMaterialPropertiesTextField[24].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                guard let alpha13 = Double(laminaMaterialPropertiesTextField[25].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                guard let alpha12 = Double(laminaMaterialPropertiesTextField[26].text!) else {            self.present(wrongCTEValue, animated: true, completion: nil)
-                    return false
-                }
-                
-                alphap = [alpha11, alpha22, alpha33, alpha23, alpha13, alpha12]
-            }
-        
-        
             var tempalphaes = [Double](repeating: 0.0, count: 3)
             var tempalphats = [Double](repeating: 0.0, count: 3)
-        
+            
             var tempCts = [Double](repeating: 0.0, count: 9)
             var tempCets = [Double](repeating: 0.0, count: 9)
             var Qs = [Double](repeating: 0.0, count: 9)
             var Cts = [Double](repeating: 0.0, count: 9)
             var Cets = [Double](repeating: 0.0, count: 9)
             var Ces = [Double](repeating: 0.0, count: 9)
-        
+            
             // Calculate effective 3D properties
             for i in 1...nPly {
                 
@@ -1658,14 +2019,14 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
                 vDSP_vaddD(alphat, 1, temp5, 1, &temp6, 1, 3)
                 vDSP_vaddD(tempalphats, 1, temp6, 1, &tempalphats, 1, 3)
             }
-        
+            
             // Get average tempCts, Qs, tempCets
             var nPlyD = Double(nPly)
             vDSP_vsdivD(Qs, 1, &nPlyD, &Qs, 1, 9)
             vDSP_vsdivD(tempCts, 1, &nPlyD, &tempCts, 1, 9)
             vDSP_vsdivD(tempCets, 1, &nPlyD, &tempCets, 1, 9)
-        
-        
+            
+            
             // Get Cts, Cets, Cet
             Cts = invert(matrix: tempCts)
             vDSP_mmulD(tempCets,1,Cts,1,&Cets,1,3,3,3)
@@ -1677,70 +2038,267 @@ class Laminate: UIViewController, UINavigationControllerDelegate, UIPopoverPrese
             var temp8 = [Double](repeating: 0.0, count: 9)
             vDSP_mmulD(temp7,1,CetsT,1,&temp8,1,3,3,3)
             vDSP_vaddD(Qs, 1, temp8, 1, &Ces, 1, 9)
-        
+            
             // Get alphaes, alphats
             vDSP_vsdivD(tempalphaes, 1, &nPlyD, &tempalphaes, 1, 3)
             vDSP_vsdivD(tempalphats, 1, &nPlyD, &tempalphats, 1, 3)
-        
+            
             let QsI = invert(matrix: Qs)
             var alphaes = [Double](repeating: 0.0, count: 3)
             vDSP_mmulD(QsI,1,tempalphaes,1,&alphaes,1,3,1,3)
-        
+            
             var alphats = [Double](repeating: 0.0, count: 3)
             var temp9 = [Double](repeating: 0.0, count: 9)
             var temp10 = [Double](repeating: 0.0, count: 3)
             vDSP_mmulD(CtsI,1,CetsT,1,&temp9,1,3,3,3)
             vDSP_mmulD(temp9,1,alphaes,1,&temp10,1,3,1,3)
             vDSP_vsubD(temp10, 1, tempalphats, 1, &alphats, 1, 3)
-        
-            if laminaMaterialType == .transverselyIsotropic {
-                effective3DPropertiesMonoclinicThermal[0] = alphaes[0]
-                effective3DPropertiesMonoclinicThermal[1] = alphaes[1]
-                effective3DPropertiesMonoclinicThermal[2] = alphats[0]
-                effective3DPropertiesMonoclinicThermal[3] = alphaes[2]/2
-            } else if laminaMaterialType == .orthotropic {
-                effective3DPropertiesMonoclinicThermal[0] = alphaes[0]
-                effective3DPropertiesMonoclinicThermal[1] = alphaes[1]
-                effective3DPropertiesMonoclinicThermal[2] = alphats[0]
-                effective3DPropertiesMonoclinicThermal[3] = alphaes[2]/2
-            } else if laminaMaterialType == .anisotropic {
-                effective3DPropertiesAnisotropicThermal[0] = alphaes[0]
-                effective3DPropertiesAnisotropicThermal[1] = alphaes[1]
-                effective3DPropertiesAnisotropicThermal[2] = alphats[0]
-                effective3DPropertiesAnisotropicThermal[3] = alphats[1]/2
-                effective3DPropertiesAnisotropicThermal[3] = alphats[2]/2
-                effective3DPropertiesAnisotropicThermal[3] = alphaes[2]/2
-            }
+            
+            resultData.effectiveThermalCoefficients[0] = alphaes[0]
+            resultData.effectiveThermalCoefficients[1] = alphaes[1]
+            resultData.effectiveThermalCoefficients[2] = alphats[0]
+            resultData.effectiveThermalCoefficients[3] = alphats[1]/2
+            resultData.effectiveThermalCoefficients[4] = alphats[2]/2
+            resultData.effectiveThermalCoefficients[5] = alphaes[2]/2
             
         }
-    
-        return true
-        
     }
     
+    // calculate result by SwiftComp
     
-    // Inverse operation for matrix
-    
-    func invert(matrix : [Double]) -> [Double] {
-        var inMatrix = matrix
-        let N = __CLPK_integer(sqrt(Double(matrix.count)))
-        var pivots = [__CLPK_integer](repeating: 0, count: Int(N))
-        var workspace = [Double](repeating: 0.0, count: Int(N))
-        var error : __CLPK_integer = 0
+    override func calculateResultBySwiftComp() -> swiftcompCalculationStatus {
         
-        // Mutable copies to circumvent "Simultaneous accesses to var 'N'" error in Swift 4
-        var N1 = N, N2 = N, N3 = N
-        dgetrf_(&N1, &N2, &inMatrix, &N3, &pivots, &error)
-        dgetri_(&N1, &inMatrix, &N2, &pivots, &workspace, &N3, &error)
-        return inMatrix
+        var typeOfAnalysisValue : String = "Elastic"
+        var structuralModelValue : String = "Plate"
+        var structuralSubmodelValue : String = "KirchhoffLovePlateShellModel"
+        var stackingSequenceValue : String = ""
+        var laminaMaterialTypeValue : String = "Orthotropic"
+        var materialPropertiesValue : String = ""
+        
+        if analysisSettings.typeOfAnalysis == .elastic {
+            typeOfAnalysisValue = "Elastic"
+        } else if analysisSettings.typeOfAnalysis == .thermoElastic {
+            typeOfAnalysisValue = "Thermoelastic"
+        }
+        
+        if analysisSettings.structuralModel == .plate {
+            structuralModelValue = "Plate"
+        } else if analysisSettings.structuralModel == .solid {
+            structuralModelValue = "Solid"
+        }
+        
+        API_URL = "\(baseURL)/Laminate/homogenization?typeOfAnalysis=\(typeOfAnalysisValue)&structuralModel=\(structuralModelValue)"
+        
+        if analysisSettings.structuralModel == .plate {
+            
+            if analysisSettings.structuralSubmodel == .KirchhoffLovePlateShellModel {
+                structuralSubmodelValue = "KirchhoffLovePlateShellModel"
+            } else if analysisSettings.structuralSubmodel == .ReissnerMindlinPlateShellModel {
+                structuralSubmodelValue = "ReissnerMindlinPlateShellModel"
+            }
+            
+            API_URL += "&structuralSubmodel=\(structuralSubmodelValue)&k12_plate=\(k12_plate)&k21_plate=\(k21_plate)"
+            
+        }
+        
+        layupSequence.forEach { (angle) in
+            stackingSequenceValue.append(String(angle) + " ")
+        }
+        
+        _ = stackingSequenceValue.popLast()
+        
+        API_URL += "&stackingSequence=\(stackingSequenceValue)&layerThickness=\(layerThickness)"
+        
+        
+        if laminaMaterialType != .anisotropic {
+            
+            laminaMaterialTypeValue = "Orthotropic"
+            
+            materialPropertiesValue = "E1=\(e1)&E2=\(e2)&E3=\(e3)&G12=\(g12)&G13=\(g13)&G23=\(g23)&nu12=\(nu12)&nu13=\(nu13)&nu23=\(nu23)"
+            
+        } else {
+            
+            laminaMaterialTypeValue = "Anisotropic"
+            
+            materialPropertiesValue = "C11=\(c11)&C12=\(c12)&C13=\(c13)&C14=\(c14)&C15=\(c15)&C16=\(c16)&C22=\(c22)&C23=\(c23)&C33=\(c23)&C24=\(c24)&C25=\(c25)&C26=\(c26)&C33=\(c33)&C34=\(c34)&C35=\(c35)&C36=\(c36)&C44=\(c44)&C45=\(c45)&C46=\(c46)&C55=\(c55)&C56=\(c56)&C66=\(c66)"
+            
+        }
+        
+        if analysisSettings.typeOfAnalysis == .thermoElastic {
+            materialPropertiesValue += "&alpha11=\(alpha11)&alpha22=\(alpha22)&alpha33=\(alpha33)&alpha23=\(alpha23)&alpha13=\(alpha13)&alpha12=\(alpha12)"
+        }
+        
+        API_URL += "&laminaMaterialType=\(laminaMaterialTypeValue)&\(materialPropertiesValue)"
+        
+        let group = DispatchGroup()
+        
+        group.enter()
+        
+        fetchSwiftCompHomogenizationResultJSON(API_URL: API_URL, timeoutIntervalForRequest: 10) { (res) in
+            switch res {
+            case .success(let result):
+                
+                self.resultData.swiftcompCwd = result.swiftcompCwd
+                
+                self.resultData.swiftcompCalculationInfo = result.swiftcompCalculationInfo
+                
+                if self.analysisSettings.structuralModel == .plate {
+                    
+                    let A11 = Double(result.plateModelResult.effectivePlateStiffness.A11) ?? 0
+                    let A12 = Double(result.plateModelResult.effectivePlateStiffness.A12) ?? 0
+                    let A16 = Double(result.plateModelResult.effectivePlateStiffness.A16) ?? 0
+                    let A22 = Double(result.plateModelResult.effectivePlateStiffness.A22) ?? 0
+                    let A26 = Double(result.plateModelResult.effectivePlateStiffness.A26) ?? 0
+                    let A66 = Double(result.plateModelResult.effectivePlateStiffness.A66) ?? 0
+                    
+                    let B11 = Double(result.plateModelResult.effectivePlateStiffness.B11) ?? 0
+                    let B12 = Double(result.plateModelResult.effectivePlateStiffness.B12) ?? 0
+                    let B16 = Double(result.plateModelResult.effectivePlateStiffness.B16) ?? 0
+                    let B22 = Double(result.plateModelResult.effectivePlateStiffness.B22) ?? 0
+                    let B26 = Double(result.plateModelResult.effectivePlateStiffness.B26) ?? 0
+                    let B66 = Double(result.plateModelResult.effectivePlateStiffness.B66) ?? 0
+                    
+                    let D11 = Double(result.plateModelResult.effectivePlateStiffness.D11) ?? 0
+                    let D12 = Double(result.plateModelResult.effectivePlateStiffness.D12) ?? 0
+                    let D16 = Double(result.plateModelResult.effectivePlateStiffness.D16) ?? 0
+                    let D22 = Double(result.plateModelResult.effectivePlateStiffness.D22) ?? 0
+                    let D26 = Double(result.plateModelResult.effectivePlateStiffness.D26) ?? 0
+                    let D66 = Double(result.plateModelResult.effectivePlateStiffness.D66) ?? 0
+                    
+                    self.resultData.AMatrix = [A11, A12, A16, A12, A22, A26, A16, A26, A66]
+                    self.resultData.BMatrix = [B11, B12, B16, B12, B22, B26, B16, B26, B66]
+                    self.resultData.DMatrix = [D11, D12, D16, D12, D22, D26, D16, D26, D66]
+                    
+                    self.resultData.effectiveInplaneProperties[0] = Double(result.plateModelResult.inPlaneProperties.E1) ?? 0
+                    self.resultData.effectiveInplaneProperties[1] = Double(result.plateModelResult.inPlaneProperties.E2) ?? 0
+                    self.resultData.effectiveInplaneProperties[2] = Double(result.plateModelResult.inPlaneProperties.G12) ?? 0
+                    self.resultData.effectiveInplaneProperties[3] = Double(result.plateModelResult.inPlaneProperties.nu12) ?? 0
+                    self.resultData.effectiveInplaneProperties[4] = Double(result.plateModelResult.inPlaneProperties.eta121) ?? 0
+                    self.resultData.effectiveInplaneProperties[5] = Double(result.plateModelResult.inPlaneProperties.eta122) ?? 0
+                    
+                    self.resultData.effectiveFlexuralProperties[0] = Double(result.plateModelResult.flexuralProperties.E1) ?? 0
+                    self.resultData.effectiveFlexuralProperties[1] = Double(result.plateModelResult.flexuralProperties.E2) ?? 0
+                    self.resultData.effectiveFlexuralProperties[2] = Double(result.plateModelResult.flexuralProperties.G12) ?? 0
+                    self.resultData.effectiveFlexuralProperties[3] = Double(result.plateModelResult.flexuralProperties.nu12) ?? 0
+                    self.resultData.effectiveFlexuralProperties[4] = Double(result.plateModelResult.flexuralProperties.eta121) ?? 0
+                    self.resultData.effectiveFlexuralProperties[5] = Double(result.plateModelResult.flexuralProperties.eta122) ?? 0
+                    
+                    if self.analysisSettings.structuralSubmodel == .ReissnerMindlinPlateShellModel {
+                        self.resultData.CMatrix[0] = Double(result.plateModelResult.effectivePlateStiffnessRefined.C11) ?? 0
+                        self.resultData.CMatrix[1] = Double(result.plateModelResult.effectivePlateStiffnessRefined.C12) ?? 0
+                        self.resultData.CMatrix[2] = Double(result.plateModelResult.effectivePlateStiffnessRefined.C12) ?? 0
+                        self.resultData.CMatrix[3] = Double(result.plateModelResult.effectivePlateStiffnessRefined.C22) ?? 0
+                    }
+                    
+                    if self.analysisSettings.typeOfAnalysis == .thermoElastic {
+                        
+                        self.resultData.effectiveThermalCoefficients[0] = Double(result.plateModelResult.thermalCoefficients.alpha11) ?? 0
+                        self.resultData.effectiveThermalCoefficients[1] = Double(result.plateModelResult.thermalCoefficients.alpha22) ?? 0
+                        self.resultData.effectiveThermalCoefficients[2] = Double(result.plateModelResult.thermalCoefficients.alpha33) ?? 0
+                        self.resultData.effectiveThermalCoefficients[3] = Double(result.plateModelResult.thermalCoefficients.alpha23) ?? 0
+                        self.resultData.effectiveThermalCoefficients[4] = Double(result.plateModelResult.thermalCoefficients.alpha13) ?? 0
+                        self.resultData.effectiveThermalCoefficients[5] = Double(result.plateModelResult.thermalCoefficients.alpha12) ?? 0
+                        self.resultData.effectiveThermalCoefficients[3] /= 2
+                        self.resultData.effectiveThermalCoefficients[4] /= 2
+                        self.resultData.effectiveThermalCoefficients[5] /= 2
+                        
+                    }
+                    
+                } else if self.analysisSettings.structuralModel == .solid {
+                    
+                    self.resultData.effectiveSolidStiffnessMatrix[0] = Double(result.solidModelResult.effectiveSolidStiffness.C11) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[1] = Double(result.solidModelResult.effectiveSolidStiffness.C12) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[2] = Double(result.solidModelResult.effectiveSolidStiffness.C13) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[3] = Double(result.solidModelResult.effectiveSolidStiffness.C14) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[4] = Double(result.solidModelResult.effectiveSolidStiffness.C15) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[5] = Double(result.solidModelResult.effectiveSolidStiffness.C16) ?? 0
+                    
+                    self.resultData.effectiveSolidStiffnessMatrix[6] = Double(result.solidModelResult.effectiveSolidStiffness.C12) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[7] = Double(result.solidModelResult.effectiveSolidStiffness.C22) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[8] = Double(result.solidModelResult.effectiveSolidStiffness.C23) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[9] = Double(result.solidModelResult.effectiveSolidStiffness.C24) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[10] = Double(result.solidModelResult.effectiveSolidStiffness.C25) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[11] = Double(result.solidModelResult.effectiveSolidStiffness.C26) ?? 0
+                    
+                    self.resultData.effectiveSolidStiffnessMatrix[12] = Double(result.solidModelResult.effectiveSolidStiffness.C13) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[13] = Double(result.solidModelResult.effectiveSolidStiffness.C23) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[14] = Double(result.solidModelResult.effectiveSolidStiffness.C33) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[15] = Double(result.solidModelResult.effectiveSolidStiffness.C34) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[16] = Double(result.solidModelResult.effectiveSolidStiffness.C35) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[17] = Double(result.solidModelResult.effectiveSolidStiffness.C36) ?? 0
+                    
+                    self.resultData.effectiveSolidStiffnessMatrix[18] = Double(result.solidModelResult.effectiveSolidStiffness.C14) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[19] = Double(result.solidModelResult.effectiveSolidStiffness.C24) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[20] = Double(result.solidModelResult.effectiveSolidStiffness.C34) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[21] = Double(result.solidModelResult.effectiveSolidStiffness.C44) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[22] = Double(result.solidModelResult.effectiveSolidStiffness.C45) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[23] = Double(result.solidModelResult.effectiveSolidStiffness.C46) ?? 0
+                    
+                    self.resultData.effectiveSolidStiffnessMatrix[24] = Double(result.solidModelResult.effectiveSolidStiffness.C15) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[25] = Double(result.solidModelResult.effectiveSolidStiffness.C25) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[26] = Double(result.solidModelResult.effectiveSolidStiffness.C35) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[27] = Double(result.solidModelResult.effectiveSolidStiffness.C45) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[28] = Double(result.solidModelResult.effectiveSolidStiffness.C55) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[29] = Double(result.solidModelResult.effectiveSolidStiffness.C56) ?? 0
+                    
+                    self.resultData.effectiveSolidStiffnessMatrix[30] = Double(result.solidModelResult.effectiveSolidStiffness.C16) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[31] = Double(result.solidModelResult.effectiveSolidStiffness.C26) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[32] = Double(result.solidModelResult.effectiveSolidStiffness.C36) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[33] = Double(result.solidModelResult.effectiveSolidStiffness.C46) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[34] = Double(result.solidModelResult.effectiveSolidStiffness.C56) ?? 0
+                    self.resultData.effectiveSolidStiffnessMatrix[35] = Double(result.solidModelResult.effectiveSolidStiffness.C66) ?? 0
+                    
+                    
+                    self.resultData.engineeringConstantsOrthotropic[0] = Double(result.solidModelResult.engineeringConstants.E1) ?? 0
+                    self.resultData.engineeringConstantsOrthotropic[1] = Double(result.solidModelResult.engineeringConstants.E2) ?? 0
+                    self.resultData.engineeringConstantsOrthotropic[2] = Double(result.solidModelResult.engineeringConstants.E3) ?? 0
+                    self.resultData.engineeringConstantsOrthotropic[3] = Double(result.solidModelResult.engineeringConstants.G12) ?? 0
+                    self.resultData.engineeringConstantsOrthotropic[4] = Double(result.solidModelResult.engineeringConstants.G13) ?? 0
+                    self.resultData.engineeringConstantsOrthotropic[5] = Double(result.solidModelResult.engineeringConstants.G23) ?? 0
+                    self.resultData.engineeringConstantsOrthotropic[6] = Double(result.solidModelResult.engineeringConstants.nu12) ?? 0
+                    self.resultData.engineeringConstantsOrthotropic[7] = Double(result.solidModelResult.engineeringConstants.nu13) ?? 0
+                    self.resultData.engineeringConstantsOrthotropic[8] = Double(result.solidModelResult.engineeringConstants.nu23) ?? 0
+                    
+                    if self.analysisSettings.typeOfAnalysis == .thermoElastic {
+                        
+                        self.resultData.effectiveThermalCoefficients[0] = Double(result.solidModelResult.thermalCoefficients.alpha11) ?? 0
+                        self.resultData.effectiveThermalCoefficients[1] = Double(result.solidModelResult.thermalCoefficients.alpha22) ?? 0
+                        self.resultData.effectiveThermalCoefficients[2] = Double(result.solidModelResult.thermalCoefficients.alpha33) ?? 0
+                        self.resultData.effectiveThermalCoefficients[3] = Double(result.solidModelResult.thermalCoefficients.alpha23) ?? 0
+                        self.resultData.effectiveThermalCoefficients[4] = Double(result.solidModelResult.thermalCoefficients.alpha13) ?? 0
+                        self.resultData.effectiveThermalCoefficients[5] = Double(result.solidModelResult.thermalCoefficients.alpha12) ?? 0
+                        self.resultData.effectiveThermalCoefficients[3] /= 2
+                        self.resultData.effectiveThermalCoefficients[4] /= 2
+                        self.resultData.effectiveThermalCoefficients[5] /= 2
+                        
+                    }
+                    
+                }
+                
+            case .failure(let swiftcompCalculationError):
+                
+                print("Failed to fetch courses:", swiftcompCalculationError.localizedDescription)
+                
+                self.swiftCompCalculationError = swiftcompCalculationError
+                
+                
+            }
+            
+            group.leave()
+        }
+        
+        group.wait()
+        
+        if self.swiftCompCalculationError == .networkError {
+            return .networkError
+        } else if self.swiftCompCalculationError == .parseJSONError {
+            return .parseJSONError
+        } else if self.swiftCompCalculationError == .timeOutError {
+            return .timeOutError
+        }
+        
+        return .success
+        
     }
-    
     
 }
-
-
-
-
-
-
-

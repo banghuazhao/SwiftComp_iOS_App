@@ -8,21 +8,9 @@
 
 import Foundation
 
-enum typeOfAnalysis {
-    case elastic
-    case thermalElatic
-}
-
-enum structuralModel {
-    case beam
-    case plate
-    case solid
-}
-
-enum materialType {
+enum MaterialType {
     case isotropic
     case transverselyIsotropic
-    case inPlateMonoclinic
     case orthotropic
     case monoclinic
     case anisotropic
@@ -35,8 +23,6 @@ struct MaterialPropertyLabel {
     
     let transverselyIsotropic = ["Young's Modulus E1", "Young's Modulus E2", "Shear Modulus G12", "Poisson's Ratio ν12", "Poisson's Ratio ν23"]
     let transverselyIsotropicThermal = ["CTE α11", "CTE α22"]
-    
-    let inPlateMonoclinic = ["Young's Modulus E1", "Young's Modulus E2", "Shear Modulus G12", "Poisson's Ratio ν12", "Mutual Influence η12,1", "Mutual Influence η12,2"]
     
     let orthotropic = ["Young's Modulus E1", "Young's Modulus E2", "Young's Modulus E3", "Shear Modulus G12", "Shear Modulus G13", "Shear Modulus G23", "Poisson's Ratio ν12", "Poisson's Ratio ν13", "Poisson's Ratio ν23"]
     let orthotropicThermal = ["CTE α11", "CTE α22", "CTE α33"]

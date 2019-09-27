@@ -11,10 +11,10 @@ import Foundation
 class Material {
     
     let materialName : String
-    let materialType : materialType
+    let materialType : MaterialType
     let materialProperties : [String : Double]
     
-    init(name : String, type : materialType, properties: [String : Double]) {
+    init(name : String, type : MaterialType, properties: [String : Double]) {
         self.materialName = name
         self.materialProperties = properties
         self.materialType = type
@@ -54,6 +54,10 @@ class MaterialBank {
         list.append(Material(name: "IM7/8552", type: .orthotropic, properties: ["E1" : 161.0, "E2" : 11.38, "E3" : 11.38, "G12" : 5.17, "G13" : 5.17, "G23" : 3.98, "ν12" : 0.32, "ν13" : 0.32, "ν23" : 0.44, "α11" : 10, "α22" : 20, "α33" : 20]))
         
         list.append(Material(name: "T2C190/F155", type: .orthotropic, properties: ["E1" : 122.7, "E2" : 8.69, "E3" : 8.69, "G12" : 5.9, "G13" : 5.9, "G23" : 3.3, "ν12" : 0.340, "ν13" : 0.340, "ν23" : 0.400, "α11" : 10, "α22" : 20, "α33" : 20]))
+        
+        list.append(Material(name: "Nomex", type: .isotropic, properties: ["E": 3.0, "ν" : 0.3, "α" : 20]))
+        list.append(Material(name: "Aluminum", type: .isotropic, properties: ["E": 68.0, "ν" : 0.36, "α" : 8.1]))
+        list.append(Material(name: "Steel", type: .isotropic, properties: ["E": 200.0, "ν" : 0.25, "α" : 11.5]))
         
     }
     

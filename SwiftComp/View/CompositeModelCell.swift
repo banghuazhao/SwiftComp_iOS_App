@@ -14,6 +14,7 @@ class CompositeModelCell: UITableViewCell {
         didSet {
             coverImageView.image = compositeModel?.image
             nameLabel.text = compositeModel?.name
+            subnameLabel.text = compositeModel?.subname
         }
     }
     
@@ -27,6 +28,18 @@ class CompositeModelCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+    
+    let subnameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .greyFontColor
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -41,9 +54,15 @@ class CompositeModelCell: UITableViewCell {
         
         addSubview(nameLabel)
         nameLabel.leftAnchor.constraint(equalTo: coverImageView.rightAnchor, constant: 8).isActive = true
-        nameLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
-        nameLabel.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        nameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0).isActive = true
+        nameLabel.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -120).isActive = true
+        nameLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        nameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -14).isActive = true
+        
+        addSubview(subnameLabel)
+        subnameLabel.leftAnchor.constraint(equalTo: coverImageView.rightAnchor, constant: 8).isActive = true
+        subnameLabel.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -120).isActive = true
+        subnameLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        subnameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 16).isActive = true
         
     }
     

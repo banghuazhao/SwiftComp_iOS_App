@@ -8,11 +8,8 @@
 
 import UIKit
 
-var materialPropertyLabel = MaterialPropertyLabel()
-var materialPropertyPlaceHolder = MaterialPropertyPlaceHolder()
 
-
-func createMaterialCard(materialCard: inout UIView, materialName: UILabel, label: inout [UILabel], value: inout [UITextField], aboveConstraint: NSLayoutAnchor<NSLayoutYAxisAnchor>, under: UIView, typeOfAnalysis: typeOfAnalysis, materialType: materialType) {
+func createMaterialCard(materialCard: inout UIView, materialName: UILabel, label: inout [UILabel], value: inout [UITextField], aboveConstraint: NSLayoutAnchor<NSLayoutYAxisAnchor>, under: UIView, typeOfAnalysis: TypeOfAnalysis, materialType: MaterialType) {
     
     var elasticConstants = 0
     var thermalConstants = 0
@@ -44,9 +41,6 @@ func createMaterialCard(materialCard: inout UIView, materialName: UILabel, label
     case .transverselyIsotropic:
         elasticConstants = 5
         thermalConstants = 2
-    case .inPlateMonoclinic:
-        elasticConstants = 6
-        thermalConstants = 0
     case .orthotropic:
         elasticConstants = 9
         thermalConstants = 3
@@ -76,8 +70,6 @@ func createMaterialCard(materialCard: inout UIView, materialName: UILabel, label
         case .transverselyIsotropic:
             label[i].text = materialPropertyLabel.transverselyIsotropic[i]
             value[i].placeholder = materialPropertyPlaceHolder.transverselyIsotropic[i]
-        case .inPlateMonoclinic:
-            break
         case .orthotropic:
             label[i].text = materialPropertyLabel.orthotropic[i]
             value[i].placeholder = materialPropertyPlaceHolder.orthotropic[i]
@@ -91,7 +83,7 @@ func createMaterialCard(materialCard: inout UIView, materialName: UILabel, label
         
         label[i].materialCardLabelDesign()
         value[i].materialCardTextFieldDesign()
-        value[i].keyboardType = UIKeyboardType.decimalPad
+        value[i].keyboardType = UIKeyboardType.numbersAndPunctuation
         
         label[i].leftAnchor.constraint(equalTo: materialCard.leftAnchor, constant: 8).isActive = true
         value[i].rightAnchor.constraint(equalTo: materialCard.rightAnchor, constant: -8).isActive = true
@@ -117,7 +109,7 @@ func createMaterialCard(materialCard: inout UIView, materialName: UILabel, label
     
     // Addtional row
     
-    if typeOfAnalysis == .thermalElatic {
+    if typeOfAnalysis == .thermoElastic {
     
         for i in elasticConstants...elasticConstants + thermalConstants-1 {
             
@@ -134,8 +126,6 @@ func createMaterialCard(materialCard: inout UIView, materialName: UILabel, label
             case .transverselyIsotropic:
                 label[i].text = materialPropertyLabel.transverselyIsotropicThermal[i - elasticConstants]
                 value[i].placeholder = materialPropertyPlaceHolder.transverselyIsotropicThermal[i - elasticConstants]
-            case .inPlateMonoclinic:
-                break
             case .orthotropic:
                 label[i].text = materialPropertyLabel.orthotropicThermal[i - elasticConstants]
                 value[i].placeholder = materialPropertyPlaceHolder.orthotropicThermal[i - elasticConstants]
@@ -149,7 +139,7 @@ func createMaterialCard(materialCard: inout UIView, materialName: UILabel, label
             
             label[i].materialCardLabelDesign()
             value[i].materialCardTextFieldDesign()
-            value[i].keyboardType = UIKeyboardType.decimalPad
+            value[i].keyboardType = UIKeyboardType.numbersAndPunctuation
             
             label[i].leftAnchor.constraint(equalTo: materialCard.leftAnchor, constant: 8).isActive = true
             value[i].rightAnchor.constraint(equalTo: materialCard.rightAnchor, constant: -8).isActive = true
@@ -176,9 +166,9 @@ extension UIView {
     
     func materialCardViewDesign() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
+        self.backgroundColor = .materialCardColor
         self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor(red: 223/255, green: 220/255, blue: 194/255, alpha: 1.0).cgColor
+        self.layer.borderColor = UIColor.materialCardBorderColor.cgColor
     }
     
 }
@@ -188,7 +178,7 @@ extension UITextField {
     
     func materialCardTextFieldDesign() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = UIColor.whitebackgroundColor
         self.borderStyle = .roundedRect
         self.font = UIFont.systemFont(ofSize: 14)
         self.textAlignment = .left
@@ -201,17 +191,17 @@ extension UILabel {
     
     func materialCardTitleDesign() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
-        self.textColor = UIColor(red: 130/255, green: 138/255, blue: 145/255, alpha: 1.0)
-        self.font = UIFont.boldSystemFont(ofSize: 15)
+        self.backgroundColor = .materialCardColor
+        self.textColor = .greyFontColor
+        self.font = UIFont.boldSystemFont(ofSize: 14)
         self.textAlignment = .center
         self.adjustsFontSizeToFitWidth = true
     }
     
     func materialCardLabelDesign() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
-        self.textColor = UIColor(red: 130/255, green: 138/255, blue: 145/255, alpha: 1.0)
+        self.backgroundColor = .materialCardColor
+        self.textColor = .greyFontColor
         self.font = UIFont.systemFont(ofSize: 14)
         self.adjustsFontSizeToFitWidth = true
         self.textAlignment = .right
