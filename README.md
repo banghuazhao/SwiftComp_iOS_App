@@ -1,4 +1,4 @@
-# SwiftComp iOS App
+## SwiftComp iOS App
 SwiftComp is a user-friendly app for computing properties for composites
 
 The current functionalities of this app are:
@@ -15,6 +15,14 @@ The current composites models are:
 
 We are constantly adding more functionalities into this App.
 
-# Demo gif
+## Demo gif
 
-![](demo.gif)
+![](./docs/demo.gif)
+
+## Download
+
+[[](./docs/app-store-icon.jpg)](https://apps.apple.com/us/app/swiftcomp/id1297825946)
+
+
+## License
+MIT © [Banghua Zhao](http://www.banghuazhao.com/)
