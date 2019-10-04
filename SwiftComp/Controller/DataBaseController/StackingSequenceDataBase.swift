@@ -24,9 +24,15 @@ class StackingSequenceDataBase: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupCancelButton()
+        
         tableView.register(UserSavedStackingSequenceCell.self, forCellReuseIdentifier: "CellID")
         
         tableView.tableFooterView = UIView()
+        
+        self.navigationController?.setToolbarHidden(true, animated: false)
+        
+        navigationItem.title = "Stacking Sequence DB"
         
         fetchData()
         
@@ -117,7 +123,7 @@ class StackingSequenceDataBase: UITableViewController {
         
         delegate?.userTypeStackingSequenceDataBase(stackingSequence: stackingSequence)
         
-        _ = navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func fetchData() {

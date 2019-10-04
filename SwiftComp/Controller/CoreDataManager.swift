@@ -8,6 +8,8 @@
 
 import CoreData
 
+let context = CoreDataManager.shared.persistentContainer.viewContext
+
 class CoreDataManager {
     
     static let shared = CoreDataManager()

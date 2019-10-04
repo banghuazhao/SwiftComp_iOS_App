@@ -56,76 +56,9 @@ extension UIView {
 }
 
 
-
-extension UIColor {
-    
-    static let whitebackgroundColor = UIColor(dynamicProvider: { (trait) -> UIColor in
-        switch trait.userInterfaceStyle {
-        case .unspecified, .light:
-            return .white
-        case .dark:
-            return .black
-        @unknown default:
-            return .white
-        }
-    })
-    
-    static let greybackgroundColor = UIColor(dynamicProvider: { (trait) -> UIColor in
-        switch trait.userInterfaceStyle {
-        case .unspecified, .light:
-            return UIColor(displayP3Red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
-        case .dark:
-            return .systemGray5
-        @unknown default:
-            return UIColor(displayP3Red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
-        }
-    })
-    
-    static let materialCardColor = UIColor(dynamicProvider: { (trait) -> UIColor in
-        switch trait.userInterfaceStyle {
-        case .unspecified, .light:
-            return UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
-        case .dark:
-            return .systemGray5
-        @unknown default:
-            return UIColor(red: 254/255, green: 248/255, blue: 223/255, alpha: 1.0)
-        }
-    })
-    
-    static let materialCardBorderColor = UIColor(dynamicProvider: { (trait) -> UIColor in
-        switch trait.userInterfaceStyle {
-        case .unspecified, .light:
-            return UIColor(red: 223/255, green: 220/255, blue: 194/255, alpha: 1.0)
-        case .dark:
-            return .systemGray2
-        @unknown default:
-            return UIColor(red: 223/255, green: 220/255, blue: 194/255, alpha: 1.0)
-        }
-    })
-    
-   static let greyFontColor = UIColor(dynamicProvider: { (trait) -> UIColor in
-          switch trait.userInterfaceStyle {
-          case .unspecified, .light:
-              return UIColor(displayP3Red: 142/255, green: 142/255, blue: 147/255, alpha: 1)
-          case .dark:
-              return .systemGray
-          @unknown default:
-              return UIColor(displayP3Red: 142/255, green: 142/255, blue: 147/255, alpha: 1)
-          }
-      })
-    
-    static let attributedTextWhiteColor = UIColor(dynamicProvider: { (trait) -> UIColor in
-        switch trait.userInterfaceStyle {
-        case .unspecified, .light:
-            return .black
-        case .dark:
-            return .white
-        @unknown default:
-            return .black
-        }
-    })
-    
-    static let imageGreyColor = UIColor(displayP3Red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+func getDocumentsDirectory() -> URL {
+    let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+    return paths[0]
 }
 
 // Inverse operation for matrix
@@ -431,4 +364,18 @@ func createPath(beginPoint: CGPoint, endPoint: CGPoint) -> UIBezierPath {
     path.move(to: beginPoint)
     path.addLine(to: endPoint)
     return path
+}
+
+
+extension UIViewController {
+    
+    func setupCancelButton() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancelButton))
+    }
+    
+    @objc func handleCancelButton() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    
 }

@@ -24,13 +24,17 @@ class CompositeModel {
 
 class CompoisteModels {
     
-    var models: [CompositeModel]
+    var SG1D: [CompositeModel]
+    var SG2D: [CompositeModel]
+    var SG3D: [CompositeModel]
     
     init() {
-        let compositeModel1 = CompositeModel(name: "Laminate",subname: "1D SG of laminate", image: #imageLiteral(resourceName: "laminate"))
-        let compositeModel2 = CompositeModel(name: "Unidirectional Fiber Reinforced Composite (UDFRC)", subname: "2D SG of square pack microstructure", image: #imageLiteral(resourceName: "spuarePack"))
-        let compositeModel3 = CompositeModel(name: "Honeycomb Sandwich Structure", subname: "3D SG of honeycomb sandwich", image: #imageLiteral(resourceName: "honeycomb_sandwich"))
+        let laminate = CompositeModel(name: "Laminate",subname: "1D SG of laminate", image: #imageLiteral(resourceName: "laminate"))
+        let UDFRC = CompositeModel(name: "Unidirectional Fiber Reinforced Composite (UDFRC)", subname: "2D SG of square pack microstructure", image: #imageLiteral(resourceName: "spuarePack"))
+        let honeycombSandwich = CompositeModel(name: "Honeycomb Sandwich Structure", subname: "3D SG of honeycomb sandwich", image: #imageLiteral(resourceName: "honeycomb_sandwich"))
         
-        self.models = [compositeModel1, compositeModel2, compositeModel3]
+        self.SG1D = [laminate]
+        self.SG2D = [UDFRC]
+        self.SG3D = [honeycombSandwich]
     }
 }

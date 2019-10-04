@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-let baseURL = "http://128.46.6.100:8888"
+let appID = "1297825946"
 
-let context = CoreDataManager.shared.persistentContainer.viewContext
+let baseURL = "http://128.46.6.100:8888"
 
 var materialPropertyName = MaterialPropertyName()
 var materialPropertyLabel = MaterialPropertyLabel()

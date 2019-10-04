@@ -1,0 +1,28 @@
+PODS:
+  - FontAwesome.swift (1.6.0)
+  - IQKeyboardManager (6.2.1)
+  - JGProgressHUD (2.0.3)
+  - ReachabilitySwift (4.3.1)
+
+DEPENDENCIES:
+  - FontAwesome.swift
+  - IQKeyboardManager (~> 6.2.1)
+  - JGProgressHUD
+  - ReachabilitySwift
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - FontAwesome.swift
+    - IQKeyboardManager
+    - JGProgressHUD
+    - ReachabilitySwift
+
+SPEC CHECKSUMS:
+  FontAwesome.swift: 71a422e7b209ee940c7c21a5d13964ecf2897ca4
+  IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
+  JGProgressHUD: 12b20a8f4ffe05258f8635c1ab92816e451f904d
+  ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
+
+PODFILE CHECKSUM: f931b5ba8f7441d1fb16e5830dded91f586918f5
+
+COCOAPODS: 1.5.3

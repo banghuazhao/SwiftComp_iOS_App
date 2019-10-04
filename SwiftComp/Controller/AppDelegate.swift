@@ -12,6 +12,14 @@ import UIKit
 import CoreData
 import IQKeyboardManager
 
+
+class CustomNavigationController: UINavigationController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+}
+
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -25,12 +33,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window?.makeKeyAndVisible()
         
-        window?.rootViewController = UINavigationController(rootViewController: Home())
+        let customNavigationController = CustomNavigationController(rootViewController: CustomTabBarController())
                 
+        UINavigationBar.appearance().barTintColor = .navBarColor
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().isTranslucent = false
+
+        window?.rootViewController = customNavigationController
         IQKeyboardManager.shared().isEnabled = true
       
         return true
     }
+
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

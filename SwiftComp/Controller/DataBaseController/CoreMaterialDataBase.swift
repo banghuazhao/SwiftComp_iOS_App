@@ -26,9 +26,15 @@ class CoreMaterialDataBase: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupCancelButton()
+        
         tableView.register(UserSavedMaterialCell.self, forCellReuseIdentifier: "CellID")
         
         tableView.tableFooterView = UIView()
+        
+        self.navigationController?.setToolbarHidden(true, animated: false)
+        
+        navigationItem.title = "Core Material DB"
         
         fetchData()
         
@@ -173,7 +179,7 @@ class CoreMaterialDataBase: UITableViewController {
         
         delegate?.userTypeCoreMaterialDataBase(materialName: materialName)
         
-        _ = navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func fetchData() {
