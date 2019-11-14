@@ -9,7 +9,7 @@ target 'SwiftComp' do
   # Pods for SwiftComp
   pod 'IQKeyboardManager', '~> 6.2.1'
   pod 'JGProgressHUD'
-  pod 'FontAwesome.swift'
   pod 'ReachabilitySwift'
+  pod 'SnapKit', '~> 5.0.0'
 
 end
