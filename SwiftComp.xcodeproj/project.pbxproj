@@ -20,9 +20,9 @@
 		990F76C41F85BFCF0073E459 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76C31F85BFCF0073E459 /* AppDelegate.swift */; };
 		990F76CB1F85BFCF0073E459 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 990F76CA1F85BFCF0073E459 /* Assets.xcassets */; };
 		990F76CE1F85BFCF0073E459 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */; };
-		990F76D61F85C0280073E459 /* CompositeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76D51F85C0280073E459 /* CompositeModels.swift */; };
-		99112DDE230E3C9C0064C306 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99112DDD230E3C9C0064C306 /* HelpViewController.swift */; };
-		99112DE0230E54A90064C306 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99112DDF230E54A90064C306 /* AboutViewController.swift */; };
+		990F76D61F85C0280073E459 /* CompositeModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76D51F85C0280073E459 /* CompositeModelController.swift */; };
+		99112DDE230E3C9C0064C306 /* HelpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99112DDD230E3C9C0064C306 /* HelpController.swift */; };
+		99112DE0230E54A90064C306 /* AboutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99112DDF230E54A90064C306 /* AboutController.swift */; };
 		9920DBF82231A76E00AB303E /* StackingSequenceDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DBF72231A76E00AB303E /* StackingSequenceDataBase.swift */; };
 		9920DBFA2231AD9900AB303E /* UserSavedStackingSequenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DBF92231AD9900AB303E /* UserSavedStackingSequenceCell.swift */; };
 		9920DC0122358EE400AB303E /* CircleTransitionDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DC0022358EE400AB303E /* CircleTransitionDesign.swift */; };
@@ -37,25 +37,30 @@
 		9945CF8D1FA67AF0002F2F30 /* CompositeModelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */; };
 		99531902224B122C002923C5 /* ExplainBoxDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99531901224B122B002923C5 /* ExplainBoxDesign.swift */; };
 		99531905224B2179002923C5 /* UserDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 99531903224B2179002923C5 /* UserDataModel.xcdatamodeld */; };
-		99755A0A23439D9F001CFE75 /* GeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A0923439D9F001CFE75 /* GeneralViewController.swift */; };
-		99755A0C2343A0E6001CFE75 /* generalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A0B2343A0E6001CFE75 /* generalModel.swift */; };
-		99755A0E2343A589001CFE75 /* GeneralModelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A0D2343A589001CFE75 /* GeneralModelCell.swift */; };
-		99755A112344D2A9001CFE75 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A102344D2A9001CFE75 /* CustomTabBarController.swift */; };
+		99755A0A23439D9F001CFE75 /* GeneralController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A0923439D9F001CFE75 /* GeneralController.swift */; };
+		99755A0C2343A0E6001CFE75 /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A0B2343A0E6001CFE75 /* General.swift */; };
+		99755A0E2343A589001CFE75 /* GeneralCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A0D2343A589001CFE75 /* GeneralCell.swift */; };
+		99755A112344D2A9001CFE75 /* SCTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A102344D2A9001CFE75 /* SCTabBarController.swift */; };
 		99755A1523463E6D001CFE75 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A1423463E6D001CFE75 /* ColorScheme.swift */; };
+		9979DABA237C5EF300F93D72 /* CompositeModelHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9979DAB9237C5EF300F93D72 /* CompositeModelHeaderCell.swift */; };
+		99811D5F237854640071711B /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99811D5E237854640071711B /* Constant.swift */; };
+		99811D622379B3CE0071711B /* SCNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99811D612379B3CE0071711B /* SCNavigationController.swift */; };
+		99811D642379B4860071711B /* SCSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99811D632379B4860071711B /* SCSplitViewController.swift */; };
+		99811D66237B01000071711B /* SCCalculateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99811D65237B01000071711B /* SCCalculateButton.swift */; };
 		998FB89C2328C083008885EB /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998FB89B2328C083008885EB /* CoreDataManager.swift */; };
 		9994A27A23128AF100A99F6B /* SwiftCompResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9994A27923128AF100A99F6B /* SwiftCompResultModel.swift */; };
-		999DCF6A2333714600EA8AE0 /* HoneycombSandwich.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999DCF692333714600EA8AE0 /* HoneycombSandwich.swift */; };
+		999DCF6A2333714600EA8AE0 /* HoneycombSandwichController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999DCF692333714600EA8AE0 /* HoneycombSandwichController.swift */; };
 		999DCF6C233381E800EA8AE0 /* CoreMaterialDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999DCF6B233381E800EA8AE0 /* CoreMaterialDataBase.swift */; };
 		999DCF712333ABAB00EA8AE0 /* ErrorHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999DCF702333ABAB00EA8AE0 /* ErrorHandle.swift */; };
 		99B508C51F86872200B6BC47 /* MaterialDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B508C41F86872200B6BC47 /* MaterialDataModel.swift */; };
 		99C5BF7F1F9CD54E00D87360 /* CompositeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */; };
 		99F0EE13232C7AAC00F84CA4 /* SwiftCompTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE12232C7AAC00F84CA4 /* SwiftCompTemplate.swift */; };
-		99F0EE15232C88DF00F84CA4 /* Laminate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE14232C88DF00F84CA4 /* Laminate.swift */; };
-		99F0EE17232D240200F84CA4 /* UDFRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE16232D240200F84CA4 /* UDFRC.swift */; };
+		99F0EE15232C88DF00F84CA4 /* LaminateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE14232C88DF00F84CA4 /* LaminateController.swift */; };
+		99F0EE17232D240200F84CA4 /* UDFRCController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE16232D240200F84CA4 /* UDFRCController.swift */; };
 		99FB919A2317FAF000FA1373 /* ResultDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB91992317FAF000FA1373 /* ResultDataModel.swift */; };
 		99FB919C2318083300FA1373 /* AnalysisSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB919B2318083300FA1373 /* AnalysisSettingsModel.swift */; };
-		99FB919E23189BC400FA1373 /* TheoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB919D23189BC400FA1373 /* TheoryViewController.swift */; };
-		99FB91A02318BE3900FA1373 /* UserManualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB919F2318BE3900FA1373 /* UserManualViewController.swift */; };
+		99FB919E23189BC400FA1373 /* TheoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB919D23189BC400FA1373 /* TheoryController.swift */; };
+		99FB91A02318BE3900FA1373 /* UserManualController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB919F2318BE3900FA1373 /* UserManualController.swift */; };
 		99FB91A32318BE9700FA1373 /* SwiftComp User Manual.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 99FB91A22318BE9700FA1373 /* SwiftComp User Manual.pdf */; };
 		99FB91A7231CCA4C00FA1373 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB91A6231CCA4C00FA1373 /* Config.swift */; };
 /* End PBXBuildFile section */
@@ -78,9 +83,9 @@
 		990F76CA1F85BFCF0073E459 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		990F76CD1F85BFCF0073E459 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		990F76CF1F85BFCF0073E459 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		990F76D51F85C0280073E459 /* CompositeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeModels.swift; sourceTree = "<group>"; };
-		99112DDD230E3C9C0064C306 /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
-		99112DDF230E54A90064C306 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		990F76D51F85C0280073E459 /* CompositeModelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeModelController.swift; sourceTree = "<group>"; };
+		99112DDD230E3C9C0064C306 /* HelpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpController.swift; sourceTree = "<group>"; };
+		99112DDF230E54A90064C306 /* AboutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutController.swift; sourceTree = "<group>"; };
 		9920DBF72231A76E00AB303E /* StackingSequenceDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackingSequenceDataBase.swift; sourceTree = "<group>"; };
 		9920DBF92231AD9900AB303E /* UserSavedStackingSequenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavedStackingSequenceCell.swift; sourceTree = "<group>"; };
 		9920DC0022358EE400AB303E /* CircleTransitionDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleTransitionDesign.swift; sourceTree = "<group>"; };
@@ -95,26 +100,32 @@
 		9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositeModelCell.swift; sourceTree = "<group>"; };
 		99531901224B122B002923C5 /* ExplainBoxDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplainBoxDesign.swift; sourceTree = "<group>"; };
 		99531904224B2179002923C5 /* UserDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserDataModel.xcdatamodel; sourceTree = "<group>"; };
-		99755A0923439D9F001CFE75 /* GeneralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralViewController.swift; sourceTree = "<group>"; };
-		99755A0B2343A0E6001CFE75 /* generalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = generalModel.swift; sourceTree = "<group>"; };
-		99755A0D2343A589001CFE75 /* GeneralModelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralModelCell.swift; sourceTree = "<group>"; };
-		99755A102344D2A9001CFE75 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		99755A0923439D9F001CFE75 /* GeneralController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralController.swift; sourceTree = "<group>"; };
+		99755A0B2343A0E6001CFE75 /* General.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
+		99755A0D2343A589001CFE75 /* GeneralCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralCell.swift; sourceTree = "<group>"; };
+		99755A102344D2A9001CFE75 /* SCTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCTabBarController.swift; sourceTree = "<group>"; };
 		99755A1423463E6D001CFE75 /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
+		9979DAB9237C5EF300F93D72 /* CompositeModelHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeModelHeaderCell.swift; sourceTree = "<group>"; };
+		99811D5E237854640071711B /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		99811D612379B3CE0071711B /* SCNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNavigationController.swift; sourceTree = "<group>"; };
+		99811D632379B4860071711B /* SCSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCSplitViewController.swift; sourceTree = "<group>"; };
+		99811D65237B01000071711B /* SCCalculateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCCalculateButton.swift; sourceTree = "<group>"; };
+		9989604B2369DD5D00D941FF /* SwiftComp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftComp.entitlements; sourceTree = "<group>"; };
 		998FB89B2328C083008885EB /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		9994A27923128AF100A99F6B /* SwiftCompResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCompResultModel.swift; sourceTree = "<group>"; };
-		999DCF692333714600EA8AE0 /* HoneycombSandwich.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneycombSandwich.swift; sourceTree = "<group>"; };
+		999DCF692333714600EA8AE0 /* HoneycombSandwichController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneycombSandwichController.swift; sourceTree = "<group>"; };
 		999DCF6B233381E800EA8AE0 /* CoreMaterialDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMaterialDataBase.swift; sourceTree = "<group>"; };
 		999DCF702333ABAB00EA8AE0 /* ErrorHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandle.swift; sourceTree = "<group>"; };
 		99B508C41F86872200B6BC47 /* MaterialDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialDataModel.swift; sourceTree = "<group>"; };
 		99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeModel.swift; sourceTree = "<group>"; };
 		99F0EE12232C7AAC00F84CA4 /* SwiftCompTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCompTemplate.swift; sourceTree = "<group>"; };
-		99F0EE14232C88DF00F84CA4 /* Laminate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laminate.swift; sourceTree = "<group>"; };
-		99F0EE16232D240200F84CA4 /* UDFRC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDFRC.swift; sourceTree = "<group>"; };
+		99F0EE14232C88DF00F84CA4 /* LaminateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaminateController.swift; sourceTree = "<group>"; };
+		99F0EE16232D240200F84CA4 /* UDFRCController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDFRCController.swift; sourceTree = "<group>"; };
 		99FB91992317FAF000FA1373 /* ResultDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDataModel.swift; sourceTree = "<group>"; };
 		99FB919B2318083300FA1373 /* AnalysisSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisSettingsModel.swift; sourceTree = "<group>"; };
-		99FB919D23189BC400FA1373 /* TheoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheoryViewController.swift; sourceTree = "<group>"; };
-		99FB919F2318BE3900FA1373 /* UserManualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManualViewController.swift; sourceTree = "<group>"; };
-		99FB91A22318BE9700FA1373 /* SwiftComp User Manual.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "SwiftComp User Manual.pdf"; path = "../../../MSG/SwiftComp User Manual.pdf"; sourceTree = "<group>"; };
+		99FB919D23189BC400FA1373 /* TheoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheoryController.swift; sourceTree = "<group>"; };
+		99FB919F2318BE3900FA1373 /* UserManualController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManualController.swift; sourceTree = "<group>"; };
+		99FB91A22318BE9700FA1373 /* SwiftComp User Manual.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "SwiftComp User Manual.pdf"; path = "../Doc/SwiftComp User Manual.pdf"; sourceTree = "<group>"; };
 		99FB91A6231CCA4C00FA1373 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,42 +171,17 @@
 		990F76C21F85BFCF0073E459 /* SwiftComp */ = {
 			isa = PBXGroup;
 			children = (
-				990F76CA1F85BFCF0073E459 /* Assets.xcassets */,
-				990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */,
-				990F76CF1F85BFCF0073E459 /* Info.plist */,
-				99531903224B2179002923C5 /* UserDataModel.xcdatamodeld */,
-				99FB91A12318BE6A00FA1373 /* Doc */,
-				9986553F1F867FCE0004876A /* Model */,
-				998655401F867FDC0004876A /* View */,
-				998655411F867FE70004876A /* Controller */,
+				9989604B2369DD5D00D941FF /* SwiftComp.entitlements */,
+				990F76C31F85BFCF0073E459 /* AppDelegate.swift */,
+				99FB91A6231CCA4C00FA1373 /* Config.swift */,
+				99811D5E237854640071711B /* Constant.swift */,
+				99811D60237855A10071711B /* SCBaseKitModule */,
+				99811D55237831950071711B /* CompositeModels */,
+				99811D59237835400071711B /* General */,
+				99811D5B237837480071711B /* Utilites */,
+				99811D5A2378364B0071711B /* Supporting */,
 			);
 			path = SwiftComp;
-			sourceTree = "<group>";
-		};
-		99755A0823439D7A001CFE75 /* General */ = {
-			isa = PBXGroup;
-			children = (
-				99755A0923439D9F001CFE75 /* GeneralViewController.swift */,
-				99112DDF230E54A90064C306 /* AboutViewController.swift */,
-				99FB919D23189BC400FA1373 /* TheoryViewController.swift */,
-				99112DDD230E3C9C0064C306 /* HelpViewController.swift */,
-				99FB919F2318BE3900FA1373 /* UserManualViewController.swift */,
-			);
-			path = General;
-			sourceTree = "<group>";
-		};
-		99755A0F2343AA0A001CFE75 /* CompositeModels */ = {
-			isa = PBXGroup;
-			children = (
-				990F76D51F85C0280073E459 /* CompositeModels.swift */,
-				99F0EE12232C7AAC00F84CA4 /* SwiftCompTemplate.swift */,
-				99F0EE14232C88DF00F84CA4 /* Laminate.swift */,
-				99F0EE16232D240200F84CA4 /* UDFRC.swift */,
-				999DCF692333714600EA8AE0 /* HoneycombSandwich.swift */,
-				9945CF851FA565C7002F2F30 /* HomogenizationResult.swift */,
-				9904DEED2317A36D005E4C14 /* SwiftCompCalculationInfo.swift */,
-			);
-			path = CompositeModels;
 			sourceTree = "<group>";
 		};
 		99755A122344F656001CFE75 /* Design */ = {
@@ -212,22 +198,102 @@
 			path = Design;
 			sourceTree = "<group>";
 		};
-		99755A132344F662001CFE75 /* TableViewCell */ = {
+		99811D55237831950071711B /* CompositeModels */ = {
 			isa = PBXGroup;
 			children = (
+				9986553F1F867FCE0004876A /* Model */,
+				99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */,
+				9979DAB9237C5EF300F93D72 /* CompositeModelHeaderCell.swift */,
 				9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */,
-				99755A0D2343A589001CFE75 /* GeneralModelCell.swift */,
-				992285861FAEB1F2004C1E34 /* UserSavedMaterialCell.swift */,
-				9920DBF92231AD9900AB303E /* UserSavedStackingSequenceCell.swift */,
+				990F76D51F85C0280073E459 /* CompositeModelController.swift */,
+				99F0EE12232C7AAC00F84CA4 /* SwiftCompTemplate.swift */,
+				9945CF851FA565C7002F2F30 /* HomogenizationResult.swift */,
+				9904DEED2317A36D005E4C14 /* SwiftCompCalculationInfo.swift */,
+				99811D562378331D0071711B /* Laminate */,
+				99811D57237833380071711B /* UDFRC */,
+				99811D58237833C50071711B /* HoneycombSandwich */,
+				999DCF6D2333823900EA8AE0 /* DataBase */,
 			);
-			path = TableViewCell;
+			path = CompositeModels;
+			sourceTree = "<group>";
+		};
+		99811D562378331D0071711B /* Laminate */ = {
+			isa = PBXGroup;
+			children = (
+				99F0EE14232C88DF00F84CA4 /* LaminateController.swift */,
+			);
+			path = Laminate;
+			sourceTree = "<group>";
+		};
+		99811D57237833380071711B /* UDFRC */ = {
+			isa = PBXGroup;
+			children = (
+				99F0EE16232D240200F84CA4 /* UDFRCController.swift */,
+			);
+			path = UDFRC;
+			sourceTree = "<group>";
+		};
+		99811D58237833C50071711B /* HoneycombSandwich */ = {
+			isa = PBXGroup;
+			children = (
+				999DCF692333714600EA8AE0 /* HoneycombSandwichController.swift */,
+			);
+			path = HoneycombSandwich;
+			sourceTree = "<group>";
+		};
+		99811D59237835400071711B /* General */ = {
+			isa = PBXGroup;
+			children = (
+				99755A0B2343A0E6001CFE75 /* General.swift */,
+				99755A0D2343A589001CFE75 /* GeneralCell.swift */,
+				99755A0923439D9F001CFE75 /* GeneralController.swift */,
+				99112DDF230E54A90064C306 /* AboutController.swift */,
+				99FB919D23189BC400FA1373 /* TheoryController.swift */,
+				99112DDD230E3C9C0064C306 /* HelpController.swift */,
+				99FB919F2318BE3900FA1373 /* UserManualController.swift */,
+				99FB91A22318BE9700FA1373 /* SwiftComp User Manual.pdf */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		99811D5A2378364B0071711B /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				990F76CA1F85BFCF0073E459 /* Assets.xcassets */,
+				990F76CC1F85BFCF0073E459 /* LaunchScreen.storyboard */,
+				990F76CF1F85BFCF0073E459 /* Info.plist */,
+				99531903224B2179002923C5 /* UserDataModel.xcdatamodeld */,
+			);
+			path = Supporting;
+			sourceTree = "<group>";
+		};
+		99811D5B237837480071711B /* Utilites */ = {
+			isa = PBXGroup;
+			children = (
+				993B8182230C36F1001AE3CF /* Utilities.swift */,
+				999DCF702333ABAB00EA8AE0 /* ErrorHandle.swift */,
+				9929959423212BAA00925595 /* NetworkManager.swift */,
+				998FB89B2328C083008885EB /* CoreDataManager.swift */,
+				99755A1423463E6D001CFE75 /* ColorScheme.swift */,
+				99755A122344F656001CFE75 /* Design */,
+			);
+			path = Utilites;
+			sourceTree = "<group>";
+		};
+		99811D60237855A10071711B /* SCBaseKitModule */ = {
+			isa = PBXGroup;
+			children = (
+				99755A102344D2A9001CFE75 /* SCTabBarController.swift */,
+				99811D612379B3CE0071711B /* SCNavigationController.swift */,
+				99811D632379B4860071711B /* SCSplitViewController.swift */,
+				99811D65237B01000071711B /* SCCalculateButton.swift */,
+			);
+			path = SCBaseKitModule;
 			sourceTree = "<group>";
 		};
 		9986553F1F867FCE0004876A /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */,
-				99755A0B2343A0E6001CFE75 /* generalModel.swift */,
 				99FB919B2318083300FA1373 /* AnalysisSettingsModel.swift */,
 				99B508C41F86872200B6BC47 /* MaterialDataModel.swift */,
 				9904AFEC1FA779310018FD55 /* MaterialTypeModel.swift */,
@@ -240,51 +306,18 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		998655401F867FDC0004876A /* View */ = {
+		999DCF6D2333823900EA8AE0 /* DataBase */ = {
 			isa = PBXGroup;
 			children = (
-				99755A1423463E6D001CFE75 /* ColorScheme.swift */,
-				99755A132344F662001CFE75 /* TableViewCell */,
-				99755A122344F656001CFE75 /* Design */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		998655411F867FE70004876A /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				990F76C31F85BFCF0073E459 /* AppDelegate.swift */,
-				99FB91A6231CCA4C00FA1373 /* Config.swift */,
-				993B8182230C36F1001AE3CF /* Utilities.swift */,
-				999DCF702333ABAB00EA8AE0 /* ErrorHandle.swift */,
-				9929959423212BAA00925595 /* NetworkManager.swift */,
-				998FB89B2328C083008885EB /* CoreDataManager.swift */,
-				99755A102344D2A9001CFE75 /* CustomTabBarController.swift */,
-				99755A0F2343AA0A001CFE75 /* CompositeModels */,
-				99755A0823439D7A001CFE75 /* General */,
-				999DCF6D2333823900EA8AE0 /* DataBaseController */,
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		999DCF6D2333823900EA8AE0 /* DataBaseController */ = {
-			isa = PBXGroup;
-			children = (
+				992285861FAEB1F2004C1E34 /* UserSavedMaterialCell.swift */,
+				9920DBF92231AD9900AB303E /* UserSavedStackingSequenceCell.swift */,
 				9920DBF72231A76E00AB303E /* StackingSequenceDataBase.swift */,
 				992285841FAEAF64004C1E34 /* LaminaMaterialDataBase.swift */,
 				992285881FAF5C93004C1E34 /* FiberMaterialDataBase.swift */,
 				9922858A1FAF5EAD004C1E34 /* MatrixMaterialDataBase.swift */,
 				999DCF6B233381E800EA8AE0 /* CoreMaterialDataBase.swift */,
 			);
-			path = DataBaseController;
-			sourceTree = "<group>";
-		};
-		99FB91A12318BE6A00FA1373 /* Doc */ = {
-			isa = PBXGroup;
-			children = (
-				99FB91A22318BE9700FA1373 /* SwiftComp User Manual.pdf */,
-			);
-			path = Doc;
+			path = DataBase;
 			sourceTree = "<group>";
 		};
 		D89B077CC58375267E780BBC /* Frameworks */ = {
@@ -371,27 +404,23 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-SwiftComp/Pods-SwiftComp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/FontAwesome.swift/FontAwesome_swift.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftComp/Pods-SwiftComp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 				"${BUILT_PRODUCTS_DIR}/JGProgressHUD/JGProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontAwesome_swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JGProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwiftComp/Pods-SwiftComp-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftComp/Pods-SwiftComp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CD2BEB88AC5D3AA1811F77F2 /* [CP] Check Pods Manifest.lock */ = {
@@ -427,47 +456,52 @@
 				9904AFEF1FA8FF430018FD55 /* ResultCardDesign.swift in Sources */,
 				99755A1523463E6D001CFE75 /* ColorScheme.swift in Sources */,
 				99FB919A2317FAF000FA1373 /* ResultDataModel.swift in Sources */,
-				99755A0C2343A0E6001CFE75 /* generalModel.swift in Sources */,
-				990F76D61F85C0280073E459 /* CompositeModels.swift in Sources */,
+				99755A0C2343A0E6001CFE75 /* General.swift in Sources */,
+				9979DABA237C5EF300F93D72 /* CompositeModelHeaderCell.swift in Sources */,
+				990F76D61F85C0280073E459 /* CompositeModelController.swift in Sources */,
 				9994A27A23128AF100A99F6B /* SwiftCompResultModel.swift in Sources */,
 				9920DBF82231A76E00AB303E /* StackingSequenceDataBase.swift in Sources */,
-				99755A0E2343A589001CFE75 /* GeneralModelCell.swift in Sources */,
+				99755A0E2343A589001CFE75 /* GeneralCell.swift in Sources */,
 				992285891FAF5C93004C1E34 /* FiberMaterialDataBase.swift in Sources */,
-				999DCF6A2333714600EA8AE0 /* HoneycombSandwich.swift in Sources */,
+				999DCF6A2333714600EA8AE0 /* HoneycombSandwichController.swift in Sources */,
 				9904AFF31FA9001A0018FD55 /* ButtonDesign.swift in Sources */,
 				99FB919C2318083300FA1373 /* AnalysisSettingsModel.swift in Sources */,
-				99112DE0230E54A90064C306 /* AboutViewController.swift in Sources */,
+				99112DE0230E54A90064C306 /* AboutController.swift in Sources */,
 				99C5BF7F1F9CD54E00D87360 /* CompositeModel.swift in Sources */,
 				999DCF712333ABAB00EA8AE0 /* ErrorHandle.swift in Sources */,
 				9929959523212BAA00925595 /* NetworkManager.swift in Sources */,
 				99531905224B2179002923C5 /* UserDataModel.xcdatamodeld in Sources */,
-				99755A0A23439D9F001CFE75 /* GeneralViewController.swift in Sources */,
+				99755A0A23439D9F001CFE75 /* GeneralController.swift in Sources */,
 				992285871FAEB1F2004C1E34 /* UserSavedMaterialCell.swift in Sources */,
-				99F0EE15232C88DF00F84CA4 /* Laminate.swift in Sources */,
+				99F0EE15232C88DF00F84CA4 /* LaminateController.swift in Sources */,
 				990F76C41F85BFCF0073E459 /* AppDelegate.swift in Sources */,
 				999DCF6C233381E800EA8AE0 /* CoreMaterialDataBase.swift in Sources */,
 				9920DBFA2231AD9900AB303E /* UserSavedStackingSequenceCell.swift in Sources */,
-				99FB919E23189BC400FA1373 /* TheoryViewController.swift in Sources */,
+				99FB919E23189BC400FA1373 /* TheoryController.swift in Sources */,
 				9945CF861FA565C7002F2F30 /* HomogenizationResult.swift in Sources */,
 				9904DEE82313B5A2005E4C14 /* SwiftCompCalculationStatusModel.swift in Sources */,
-				99FB91A02318BE3900FA1373 /* UserManualViewController.swift in Sources */,
+				99FB91A02318BE3900FA1373 /* UserManualController.swift in Sources */,
 				99B508C51F86872200B6BC47 /* MaterialDataModel.swift in Sources */,
 				998FB89C2328C083008885EB /* CoreDataManager.swift in Sources */,
+				99811D66237B01000071711B /* SCCalculateButton.swift in Sources */,
 				9904DEEA23140C8B005E4C14 /* ResultCardTypeModel.swift in Sources */,
 				9904AFF11FA8FFA50018FD55 /* MaterialCardDesign.swift in Sources */,
 				99FB91A7231CCA4C00FA1373 /* Config.swift in Sources */,
-				99755A112344D2A9001CFE75 /* CustomTabBarController.swift in Sources */,
+				99755A112344D2A9001CFE75 /* SCTabBarController.swift in Sources */,
 				99F0EE13232C7AAC00F84CA4 /* SwiftCompTemplate.swift in Sources */,
+				99811D5F237854640071711B /* Constant.swift in Sources */,
 				99531902224B122C002923C5 /* ExplainBoxDesign.swift in Sources */,
-				99112DDE230E3C9C0064C306 /* HelpViewController.swift in Sources */,
+				99112DDE230E3C9C0064C306 /* HelpController.swift in Sources */,
 				9922858B1FAF5EAD004C1E34 /* MatrixMaterialDataBase.swift in Sources */,
 				993B8185230D7EE4001AE3CF /* ExplainModel.swift in Sources */,
+				99811D622379B3CE0071711B /* SCNavigationController.swift in Sources */,
 				9920DC0122358EE400AB303E /* CircleTransitionDesign.swift in Sources */,
 				992285851FAEAF64004C1E34 /* LaminaMaterialDataBase.swift in Sources */,
 				993B8183230C36F1001AE3CF /* Utilities.swift in Sources */,
 				9904AFED1FA779310018FD55 /* MaterialTypeModel.swift in Sources */,
+				99811D642379B4860071711B /* SCSplitViewController.swift in Sources */,
 				9904DEEE2317A36D005E4C14 /* SwiftCompCalculationInfo.swift in Sources */,
-				99F0EE17232D240200F84CA4 /* UDFRC.swift in Sources */,
+				99F0EE17232D240200F84CA4 /* UDFRCController.swift in Sources */,
 				9904AFF71FAB888A0018FD55 /* ViewCardDesign.swift in Sources */,
 				9904AFF51FA900690018FD55 /* KeyboardDesign.swift in Sources */,
 			);
@@ -537,7 +571,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -590,7 +624,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -603,17 +637,20 @@
 			baseConfigurationReference = 68D855F1C93B8FD1019EE5E5 /* Pods-SwiftComp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SwiftComp/SwiftComp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = E6968P466E;
-				INFOPLIST_FILE = SwiftComp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				INFOPLIST_FILE = "$(SRCROOT)/SwiftComp/Supporting/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cdmHUB.SwiftComp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -622,17 +659,20 @@
 			baseConfigurationReference = 43369F08A2C405549337343C /* Pods-SwiftComp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SwiftComp/SwiftComp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = E6968P466E;
-				INFOPLIST_FILE = SwiftComp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				INFOPLIST_FILE = "$(SRCROOT)/SwiftComp/Supporting/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cdmHUB.SwiftComp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
