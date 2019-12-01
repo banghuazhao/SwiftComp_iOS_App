@@ -1,14 +1,24 @@
 PODS:
+  - Alamofire (4.9.1)
   - IQKeyboardManager (6.2.1)
   - JGProgressHUD (2.0.3)
+  - Moya (13.0.1):
+    - Moya/Core (= 13.0.1)
+  - Moya/Core (13.0.1):
+    - Alamofire (~> 4.1)
+    - Result (~> 4.1)
   - ReachabilitySwift (4.3.1)
+  - Result (4.1.0)
   - SnapKit (5.0.1)
+  - SwiftyJSON (4.3.0)
 
 DEPENDENCIES:
   - IQKeyboardManager (~> 6.2.1)
   - JGProgressHUD
+  - Moya (~> 13.0)
   - ReachabilitySwift
   - SnapKit (~> 5.0.0)
+  - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -16,14 +26,22 @@ SPEC REPOS:
     - JGProgressHUD
     - ReachabilitySwift
   trunk:
+    - Alamofire
+    - Moya
+    - Result
     - SnapKit
+    - SwiftyJSON
 
 SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
   JGProgressHUD: 12b20a8f4ffe05258f8635c1ab92816e451f904d
+  Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
   ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
+  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: 5566f31c59b16d3ce6555e7d2c923e036b54b642
+PODFILE CHECKSUM: f98b50bedc6131fd8b10404662e0f6443553e695
 
 COCOAPODS: 1.8.3

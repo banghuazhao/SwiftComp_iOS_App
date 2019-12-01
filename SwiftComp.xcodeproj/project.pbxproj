@@ -23,6 +23,8 @@
 		990F76D61F85C0280073E459 /* CompositeModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F76D51F85C0280073E459 /* CompositeModelController.swift */; };
 		99112DDE230E3C9C0064C306 /* HelpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99112DDD230E3C9C0064C306 /* HelpController.swift */; };
 		99112DE0230E54A90064C306 /* AboutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99112DDF230E54A90064C306 /* AboutController.swift */; };
+		99133BB12393E57700797201 /* HomResultAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99133BB02393E57700797201 /* HomResultAPI.swift */; };
+		991AD34E2392B8FC0009A99A /* HowResultMatrixCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991AD34D2392B8FC0009A99A /* HowResultMatrixCell.swift */; };
 		9920DBF82231A76E00AB303E /* StackingSequenceDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DBF72231A76E00AB303E /* StackingSequenceDataBase.swift */; };
 		9920DBFA2231AD9900AB303E /* UserSavedStackingSequenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DBF92231AD9900AB303E /* UserSavedStackingSequenceCell.swift */; };
 		9920DC0122358EE400AB303E /* CircleTransitionDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DC0022358EE400AB303E /* CircleTransitionDesign.swift */; };
@@ -33,10 +35,35 @@
 		9929959523212BAA00925595 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929959423212BAA00925595 /* NetworkManager.swift */; };
 		993B8183230C36F1001AE3CF /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993B8182230C36F1001AE3CF /* Utilities.swift */; };
 		993B8185230D7EE4001AE3CF /* ExplainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993B8184230D7EE4001AE3CF /* ExplainModel.swift */; };
-		9945CF861FA565C7002F2F30 /* HomogenizationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF851FA565C7002F2F30 /* HomogenizationResult.swift */; };
+		9945CF861FA565C7002F2F30 /* HomogenizationResultOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF851FA565C7002F2F30 /* HomogenizationResultOld.swift */; };
 		9945CF8D1FA67AF0002F2F30 /* CompositeModelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */; };
 		99531902224B122C002923C5 /* ExplainBoxDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99531901224B122B002923C5 /* ExplainBoxDesign.swift */; };
 		99531905224B2179002923C5 /* UserDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 99531903224B2179002923C5 /* UserDataModel.xcdatamodeld */; };
+		9958CAE323921C4D0092788B /* HomPlateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958CAE223921C4D0092788B /* HomPlateResult.swift */; };
+		9958CAE523921C860092788B /* HomResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958CAE423921C860092788B /* HomResultController.swift */; };
+		9958CAE723922ADA0092788B /* HomPlateResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958CAE623922ADA0092788B /* HomPlateResultCell.swift */; };
+		9958CAE92392605D0092788B /* HomBeamResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958CAE82392605D0092788B /* HomBeamResult.swift */; };
+		9958CAEB239260600092788B /* HomSolidResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958CAEA239260600092788B /* HomSolidResult.swift */; };
+		9958CAED239261E40092788B /* HomBeamResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958CAEC239261E40092788B /* HomBeamResultCell.swift */; };
+		9958CAEF239261E60092788B /* HomSolidResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958CAEE239261E60092788B /* HomSolidResultCell.swift */; };
+		9958CAF1239262EF0092788B /* HomResultHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958CAF0239262EF0092788B /* HomResultHeaderView.swift */; };
+		9958CAF3239269AB0092788B /* HomResultPropertyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958CAF2239269AB0092788B /* HomResultPropertyCell.swift */; };
+		9958CAF523926A3E0092788B /* HomResultProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958CAF423926A3E0092788B /* HomResultProperty.swift */; };
+		995A1B232389565E0060F0D4 /* StackingSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A1B222389565E0060F0D4 /* StackingSequence.swift */; };
+		995A1B2523896FB40060F0D4 /* StackingSequenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A1B2423896FB40060F0D4 /* StackingSequenceCell.swift */; };
+		995A1B2723898CED0060F0D4 /* Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A1B2623898CED0060F0D4 /* Method.swift */; };
+		995A1B2923898D550060F0D4 /* TypeOfAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A1B2823898D550060F0D4 /* TypeOfAnalysis.swift */; };
+		995A1B2B23898DAF0060F0D4 /* StructuralModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A1B2A23898DAE0060F0D4 /* StructuralModel.swift */; };
+		995A1B2D238A2FFA0060F0D4 /* HoneycombCoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A1B2C238A2FFA0060F0D4 /* HoneycombCoreCell.swift */; };
+		995A1B2F238A30040060F0D4 /* HoneycombCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A1B2E238A30040060F0D4 /* HoneycombCore.swift */; };
+		995A1B31238A5F850060F0D4 /* SCTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A1B30238A5F850060F0D4 /* SCTag.swift */; };
+		995A1B33238AA5B80060F0D4 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A1B32238AA5B80060F0D4 /* Material.swift */; };
+		995C5F70238438D500112685 /* SCFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995C5F6F238438D400112685 /* SCFont.swift */; };
+		99602C39238C1614000E1491 /* MaterialsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99602C38238C1614000E1491 /* MaterialsCell.swift */; };
+		9970DE4E238CD2490096E71D /* MaterialPropertyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9970DE4D238CD2490096E71D /* MaterialPropertyCell.swift */; };
+		9970DE50238CD25B0096E71D /* MaterialProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9970DE4F238CD25B0096E71D /* MaterialProperty.swift */; };
+		9970DE52238CE6920096E71D /* Materials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9970DE51238CE6920096E71D /* Materials.swift */; };
+		9973509E2393611400369CEF /* HomResultCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9973509D2393611400369CEF /* HomResultCollectionHeaderView.swift */; };
 		99755A0A23439D9F001CFE75 /* GeneralController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A0923439D9F001CFE75 /* GeneralController.swift */; };
 		99755A0C2343A0E6001CFE75 /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A0B2343A0E6001CFE75 /* General.swift */; };
 		99755A0E2343A589001CFE75 /* GeneralCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99755A0D2343A589001CFE75 /* GeneralCell.swift */; };
@@ -47,16 +74,31 @@
 		99811D622379B3CE0071711B /* SCNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99811D612379B3CE0071711B /* SCNavigationController.swift */; };
 		99811D642379B4860071711B /* SCSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99811D632379B4860071711B /* SCSplitViewController.swift */; };
 		99811D66237B01000071711B /* SCCalculateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99811D65237B01000071711B /* SCCalculateButton.swift */; };
+		998B6E0523916444005DB946 /* HoneycombAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998B6E0423916444005DB946 /* HoneycombAPI.swift */; };
 		998FB89C2328C083008885EB /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998FB89B2328C083008885EB /* CoreDataManager.swift */; };
 		9994A27A23128AF100A99F6B /* SwiftCompResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9994A27923128AF100A99F6B /* SwiftCompResultModel.swift */; };
 		999DCF6A2333714600EA8AE0 /* HoneycombSandwichController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999DCF692333714600EA8AE0 /* HoneycombSandwichController.swift */; };
 		999DCF6C233381E800EA8AE0 /* CoreMaterialDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999DCF6B233381E800EA8AE0 /* CoreMaterialDataBase.swift */; };
 		999DCF712333ABAB00EA8AE0 /* ErrorHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999DCF702333ABAB00EA8AE0 /* ErrorHandle.swift */; };
+		99A2BE2B23858385003DFB99 /* MethodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A2BE2A23858385003DFB99 /* MethodCell.swift */; };
+		99A2BE2D23858850003DFB99 /* StructuralModelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A2BE2C23858850003DFB99 /* StructuralModelCell.swift */; };
+		99A2BE2F23858895003DFB99 /* TypeOfAnalysisCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A2BE2E23858895003DFB99 /* TypeOfAnalysisCell.swift */; };
+		99A684FA239358D800CF5B53 /* HomResultMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A684F9239358D800CF5B53 /* HomResultMatrix.swift */; };
 		99B508C51F86872200B6BC47 /* MaterialDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B508C41F86872200B6BC47 /* MaterialDataModel.swift */; };
 		99C5BF7F1F9CD54E00D87360 /* CompositeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */; };
+		99C9C8542393AE5A002F8567 /* HomMeshImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C9C8532393AE5A002F8567 /* HomMeshImage.swift */; };
+		99C9C8562393AF4B002F8567 /* HomMeshImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C9C8552393AF4B002F8567 /* HomMeshImageCell.swift */; };
+		99DE711123816815007F384F /* HomogenizationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE711023816815007F384F /* HomogenizationController.swift */; };
+		99DE711723819B1C007F384F /* HomogenizationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE711623819B1C007F384F /* HomogenizationHeaderView.swift */; };
+		99DE711B23842A7F007F384F /* SCAnalysisButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE711A23842A7F007F384F /* SCAnalysisButton.swift */; };
+		99DE711E23842ABC007F384F /* SCColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE711D23842ABC007F384F /* SCColor.swift */; };
 		99F0EE13232C7AAC00F84CA4 /* SwiftCompTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE12232C7AAC00F84CA4 /* SwiftCompTemplate.swift */; };
 		99F0EE15232C88DF00F84CA4 /* LaminateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE14232C88DF00F84CA4 /* LaminateController.swift */; };
 		99F0EE17232D240200F84CA4 /* UDFRCController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0EE16232D240200F84CA4 /* UDFRCController.swift */; };
+		99F26600238CF0C30077FD40 /* MaterialNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F265FF238CF0C30077FD40 /* MaterialNameCell.swift */; };
+		99F6F35D2393BBC700126226 /* HomInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F6F35C2393BBC700126226 /* HomInformation.swift */; };
+		99F6F35F2393BBD300126226 /* HomInformationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F6F35E2393BBD300126226 /* HomInformationCell.swift */; };
+		99F6F3612393D9DE00126226 /* HomCalculationDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F6F3602393D9DD00126226 /* HomCalculationDetailController.swift */; };
 		99FB919A2317FAF000FA1373 /* ResultDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB91992317FAF000FA1373 /* ResultDataModel.swift */; };
 		99FB919C2318083300FA1373 /* AnalysisSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB919B2318083300FA1373 /* AnalysisSettingsModel.swift */; };
 		99FB919E23189BC400FA1373 /* TheoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB919D23189BC400FA1373 /* TheoryController.swift */; };
@@ -86,6 +128,8 @@
 		990F76D51F85C0280073E459 /* CompositeModelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeModelController.swift; sourceTree = "<group>"; };
 		99112DDD230E3C9C0064C306 /* HelpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpController.swift; sourceTree = "<group>"; };
 		99112DDF230E54A90064C306 /* AboutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutController.swift; sourceTree = "<group>"; };
+		99133BB02393E57700797201 /* HomResultAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomResultAPI.swift; sourceTree = "<group>"; };
+		991AD34D2392B8FC0009A99A /* HowResultMatrixCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowResultMatrixCell.swift; sourceTree = "<group>"; };
 		9920DBF72231A76E00AB303E /* StackingSequenceDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackingSequenceDataBase.swift; sourceTree = "<group>"; };
 		9920DBF92231AD9900AB303E /* UserSavedStackingSequenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavedStackingSequenceCell.swift; sourceTree = "<group>"; };
 		9920DC0022358EE400AB303E /* CircleTransitionDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleTransitionDesign.swift; sourceTree = "<group>"; };
@@ -96,10 +140,35 @@
 		9929959423212BAA00925595 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		993B8182230C36F1001AE3CF /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		993B8184230D7EE4001AE3CF /* ExplainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplainModel.swift; sourceTree = "<group>"; };
-		9945CF851FA565C7002F2F30 /* HomogenizationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomogenizationResult.swift; sourceTree = "<group>"; };
+		9945CF851FA565C7002F2F30 /* HomogenizationResultOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomogenizationResultOld.swift; sourceTree = "<group>"; };
 		9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositeModelCell.swift; sourceTree = "<group>"; };
 		99531901224B122B002923C5 /* ExplainBoxDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplainBoxDesign.swift; sourceTree = "<group>"; };
 		99531904224B2179002923C5 /* UserDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserDataModel.xcdatamodel; sourceTree = "<group>"; };
+		9958CAE223921C4D0092788B /* HomPlateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomPlateResult.swift; sourceTree = "<group>"; };
+		9958CAE423921C860092788B /* HomResultController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomResultController.swift; path = SwiftComp/CompositeModels/HomogenizationResult/Controller/HomResultController.swift; sourceTree = SOURCE_ROOT; };
+		9958CAE623922ADA0092788B /* HomPlateResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomPlateResultCell.swift; sourceTree = "<group>"; };
+		9958CAE82392605D0092788B /* HomBeamResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomBeamResult.swift; sourceTree = "<group>"; };
+		9958CAEA239260600092788B /* HomSolidResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomSolidResult.swift; sourceTree = "<group>"; };
+		9958CAEC239261E40092788B /* HomBeamResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomBeamResultCell.swift; sourceTree = "<group>"; };
+		9958CAEE239261E60092788B /* HomSolidResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomSolidResultCell.swift; sourceTree = "<group>"; };
+		9958CAF0239262EF0092788B /* HomResultHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomResultHeaderView.swift; sourceTree = "<group>"; };
+		9958CAF2239269AB0092788B /* HomResultPropertyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomResultPropertyCell.swift; sourceTree = "<group>"; };
+		9958CAF423926A3E0092788B /* HomResultProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomResultProperty.swift; sourceTree = "<group>"; };
+		995A1B222389565E0060F0D4 /* StackingSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackingSequence.swift; sourceTree = "<group>"; };
+		995A1B2423896FB40060F0D4 /* StackingSequenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackingSequenceCell.swift; sourceTree = "<group>"; };
+		995A1B2623898CED0060F0D4 /* Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Method.swift; sourceTree = "<group>"; };
+		995A1B2823898D550060F0D4 /* TypeOfAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeOfAnalysis.swift; sourceTree = "<group>"; };
+		995A1B2A23898DAE0060F0D4 /* StructuralModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructuralModel.swift; sourceTree = "<group>"; };
+		995A1B2C238A2FFA0060F0D4 /* HoneycombCoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneycombCoreCell.swift; sourceTree = "<group>"; };
+		995A1B2E238A30040060F0D4 /* HoneycombCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneycombCore.swift; sourceTree = "<group>"; };
+		995A1B30238A5F850060F0D4 /* SCTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCTag.swift; sourceTree = "<group>"; };
+		995A1B32238AA5B80060F0D4 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
+		995C5F6F238438D400112685 /* SCFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCFont.swift; sourceTree = "<group>"; };
+		99602C38238C1614000E1491 /* MaterialsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialsCell.swift; sourceTree = "<group>"; };
+		9970DE4D238CD2490096E71D /* MaterialPropertyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialPropertyCell.swift; sourceTree = "<group>"; };
+		9970DE4F238CD25B0096E71D /* MaterialProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialProperty.swift; sourceTree = "<group>"; };
+		9970DE51238CE6920096E71D /* Materials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Materials.swift; sourceTree = "<group>"; };
+		9973509D2393611400369CEF /* HomResultCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomResultCollectionHeaderView.swift; sourceTree = "<group>"; };
 		99755A0923439D9F001CFE75 /* GeneralController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralController.swift; sourceTree = "<group>"; };
 		99755A0B2343A0E6001CFE75 /* General.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		99755A0D2343A589001CFE75 /* GeneralCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralCell.swift; sourceTree = "<group>"; };
@@ -111,21 +180,36 @@
 		99811D632379B4860071711B /* SCSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCSplitViewController.swift; sourceTree = "<group>"; };
 		99811D65237B01000071711B /* SCCalculateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCCalculateButton.swift; sourceTree = "<group>"; };
 		9989604B2369DD5D00D941FF /* SwiftComp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftComp.entitlements; sourceTree = "<group>"; };
+		998B6E0423916444005DB946 /* HoneycombAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneycombAPI.swift; sourceTree = "<group>"; };
 		998FB89B2328C083008885EB /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		9994A27923128AF100A99F6B /* SwiftCompResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCompResultModel.swift; sourceTree = "<group>"; };
 		999DCF692333714600EA8AE0 /* HoneycombSandwichController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneycombSandwichController.swift; sourceTree = "<group>"; };
 		999DCF6B233381E800EA8AE0 /* CoreMaterialDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMaterialDataBase.swift; sourceTree = "<group>"; };
 		999DCF702333ABAB00EA8AE0 /* ErrorHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandle.swift; sourceTree = "<group>"; };
+		99A2BE2A23858385003DFB99 /* MethodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodCell.swift; sourceTree = "<group>"; };
+		99A2BE2C23858850003DFB99 /* StructuralModelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructuralModelCell.swift; sourceTree = "<group>"; tabWidth = 4; };
+		99A2BE2E23858895003DFB99 /* TypeOfAnalysisCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeOfAnalysisCell.swift; sourceTree = "<group>"; };
+		99A684F9239358D800CF5B53 /* HomResultMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomResultMatrix.swift; sourceTree = "<group>"; };
 		99B508C41F86872200B6BC47 /* MaterialDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialDataModel.swift; sourceTree = "<group>"; };
 		99C5BF7E1F9CD54E00D87360 /* CompositeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeModel.swift; sourceTree = "<group>"; };
+		99C9C8532393AE5A002F8567 /* HomMeshImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomMeshImage.swift; sourceTree = "<group>"; };
+		99C9C8552393AF4B002F8567 /* HomMeshImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomMeshImageCell.swift; sourceTree = "<group>"; };
+		99DE711023816815007F384F /* HomogenizationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomogenizationController.swift; sourceTree = "<group>"; };
+		99DE711623819B1C007F384F /* HomogenizationHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomogenizationHeaderView.swift; sourceTree = "<group>"; };
+		99DE711A23842A7F007F384F /* SCAnalysisButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCAnalysisButton.swift; sourceTree = "<group>"; };
+		99DE711D23842ABC007F384F /* SCColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCColor.swift; sourceTree = "<group>"; };
 		99F0EE12232C7AAC00F84CA4 /* SwiftCompTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCompTemplate.swift; sourceTree = "<group>"; };
 		99F0EE14232C88DF00F84CA4 /* LaminateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaminateController.swift; sourceTree = "<group>"; };
 		99F0EE16232D240200F84CA4 /* UDFRCController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDFRCController.swift; sourceTree = "<group>"; };
+		99F265FF238CF0C30077FD40 /* MaterialNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialNameCell.swift; sourceTree = "<group>"; };
+		99F6F35C2393BBC700126226 /* HomInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomInformation.swift; sourceTree = "<group>"; };
+		99F6F35E2393BBD300126226 /* HomInformationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomInformationCell.swift; sourceTree = "<group>"; };
+		99F6F3602393D9DD00126226 /* HomCalculationDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomCalculationDetailController.swift; sourceTree = "<group>"; };
 		99FB91992317FAF000FA1373 /* ResultDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDataModel.swift; sourceTree = "<group>"; };
 		99FB919B2318083300FA1373 /* AnalysisSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisSettingsModel.swift; sourceTree = "<group>"; };
 		99FB919D23189BC400FA1373 /* TheoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheoryController.swift; sourceTree = "<group>"; };
 		99FB919F2318BE3900FA1373 /* UserManualController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManualController.swift; sourceTree = "<group>"; };
-		99FB91A22318BE9700FA1373 /* SwiftComp User Manual.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "SwiftComp User Manual.pdf"; path = "../Doc/SwiftComp User Manual.pdf"; sourceTree = "<group>"; };
+		99FB91A22318BE9700FA1373 /* SwiftComp User Manual.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "SwiftComp User Manual.pdf"; sourceTree = "<group>"; };
 		99FB91A6231CCA4C00FA1373 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -184,6 +268,22 @@
 			path = SwiftComp;
 			sourceTree = "<group>";
 		};
+		99133BAF2393DF4B00797201 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				99133BB02393E57700797201 /* HomResultAPI.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		995C5F71238438FA00112685 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				995C5F6F238438D400112685 /* SCFont.swift */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		99755A122344F656001CFE75 /* Design */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,8 +307,10 @@
 				9945CF8C1FA67AF0002F2F30 /* CompositeModelCell.swift */,
 				990F76D51F85C0280073E459 /* CompositeModelController.swift */,
 				99F0EE12232C7AAC00F84CA4 /* SwiftCompTemplate.swift */,
-				9945CF851FA565C7002F2F30 /* HomogenizationResult.swift */,
+				9945CF851FA565C7002F2F30 /* HomogenizationResultOld.swift */,
 				9904DEED2317A36D005E4C14 /* SwiftCompCalculationInfo.swift */,
+				99DE710F238167EC007F384F /* Homogenization */,
+				99F26601238D21830077FD40 /* HomogenizationResult */,
 				99811D562378331D0071711B /* Laminate */,
 				99811D57237833380071711B /* UDFRC */,
 				99811D58237833C50071711B /* HoneycombSandwich */,
@@ -287,6 +389,10 @@
 				99811D612379B3CE0071711B /* SCNavigationController.swift */,
 				99811D632379B4860071711B /* SCSplitViewController.swift */,
 				99811D65237B01000071711B /* SCCalculateButton.swift */,
+				99DE711A23842A7F007F384F /* SCAnalysisButton.swift */,
+				995A1B30238A5F850060F0D4 /* SCTag.swift */,
+				99DE711C23842AAA007F384F /* Color */,
+				995C5F71238438FA00112685 /* Font */,
 			);
 			path = SCBaseKitModule;
 			sourceTree = "<group>";
@@ -306,6 +412,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		998B6E03239163F8005DB946 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				998B6E0423916444005DB946 /* HoneycombAPI.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		999DCF6D2333823900EA8AE0 /* DataBase */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +432,114 @@
 				999DCF6B233381E800EA8AE0 /* CoreMaterialDataBase.swift */,
 			);
 			path = DataBase;
+			sourceTree = "<group>";
+		};
+		99A2BE3223881E54003DFB99 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				995A1B2623898CED0060F0D4 /* Method.swift */,
+				995A1B2A23898DAE0060F0D4 /* StructuralModel.swift */,
+				995A1B2823898D550060F0D4 /* TypeOfAnalysis.swift */,
+				995A1B222389565E0060F0D4 /* StackingSequence.swift */,
+				995A1B2E238A30040060F0D4 /* HoneycombCore.swift */,
+				995A1B32238AA5B80060F0D4 /* Material.swift */,
+				9970DE51238CE6920096E71D /* Materials.swift */,
+				9970DE4F238CD25B0096E71D /* MaterialProperty.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		99A2BE3323881E58003DFB99 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				99DE711623819B1C007F384F /* HomogenizationHeaderView.swift */,
+				99A2BE2A23858385003DFB99 /* MethodCell.swift */,
+				99A2BE2C23858850003DFB99 /* StructuralModelCell.swift */,
+				99A2BE2E23858895003DFB99 /* TypeOfAnalysisCell.swift */,
+				995A1B2423896FB40060F0D4 /* StackingSequenceCell.swift */,
+				995A1B2C238A2FFA0060F0D4 /* HoneycombCoreCell.swift */,
+				99602C38238C1614000E1491 /* MaterialsCell.swift */,
+				99F265FF238CF0C30077FD40 /* MaterialNameCell.swift */,
+				9970DE4D238CD2490096E71D /* MaterialPropertyCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		99DE710F238167EC007F384F /* Homogenization */ = {
+			isa = PBXGroup;
+			children = (
+				998B6E03239163F8005DB946 /* Network */,
+				99A2BE3223881E54003DFB99 /* Model */,
+				99A2BE3323881E58003DFB99 /* View */,
+				99F266062390281B0077FD40 /* Controller */,
+			);
+			path = Homogenization;
+			sourceTree = "<group>";
+		};
+		99DE711C23842AAA007F384F /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				99DE711D23842ABC007F384F /* SCColor.swift */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		99F26601238D21830077FD40 /* HomogenizationResult */ = {
+			isa = PBXGroup;
+			children = (
+				99133BAF2393DF4B00797201 /* Network */,
+				99F266042390276E0077FD40 /* Model */,
+				99F26605239027710077FD40 /* View */,
+				99F6F3622393D9E400126226 /* Controller */,
+			);
+			path = HomogenizationResult;
+			sourceTree = "<group>";
+		};
+		99F266042390276E0077FD40 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9958CAF423926A3E0092788B /* HomResultProperty.swift */,
+				99A684F9239358D800CF5B53 /* HomResultMatrix.swift */,
+				9958CAE82392605D0092788B /* HomBeamResult.swift */,
+				9958CAE223921C4D0092788B /* HomPlateResult.swift */,
+				9958CAEA239260600092788B /* HomSolidResult.swift */,
+				99C9C8532393AE5A002F8567 /* HomMeshImage.swift */,
+				99F6F35C2393BBC700126226 /* HomInformation.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		99F26605239027710077FD40 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9958CAF0239262EF0092788B /* HomResultHeaderView.swift */,
+				9973509D2393611400369CEF /* HomResultCollectionHeaderView.swift */,
+				9958CAF2239269AB0092788B /* HomResultPropertyCell.swift */,
+				991AD34D2392B8FC0009A99A /* HowResultMatrixCell.swift */,
+				9958CAEC239261E40092788B /* HomBeamResultCell.swift */,
+				9958CAE623922ADA0092788B /* HomPlateResultCell.swift */,
+				9958CAEE239261E60092788B /* HomSolidResultCell.swift */,
+				99C9C8552393AF4B002F8567 /* HomMeshImageCell.swift */,
+				99F6F35E2393BBD300126226 /* HomInformationCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		99F266062390281B0077FD40 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				99DE711023816815007F384F /* HomogenizationController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		99F6F3622393D9E400126226 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9958CAE423921C860092788B /* HomResultController.swift */,
+				99F6F3602393D9DD00126226 /* HomCalculationDetailController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		D89B077CC58375267E780BBC /* Frameworks */ = {
@@ -406,17 +628,25 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftComp/Pods-SwiftComp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 				"${BUILT_PRODUCTS_DIR}/JGProgressHUD/JGProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JGProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -452,48 +682,87 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9958CAE92392605D0092788B /* HomBeamResult.swift in Sources */,
 				9945CF8D1FA67AF0002F2F30 /* CompositeModelCell.swift in Sources */,
 				9904AFEF1FA8FF430018FD55 /* ResultCardDesign.swift in Sources */,
+				99DE711723819B1C007F384F /* HomogenizationHeaderView.swift in Sources */,
 				99755A1523463E6D001CFE75 /* ColorScheme.swift in Sources */,
+				9958CAE323921C4D0092788B /* HomPlateResult.swift in Sources */,
 				99FB919A2317FAF000FA1373 /* ResultDataModel.swift in Sources */,
+				99A684FA239358D800CF5B53 /* HomResultMatrix.swift in Sources */,
 				99755A0C2343A0E6001CFE75 /* General.swift in Sources */,
 				9979DABA237C5EF300F93D72 /* CompositeModelHeaderCell.swift in Sources */,
+				9958CAED239261E40092788B /* HomBeamResultCell.swift in Sources */,
 				990F76D61F85C0280073E459 /* CompositeModelController.swift in Sources */,
 				9994A27A23128AF100A99F6B /* SwiftCompResultModel.swift in Sources */,
 				9920DBF82231A76E00AB303E /* StackingSequenceDataBase.swift in Sources */,
 				99755A0E2343A589001CFE75 /* GeneralCell.swift in Sources */,
+				9970DE50238CD25B0096E71D /* MaterialProperty.swift in Sources */,
+				995A1B31238A5F850060F0D4 /* SCTag.swift in Sources */,
+				99A2BE2B23858385003DFB99 /* MethodCell.swift in Sources */,
 				992285891FAF5C93004C1E34 /* FiberMaterialDataBase.swift in Sources */,
 				999DCF6A2333714600EA8AE0 /* HoneycombSandwichController.swift in Sources */,
+				99DE711B23842A7F007F384F /* SCAnalysisButton.swift in Sources */,
+				99F6F3612393D9DE00126226 /* HomCalculationDetailController.swift in Sources */,
+				99C9C8542393AE5A002F8567 /* HomMeshImage.swift in Sources */,
 				9904AFF31FA9001A0018FD55 /* ButtonDesign.swift in Sources */,
+				99A2BE2F23858895003DFB99 /* TypeOfAnalysisCell.swift in Sources */,
+				9970DE4E238CD2490096E71D /* MaterialPropertyCell.swift in Sources */,
+				995A1B33238AA5B80060F0D4 /* Material.swift in Sources */,
 				99FB919C2318083300FA1373 /* AnalysisSettingsModel.swift in Sources */,
 				99112DE0230E54A90064C306 /* AboutController.swift in Sources */,
 				99C5BF7F1F9CD54E00D87360 /* CompositeModel.swift in Sources */,
 				999DCF712333ABAB00EA8AE0 /* ErrorHandle.swift in Sources */,
+				9958CAF1239262EF0092788B /* HomResultHeaderView.swift in Sources */,
+				9958CAF3239269AB0092788B /* HomResultPropertyCell.swift in Sources */,
 				9929959523212BAA00925595 /* NetworkManager.swift in Sources */,
+				99602C39238C1614000E1491 /* MaterialsCell.swift in Sources */,
 				99531905224B2179002923C5 /* UserDataModel.xcdatamodeld in Sources */,
 				99755A0A23439D9F001CFE75 /* GeneralController.swift in Sources */,
 				992285871FAEB1F2004C1E34 /* UserSavedMaterialCell.swift in Sources */,
 				99F0EE15232C88DF00F84CA4 /* LaminateController.swift in Sources */,
 				990F76C41F85BFCF0073E459 /* AppDelegate.swift in Sources */,
+				995A1B2B23898DAF0060F0D4 /* StructuralModel.swift in Sources */,
+				99F26600238CF0C30077FD40 /* MaterialNameCell.swift in Sources */,
+				995A1B2723898CED0060F0D4 /* Method.swift in Sources */,
+				99A2BE2D23858850003DFB99 /* StructuralModelCell.swift in Sources */,
+				9958CAF523926A3E0092788B /* HomResultProperty.swift in Sources */,
+				99DE711123816815007F384F /* HomogenizationController.swift in Sources */,
+				9958CAEF239261E60092788B /* HomSolidResultCell.swift in Sources */,
+				995A1B2923898D550060F0D4 /* TypeOfAnalysis.swift in Sources */,
 				999DCF6C233381E800EA8AE0 /* CoreMaterialDataBase.swift in Sources */,
+				9958CAE723922ADA0092788B /* HomPlateResultCell.swift in Sources */,
+				99133BB12393E57700797201 /* HomResultAPI.swift in Sources */,
 				9920DBFA2231AD9900AB303E /* UserSavedStackingSequenceCell.swift in Sources */,
 				99FB919E23189BC400FA1373 /* TheoryController.swift in Sources */,
-				9945CF861FA565C7002F2F30 /* HomogenizationResult.swift in Sources */,
+				9945CF861FA565C7002F2F30 /* HomogenizationResultOld.swift in Sources */,
+				9973509E2393611400369CEF /* HomResultCollectionHeaderView.swift in Sources */,
+				995C5F70238438D500112685 /* SCFont.swift in Sources */,
 				9904DEE82313B5A2005E4C14 /* SwiftCompCalculationStatusModel.swift in Sources */,
+				9970DE52238CE6920096E71D /* Materials.swift in Sources */,
 				99FB91A02318BE3900FA1373 /* UserManualController.swift in Sources */,
 				99B508C51F86872200B6BC47 /* MaterialDataModel.swift in Sources */,
 				998FB89C2328C083008885EB /* CoreDataManager.swift in Sources */,
+				99F6F35D2393BBC700126226 /* HomInformation.swift in Sources */,
 				99811D66237B01000071711B /* SCCalculateButton.swift in Sources */,
+				995A1B2523896FB40060F0D4 /* StackingSequenceCell.swift in Sources */,
 				9904DEEA23140C8B005E4C14 /* ResultCardTypeModel.swift in Sources */,
 				9904AFF11FA8FFA50018FD55 /* MaterialCardDesign.swift in Sources */,
 				99FB91A7231CCA4C00FA1373 /* Config.swift in Sources */,
+				99F6F35F2393BBD300126226 /* HomInformationCell.swift in Sources */,
 				99755A112344D2A9001CFE75 /* SCTabBarController.swift in Sources */,
 				99F0EE13232C7AAC00F84CA4 /* SwiftCompTemplate.swift in Sources */,
+				9958CAE523921C860092788B /* HomResultController.swift in Sources */,
+				995A1B2D238A2FFA0060F0D4 /* HoneycombCoreCell.swift in Sources */,
+				995A1B232389565E0060F0D4 /* StackingSequence.swift in Sources */,
+				99C9C8562393AF4B002F8567 /* HomMeshImageCell.swift in Sources */,
 				99811D5F237854640071711B /* Constant.swift in Sources */,
 				99531902224B122C002923C5 /* ExplainBoxDesign.swift in Sources */,
 				99112DDE230E3C9C0064C306 /* HelpController.swift in Sources */,
 				9922858B1FAF5EAD004C1E34 /* MatrixMaterialDataBase.swift in Sources */,
+				995A1B2F238A30040060F0D4 /* HoneycombCore.swift in Sources */,
 				993B8185230D7EE4001AE3CF /* ExplainModel.swift in Sources */,
+				99DE711E23842ABC007F384F /* SCColor.swift in Sources */,
 				99811D622379B3CE0071711B /* SCNavigationController.swift in Sources */,
 				9920DC0122358EE400AB303E /* CircleTransitionDesign.swift in Sources */,
 				992285851FAEAF64004C1E34 /* LaminaMaterialDataBase.swift in Sources */,
@@ -502,8 +771,11 @@
 				99811D642379B4860071711B /* SCSplitViewController.swift in Sources */,
 				9904DEEE2317A36D005E4C14 /* SwiftCompCalculationInfo.swift in Sources */,
 				99F0EE17232D240200F84CA4 /* UDFRCController.swift in Sources */,
+				9958CAEB239260600092788B /* HomSolidResult.swift in Sources */,
 				9904AFF71FAB888A0018FD55 /* ViewCardDesign.swift in Sources */,
 				9904AFF51FA900690018FD55 /* KeyboardDesign.swift in Sources */,
+				991AD34E2392B8FC0009A99A /* HowResultMatrixCell.swift in Sources */,
+				998B6E0523916444005DB946 /* HoneycombAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

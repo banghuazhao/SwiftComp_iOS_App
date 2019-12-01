@@ -16,5 +16,9 @@ class SCSplitViewController: UISplitViewController, UISplitViewControllerDelegat
 
         preferredDisplayMode = .allVisible
         
+        preferredPrimaryColumnWidthFraction = 0.4
+
+        minimumPrimaryColumnWidth = 400
+        maximumPrimaryColumnWidth = 600
     }
 }

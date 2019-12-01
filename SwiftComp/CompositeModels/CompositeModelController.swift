@@ -10,7 +10,7 @@ import CoreData
 import UIKit
 
 class CompositeModelController: UIViewController {
-    let sectionHeaderHeight: CGFloat = 36
+    
     let compositeModels = CompoisteModels()
 
     lazy var tableView: UITableView = {
@@ -38,7 +38,7 @@ class CompositeModelController: UIViewController {
 
         tabBarController?.title = "Composite Models"
         
-        if !isIPhone {
+        if !Constant.isIPhone {
             if let indexPath = tableView.indexPathForSelectedRow, indexPath != IndexPath(row: 0, section: 0) {
                 tableView(tableView, didSelectRowAt: indexPath)
             } else {
@@ -78,15 +78,10 @@ extension CompositeModelController: UITableViewDataSource {
         return 0
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 86
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return sectionHeaderHeight
-    }
-    
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 2 {
+            return 60
+        }
         return .leastNonzeroMagnitude
     }
     
@@ -95,20 +90,20 @@ extension CompositeModelController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = CompositeModelHeaderCell()
+        var title = ""
 
         switch section {
         case 0:
-            cell.label.text = "Using 1D SG"
+            title = "Using 1D SG"
         case 1:
-            cell.label.text = "Using 2D SG"
+            title = "Using 2D SG"
         case 2:
-            cell.label.text = "Using 3D SG"
+            title = "Using 3D SG"
         default:
             break
         }
 
-        return cell
+        return CompositeModelHeaderCell(title: title)
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -136,20 +131,20 @@ extension CompositeModelController: UITableViewDataSource {
 
 extension CompositeModelController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if isIPhone {
+        if Constant.isIPhone {
             tableView.deselectRow(at: indexPath, animated: true)
         }
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
-                if isIPhone {
+                if Constant.isIPhone {
                     navigationController?.pushViewController(LaminateController(), animated: true)
                 } else { showDetailViewController(SCNavigationController(rootViewController: LaminateController()), sender: self)
                 }
             }
         case 1:
             if indexPath.row == 0 {
-                if isIPhone {
+                if Constant.isIPhone {
                     navigationController?.pushViewController(UDFRCController(), animated: true)
                 } else {
                     showDetailViewController(SCNavigationController(rootViewController: UDFRCController()), sender: self)
@@ -157,10 +152,16 @@ extension CompositeModelController: UITableViewDelegate {
             }
         case 2:
             if indexPath.row == 0 {
-                if isIPhone {
+                if Constant.isIPhone {
                     navigationController?.pushViewController(HoneycombSandwichController(), animated: true)
                 } else {
                     showDetailViewController(SCNavigationController(rootViewController: HoneycombSandwichController()), sender: self)
+                }
+            } else if indexPath.row == 1 {
+                if Constant.isIPhone {
+                    navigationController?.pushViewController(HomogenizationController(), animated: true)
+                } else {
+                    showDetailViewController(SCNavigationController(rootViewController: HomogenizationController()), sender: self)
                 }
             }
         default:

@@ -2589,7 +2589,7 @@ class HoneycombSandwichController: SwiftCompTemplateViewController, UITextFieldD
             structuralModelValue = "Solid"
         }
 
-        API_URL = "\(baseURL)/honeycombSandwich/homogenization?typeOfAnalysis=\(typeOfAnalysisValue)&structuralModel=\(structuralModelValue)"
+        API_URL = "\(Constant.baseURL)/honeycombSandwich/homogenization?typeOfAnalysis=\(typeOfAnalysisValue)&structuralModel=\(structuralModelValue)"
 
         if analysisSettings.structuralModel == .beam {
             if analysisSettings.structuralSubmodel == .EulerBernoulliBeamModel {

@@ -9,6 +9,17 @@
 import UIKit
 
 class SCCalculateButton: UIButton {
+    
+    open override var isHighlighted: Bool {
+        didSet {
+            if isHighlighted {
+                alpha = 0.2
+            } else {
+                alpha = 1
+            }
+        }
+    }
+    
     var style: Style?
 
     enum Style {
@@ -43,7 +54,7 @@ class SCCalculateButton: UIButton {
 
     private func setupView() {
         layer.cornerRadius = intrinsicContentSize.height / 2
-        backgroundColor = .swiftcompLogoColor
+        backgroundColor = .SCGreenHighLight
 
         snp.makeConstraints { make in
             make.width.equalTo(260)
@@ -60,8 +71,8 @@ class SCCalculateButton: UIButton {
 
         cloudImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().offset(16)
-            make.height.equalTo(20)
+            make.left.equalToSuperview().offset(32)
+            make.size.equalTo(16)
         }
     }
 
@@ -69,10 +80,10 @@ class SCCalculateButton: UIButton {
         removeTarget(nil, action: nil, for: .allEvents)
         switch style {
         case .cloud:
-            backgroundColor = .swiftcompLogoColor
+            backgroundColor = .SCGreenHighLight
             cloudImageView.isHidden = false
         case .local:
-            backgroundColor = .swiftcompLogoColor
+            backgroundColor = .SCGreenHighLight
             cloudImageView.isHidden = true
         case .noInternet:
             backgroundColor = .gray

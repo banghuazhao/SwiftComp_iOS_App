@@ -18,14 +18,12 @@ class GeneralCell: UITableViewCell {
 
     let generalImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
 
     let nameLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 15)
         label.adjustsFontSizeToFitWidth = true
@@ -39,16 +37,20 @@ class GeneralCell: UITableViewCell {
         backgroundColor = .whiteThemeColor
 
         addSubview(generalImageView)
+        addSubview(nameLabel)
+        
         generalImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(12)
-            make.top.bottom.equalToSuperview().inset(8)
+            make.left.equalToSuperview().offset(16)
+            make.top.bottom.equalToSuperview().inset(16).priority(999)
             make.size.equalTo(20)
         }
+        
+        nameLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(generalImageView.snp.right).offset(16)
+            make.right.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
+        }
 
-        addSubview(nameLabel)
-        nameLabel.leftAnchor.constraint(equalTo: generalImageView.rightAnchor, constant: 12).isActive = true
-        nameLabel.widthAnchor.constraint(equalTo: widthAnchor, constant: -120).isActive = true
-        nameLabel.centerYAnchor.constraint(equalTo: generalImageView.centerYAnchor, constant: 0).isActive = true
     }
 
     required init?(coder aDecoder: NSCoder) {

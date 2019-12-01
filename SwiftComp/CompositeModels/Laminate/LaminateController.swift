@@ -1987,7 +1987,7 @@ class LaminateController: SwiftCompTemplateViewController, UITextFieldDelegate {
             structuralModelValue = "Solid"
         }
 
-        API_URL = "\(baseURL)/Laminate/homogenization?typeOfAnalysis=\(typeOfAnalysisValue)&structuralModel=\(structuralModelValue)"
+        API_URL = "\(Constant.baseURL)/Laminate/homogenization?typeOfAnalysis=\(typeOfAnalysisValue)&structuralModel=\(structuralModelValue)"
 
         if analysisSettings.structuralModel == .plate {
             if analysisSettings.structuralSubmodel == .KirchhoffLovePlateShellModel {

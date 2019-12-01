@@ -19,7 +19,7 @@ enum CalculationMethod {
     case NonSwiftComp
 }
 
-enum StructuralModel {
+enum StructuralModelOld {
     case beam
     case plate
     case solid
@@ -33,20 +33,15 @@ enum StructuralSubmodel {
     case ReissnerMindlinPlateShellModel
 }
 
-enum TypeOfAnalysis {
-    case elastic
-    case thermoElastic
-}
-
 class AnalysisSettings {
     var compositeModelName : CompositeModelName
     var calculationMethod: CalculationMethod
-    var structuralModel : StructuralModel
+    var structuralModel : StructuralModelOld
     var structuralSubmodel: StructuralSubmodel
     var typeOfAnalysis : TypeOfAnalysis
     
     
-    init(compositeModelName: CompositeModelName, calculationMethod: CalculationMethod, typeOfAnalysis: TypeOfAnalysis, structuralModel : StructuralModel, structuralSubmodel: StructuralSubmodel) {
+    init(compositeModelName: CompositeModelName, calculationMethod: CalculationMethod, typeOfAnalysis: TypeOfAnalysis, structuralModel : StructuralModelOld, structuralSubmodel: StructuralSubmodel) {
         self.compositeModelName = compositeModelName
         self.calculationMethod = calculationMethod
         self.structuralModel = structuralModel

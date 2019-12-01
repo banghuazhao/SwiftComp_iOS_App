@@ -9,23 +9,37 @@
 import UIKit
 
 class CompositeModelHeaderCell: UITableViewHeaderFooterView {
-    lazy var label: UILabel = {
+    lazy var spaceView: UIView = {
+        let view = UIView()
+        return view
+    }()
+
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .greyFont2Color
-        label.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
 
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+    init(title: String) {
+        super.init(reuseIdentifier: nil)
+        titleLabel.text = title
+        setupView()
+    }
 
-        contentView.backgroundColor = .clear
+    private func setupView() {
+        addSubview(spaceView)
+        addSubview(titleLabel)
 
-        contentView.addSubview(label)
+        spaceView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(16)
+            make.top.equalToSuperview()
+            make.height.equalTo(20)
+        }
 
-        label.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(12)
-            make.centerY.equalToSuperview()
+        titleLabel.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(16)
+            make.top.equalTo(spaceView.snp.bottom)
+            make.bottom.equalToSuperview().inset(12)
         }
     }
 

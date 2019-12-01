@@ -11,5 +11,7 @@ target 'SwiftComp' do
   pod 'JGProgressHUD'
   pod 'ReachabilitySwift'
   pod 'SnapKit', '~> 5.0.0'
+  pod 'Moya', '~> 13.0'
+  pod 'SwiftyJSON', '~> 4.0'
 
 end

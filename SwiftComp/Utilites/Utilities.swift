@@ -47,6 +47,10 @@ extension UIView {
     func addSubviews(_ views: UIView...) {
         views.forEach { addSubview($0) }
     }
+
+    func addSubviews(_ views: [UIView]) {
+        views.forEach { addSubview($0) }
+    }
 }
 
 func getDocumentsDirectory() -> URL {
@@ -109,20 +113,6 @@ func fillResultsRoundSmall(resultItems: [Double], resultLabel: [UILabel], max: D
         }
 
         resultLabel[i].adjustsFontSizeToFitWidth = true
-    }
-}
-
-// change the background color of a UIButton while it's highlighted
-
-extension UIButton {
-    open override var isHighlighted: Bool {
-        didSet {
-            if isHighlighted {
-                alpha = 0.5
-            } else {
-                alpha = 1
-            }
-        }
     }
 }
 

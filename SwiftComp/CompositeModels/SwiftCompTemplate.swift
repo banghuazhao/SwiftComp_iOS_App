@@ -595,7 +595,7 @@ class SwiftCompTemplateViewController: UIViewController, UINavigationControllerD
 
         resultData = ResultData()
 
-        let resultViewController = HomogenizationResult()
+        let resultViewController = HomogenizationResultOld()
 
         // calculate by CLPT
 

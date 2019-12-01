@@ -11,7 +11,6 @@ import UIKit
 
 class GeneralController: UIViewController {
     let generalModels = GeneralModels()
-    let rowHeight: CGFloat = 30 + 8 + 8
     let sectionMarketingHeight: CGFloat = 160
     let sectionHeight: CGFloat = 10
 
@@ -19,6 +18,7 @@ class GeneralController: UIViewController {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(GeneralCell.self, forCellReuseIdentifier: "CellID")
         tableView.backgroundColor = .greybackgroundColor
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 52, bottom: 0, right: 0)
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
         tableView.delegate = self
@@ -39,7 +39,7 @@ class GeneralController: UIViewController {
 
         tabBarController?.title = "General"
 
-        if !isIPhone {
+        if !Constant.isIPhone {
             if let indexPath = tableView.indexPathForSelectedRow, indexPath != IndexPath(row: 0, section: 0) {
                 tableView(tableView, didSelectRowAt: indexPath)
             } else {
@@ -55,10 +55,6 @@ class GeneralController: UIViewController {
 extension GeneralController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return rowHeight
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -126,16 +122,19 @@ extension GeneralController: UITableViewDataSource {
 
 extension GeneralController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if Constant.isIPhone {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
-                if isIPhone {
+                if Constant.isIPhone {
                     navigationController?.pushViewController(AboutController(), animated: true)
                 } else {
                     showDetailViewController(SCNavigationController(rootViewController: AboutController()), sender: self)
                 }
             } else {
-                if isIPhone {
+                if Constant.isIPhone {
                     navigationController?.pushViewController(HelpController(), animated: true)
                 } else {
                     showDetailViewController(SCNavigationController(rootViewController: HelpController()), sender: self)
@@ -143,13 +142,13 @@ extension GeneralController: UITableViewDelegate {
             }
         case 1:
             if indexPath.row == 0 {
-                if isIPhone {
+                if Constant.isIPhone {
                     navigationController?.pushViewController(TheoryController(), animated: true)
                 } else {
                     showDetailViewController(SCNavigationController(rootViewController: TheoryController()), sender: self)
                 }
             } else {
-                if isIPhone {
+                if Constant.isIPhone {
                     navigationController?.pushViewController(UserManualController(), animated: true)
                 } else {
                     showDetailViewController(SCNavigationController(rootViewController: UserManualController()), sender: self)
@@ -166,7 +165,7 @@ extension GeneralController: UITableViewDelegate {
             }
         case 3:
             tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
-            guard let url = URL(string: "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=\(appID)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1)") else { return }
+            guard let url = URL(string: "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=\(Constant.appID)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1)") else { return }
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         default:
             break

@@ -1961,7 +1961,7 @@ class UDFRCController: SwiftCompTemplateViewController, UITextFieldDelegate {
             structuralModelValue = "Solid"
         }
 
-        API_URL = "\(baseURL)/UDFRC/homogenization?typeOfAnalysis=\(typeOfAnalysisValue)&structuralModel=\(structuralModelValue)"
+        API_URL = "\(Constant.baseURL)/UDFRC/homogenization?typeOfAnalysis=\(typeOfAnalysisValue)&structuralModel=\(structuralModelValue)"
 
         if analysisSettings.structuralModel == .beam {
             if analysisSettings.structuralSubmodel == .EulerBernoulliBeamModel {
