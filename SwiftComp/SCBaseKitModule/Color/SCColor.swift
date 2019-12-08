@@ -26,10 +26,11 @@ extension UIColor {
         )
     }
     
-    static let SCGreenHighLight = UIColor(hex: 0x81C547)
+    static let SCNavigation = UIColor(displayP3Red: 51 / 255, green: 66 / 255, blue: 78 / 255, alpha: 1)
+    static let SCGreen = UIColor(hex: 0x81C547)
     static let SCTitle = UIColor(hex: 0x333333)
     static let SCSeparator = UIColor(hex: 0xE5E5E5)
-    static let SCBlueHighLight = UIColor(hex: 0x556B96)
+    static let SCBlue = UIColor(hex: 0x556B96)
     static let SCBackground = UIColor(hex: 0xEFEFF4)
     static let SCPlaceholder = UIColor(hex: 0xB3B3B3)
     static let SCNumber = UIColor(hex: 0x878C97)

@@ -12,9 +12,9 @@ class SCTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tabBar.barTintColor = .navBarColor
+        self.tabBar.barTintColor = .SCNavigation
         self.tabBar.isTranslucent = false
-        self.tabBar.tintColor = .SCGreenHighLight
+        self.tabBar.tintColor = .SCGreen
         self.tabBar.unselectedItemTintColor = .white
         
         let compositeModelsController = CompositeModelController()

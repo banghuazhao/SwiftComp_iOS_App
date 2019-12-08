@@ -10,7 +10,6 @@ import CoreData
 import UIKit
 
 class CompositeModelController: UIViewController {
-    
     let compositeModels = CompoisteModels()
 
     lazy var tableView: UITableView = {
@@ -37,7 +36,7 @@ class CompositeModelController: UIViewController {
         super.viewWillAppear(animated)
 
         tabBarController?.title = "Composite Models"
-        
+
         if !Constant.isIPhone {
             if let indexPath = tableView.indexPathForSelectedRow, indexPath != IndexPath(row: 0, section: 0) {
                 tableView(tableView, didSelectRowAt: indexPath)
@@ -46,14 +45,6 @@ class CompositeModelController: UIViewController {
                 tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 0))
             }
         }
-
-        editNavigationBar()
-    }
-
-    // MARK: set up navigation bar
-
-    func editNavigationBar() {
-        navigationController?.setToolbarHidden(true, animated: false)
     }
 }
 
@@ -77,14 +68,14 @@ extension CompositeModelController: UITableViewDataSource {
         }
         return 0
     }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 2 {
             return 60
         }
         return .leastNonzeroMagnitude
     }
-    
+
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView(frame: .zero)
     }
@@ -156,12 +147,6 @@ extension CompositeModelController: UITableViewDelegate {
                     navigationController?.pushViewController(HoneycombSandwichController(), animated: true)
                 } else {
                     showDetailViewController(SCNavigationController(rootViewController: HoneycombSandwichController()), sender: self)
-                }
-            } else if indexPath.row == 1 {
-                if Constant.isIPhone {
-                    navigationController?.pushViewController(HomogenizationController(), animated: true)
-                } else {
-                    showDetailViewController(SCNavigationController(rootViewController: HomogenizationController()), sender: self)
                 }
             }
         default:

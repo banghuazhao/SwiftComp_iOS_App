@@ -37,10 +37,9 @@ class CompoisteModels {
         let laminate = CompositeModel(name: "Laminate", subname: "1D SG of laminate", image: #imageLiteral(resourceName: "laminate"), structrualModels: [.plate, .solid])
         let UDFRC = CompositeModel(name: "Unidirectional Fiber Reinforced Composite (UDFRC)", subname: "2D SG of square pack microstructure", image: #imageLiteral(resourceName: "spuarePack"), structrualModels: [.beam, .plate, .solid])
         let honeycombSandwich = CompositeModel(name: "Honeycomb Sandwich Structure", subname: "3D SG of honeycomb sandwich", image: #imageLiteral(resourceName: "honeycomb_sandwich"), structrualModels: [.beam, .plate])
-        let experiment = CompositeModel(name: "Experiment", subname: "3D SG of experiment", image: #imageLiteral(resourceName: "honeycomb_sandwich"), structrualModels: [.beam, .plate, .solid])
 
         SG1D = [laminate]
         SG2D = [UDFRC]
-        SG3D = [honeycombSandwich, experiment]
+        SG3D = [honeycombSandwich]
     }
 }

@@ -24,6 +24,8 @@ class SCAnalysisButton: UIButton {
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
         return label
     }()
 
@@ -44,7 +46,7 @@ class SCAnalysisButton: UIButton {
     }
 
     private func setupView() {
-        backgroundColor = .SCGreenHighLight
+        backgroundColor = .SCGreen
         layer.cornerRadius = 6
 
         snp.makeConstraints { make in
@@ -55,7 +57,8 @@ class SCAnalysisButton: UIButton {
         addSubview(toggleImageView)
         
         buttonTitleLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.left.right.equalToSuperview().inset(48)
         }
         
         toggleImageView.snp.makeConstraints { make in

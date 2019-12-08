@@ -6,7 +6,6 @@
 //  Copyright © 2019 Banghua Zhao. All rights reserved.
 //
 
-import JGProgressHUD
 import UIKit
 
 class SwiftCompTemplateViewController: UIViewController, UINavigationControllerDelegate {
@@ -578,7 +577,7 @@ class SwiftCompTemplateViewController: UIViewController, UINavigationControllerD
     }
 
     // calculate
-    var hud = JGProgressHUD(style: .dark)
+//    var hud = JGProgressHUD(style: .dark)
     var workItem: DispatchWorkItem?
     @objc func calculate(_ sender: UIButton) {
         sender.isEnabled = false
@@ -614,16 +613,16 @@ class SwiftCompTemplateViewController: UIViewController, UINavigationControllerD
             let calculateOperationQueue = OperationQueue()
             let operation = BlockOperation()
 
-            hud = JGProgressHUD(style: .dark)
-            hud.textLabel.text = "Calculating"
-            hud.detailTextLabel.text = "Tap to cancel"
-            hud.tapOnHUDViewBlock = { _ in
-                operation.cancel()
-                self.hud.dismiss(afterDelay: 0)
-                return
-            }
-            hud.show(in: view, animated: true)
-            hud.backgroundColor = .init(displayP3Red: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
+//            hud = JGProgressHUD(style: .dark)
+//            hud.textLabel.text = "Calculating"
+//            hud.detailTextLabel.text = "Tap to cancel"
+//            hud.tapOnHUDViewBlock = { _ in
+//                operation.cancel()
+//                self.hud.dismiss(afterDelay: 0)
+//                return
+//            }
+//            hud.show(in: view, animated: true)
+//            hud.backgroundColor = .init(displayP3Red: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
 
             operation.addExecutionBlock {
                 self.swiftcompCalculationStatus = self.calculateResultBySwiftComp()
@@ -637,7 +636,7 @@ class SwiftCompTemplateViewController: UIViewController, UINavigationControllerD
 
                 DispatchQueue.main.async {
                     if self.swiftcompCalculationStatus != .success {
-                        self.hud.dismiss(afterDelay: 0.0)
+//                        self.hud.dismiss(afterDelay: 0.0)
 
                         swiftcompCalculationErrorHandler(vc: self, swiftcompCalculationStatus: self.swiftcompCalculationStatus)
 
@@ -648,13 +647,13 @@ class SwiftCompTemplateViewController: UIViewController, UINavigationControllerD
                         resultViewController.resultData = self.resultData
 
                         UIView.animate(withDuration: 0.1, animations: {
-                            self.hud.detailTextLabel.text = ""
-                            self.hud.textLabel.text = "Finished"
-                            self.hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+//                            self.hud.detailTextLabel.text = ""
+//                            self.hud.textLabel.text = "Finished"
+//                            self.hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                         })
 
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.hud.dismiss(afterDelay: 0)
+//                            self.hud.dismiss(afterDelay: 0)
                             self.navigationController?.pushViewController(resultViewController, animated: true)
                         }
                     }

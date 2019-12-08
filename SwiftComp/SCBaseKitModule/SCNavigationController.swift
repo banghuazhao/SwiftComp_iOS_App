@@ -15,13 +15,13 @@ class SCNavigationController: UINavigationController {
 
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        navigationBar.barTintColor = .navBarColor
+        navigationBar.barTintColor = .SCNavigation
         navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationBar.tintColor = .white
         navigationBar.isTranslucent = false
-        toolbar.barTintColor = .navBarColor
+        toolbar.barTintColor = .SCNavigation
         toolbar.isTranslucent = false
-        toolbar.tintColor = .greenThemeColor
+        toolbar.tintColor = .SCGreen
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -54,7 +54,7 @@ class SCCalculateButton: UIButton {
 
     private func setupView() {
         layer.cornerRadius = intrinsicContentSize.height / 2
-        backgroundColor = .SCGreenHighLight
+        backgroundColor = .SCGreen
 
         snp.makeConstraints { make in
             make.width.equalTo(260)
@@ -80,10 +80,10 @@ class SCCalculateButton: UIButton {
         removeTarget(nil, action: nil, for: .allEvents)
         switch style {
         case .cloud:
-            backgroundColor = .SCGreenHighLight
+            backgroundColor = .SCGreen
             cloudImageView.isHidden = false
         case .local:
-            backgroundColor = .SCGreenHighLight
+            backgroundColor = .SCGreen
             cloudImageView.isHidden = true
         case .noInternet:
             backgroundColor = .gray
