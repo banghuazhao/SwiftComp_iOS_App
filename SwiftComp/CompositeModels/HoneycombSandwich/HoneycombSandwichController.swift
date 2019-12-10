@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 import Moya
 import SwiftyJSON
@@ -164,7 +165,7 @@ extension HoneycombSandwichController {
 
     private func resetCalculationBar() {
         if method == .swiftComp {
-            if NetworkManager.sharedInstance.reachability.connection != .none {
+            if NetworkManager.sharedInstance.reachability.connection != .unavailable {
                 calculationButton.changeStyle(style: .cloud)
                 calculationButton.addTarget(self, action: #selector(swiftCompCalculate), for: .touchUpInside)
             } else {
@@ -369,6 +370,7 @@ extension HoneycombSandwichController: UITableViewDelegate, UITableViewDataSourc
             } else {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "StackingSequenceCell") as? StackingSequenceCell else { return UITableViewCell() }
                 cell.stackingSequence = faceSheetGeometry
+                cell.delegate = self
                 return cell
             }
 
@@ -510,9 +512,125 @@ extension HoneycombSandwichController: TypeOfAnalysisCellDelegate {
     }
 }
 
+// MARK: - StackingSequenceCellDelegate
+
+extension HoneycombSandwichController: StackingSequenceCellDelegate {
+    func importButtonTapped() {
+        let ac = UIAlertController(title: "Save Stacking Sequence", message: "Stacking sequence to be saved:\n\(self.faceSheetGeometry.stackingSequenceText)", preferredStyle: UIAlertController.Style.alert)
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        ac.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self](_) in
+            guard let self = self else { return }
+            let userStackingSequence = NSEntityDescription.insertNewObject(forEntityName: "UserStackingSequence", into: CoreDataManager.sharedContext) as! UserStackingSequence
+            userStackingSequence.setValue(self.faceSheetGeometry.stackingSequenceText, forKey: "name")
+            userStackingSequence.setValue(self.faceSheetGeometry.stackingSequenceText, forKey: "stackingSequence")
+            // perform the save
+            do {
+                try CoreDataManager.sharedContext.save()
+
+                // success
+                self.showSavedHuD()
+
+            } catch let saveErr {
+                print("Failed to save stackign sequence:", saveErr)
+            }
+            
+        }))
+        present(ac, animated: true, completion: nil)
+    }
+    
+    func exportButtonTapped() {
+        let stackingSequenceDataBaseVC = StackingSequenceDataBaseVC()
+
+        stackingSequenceDataBaseVC.delegate = self
+
+        let navController = SCNavigationController(rootViewController: stackingSequenceDataBaseVC)
+
+        present(navController, animated: true, completion: nil)
+    }
+}
+
+// MARK: - StackingSequenceDataBaseVCDelegate
+
+extension HoneycombSandwichController: StackingSequenceDataBaseVCDelegate {
+    func didSelectStackingSequence(stackingSequence: String) {
+        self.faceSheetGeometry.stackingSequenceText = stackingSequence
+        tableView.reloadRows(at: [IndexPath(row: 1, section: 1)], with: .automatic)
+    }
+}
+
 // MARK: - MaterialCellDelegate
 
 extension HoneycombSandwichController: MaterialCellDelegate {
+    func importButtonTapped(sectionTitle: String) {
+        if sectionTitle == "Core Material" {
+            let ac = UIAlertController(title: "Save Core Material", message: "Core Material to be saved:\n\(coreMaterials.selectedMaterial.name)", preferredStyle: UIAlertController.Style.alert)
+            ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            ac.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                let userMaterial = NSEntityDescription.insertNewObject(forEntityName: "UserCoreMaterial", into: CoreDataManager.sharedContext) as! UserCoreMaterial
+                userMaterial.setValue(self.coreMaterials.selectedMaterial.name, forKey: "name")
+                userMaterial.setValue(self.coreMaterials.selectedMaterial.getMaterialTypeText(), forKey: "type")
+
+                var materialProperties: [String: String] = [:]
+                self.coreMaterials.selectedMaterial.materialProperties.forEach {
+                    materialProperties[$0.name.rawValue] = $0.valueText
+                }
+                userMaterial.setValue(materialProperties, forKey: "properties")
+                // perform the save
+                do {
+                    try CoreDataManager.sharedContext.save()
+
+                    // success
+                    self.showSavedHuD()
+
+                } catch let saveErr {
+                    print(saveErr)
+                }
+            }))
+            present(ac, animated: true, completion: nil)
+        } else {
+            let ac = UIAlertController(title: "Save Facesheet (Lamina) Material", message: "Facesheet Material to be saved:\n\(facesheetMaterials.selectedMaterial.name)", preferredStyle: UIAlertController.Style.alert)
+              ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+              ac.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self] _ in
+                  guard let self = self else { return }
+                  let userMaterial = NSEntityDescription.insertNewObject(forEntityName: "UserLaminaMaterial", into: CoreDataManager.sharedContext) as! UserLaminaMaterial
+                  userMaterial.setValue(self.facesheetMaterials.selectedMaterial.name, forKey: "name")
+                  userMaterial.setValue(self.facesheetMaterials.selectedMaterial.getMaterialTypeText(), forKey: "type")
+
+                  var materialProperties: [String: String] = [:]
+                  self.facesheetMaterials.selectedMaterial.materialProperties.forEach {
+                      materialProperties[$0.name.rawValue] = $0.valueText
+                  }
+                  userMaterial.setValue(materialProperties, forKey: "properties")
+                  // perform the save
+                  do {
+                      try CoreDataManager.sharedContext.save()
+
+                      // success
+                      self.showSavedHuD()
+
+                  } catch let saveErr {
+                      print(saveErr)
+                  }
+              }))
+              present(ac, animated: true, completion: nil)
+        }
+    }
+    
+    func exportButtonTapped(sectionTitle: String) {
+        if sectionTitle == "Core Material" {
+            let coreMaterialDataBaseVC = CoreMaterialDataBaseVC()
+            coreMaterialDataBaseVC.delegate = self
+            let navController = SCNavigationController(rootViewController: coreMaterialDataBaseVC)
+            present(navController, animated: true, completion: nil)
+        } else {
+            let laminaMaterialDataBaseVC = LaminaMaterialDataBaseVC()
+            laminaMaterialDataBaseVC.delegate = self
+            let navController = SCNavigationController(rootViewController: laminaMaterialDataBaseVC)
+            present(navController, animated: true, completion: nil)
+        }
+    }
+    
     func changeSelectedMaterialType(index: Int, materialTitle: String?) {
         if materialTitle == "Core Material" {
             tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .automatic)
@@ -521,3 +639,46 @@ extension HoneycombSandwichController: MaterialCellDelegate {
         }
     }
 }
+
+// MARK: - CoreMaterialDataBaseVCDelegate
+
+extension HoneycombSandwichController: CoreMaterialDataBaseVCDelegate {
+    func didSelectCoreMaterial(material: Material) {
+        material.changeAnalysisType(to: typeOfAnalysis)
+        var newSelectedIndex = 0
+        switch material.materialType {
+        case .isotropic(_):
+            newSelectedIndex = 0
+        case .transverselyIsotropic(_):
+            newSelectedIndex = 1
+        case .orthotropic(_):
+            newSelectedIndex = 2
+        default:
+            break
+        }
+        coreMaterials.changeSelectedMaterial(newMaterial: material, newSelectedIndex: newSelectedIndex)
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .automatic)
+    }
+}
+
+// MARK: - LaminaMaterialDataBaseVCDelegate
+
+extension HoneycombSandwichController: LaminaMaterialDataBaseVCDelegate {
+    func didSelectLaminaMaterial(material: Material) {
+        material.changeAnalysisType(to: typeOfAnalysis)
+        var newSelectedIndex = 0
+        switch material.materialType {
+        case .transverselyIsotropic(_):
+            newSelectedIndex = 0
+        case .orthotropic(_):
+            newSelectedIndex = 1
+        case .anisotropic(_):
+            newSelectedIndex = 2
+        default:
+            break
+        }
+        facesheetMaterials.changeSelectedMaterial(newMaterial: material, newSelectedIndex: newSelectedIndex)
+        tableView.reloadRows(at: [IndexPath(row: 1, section: 2)], with: .automatic)
+    }
+}
+

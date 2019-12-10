@@ -9,7 +9,7 @@
 import Foundation
 
 class MaterialProperty {
-    enum Name {
+    enum Name: String {
         case E, nu
         case E1, E2, E3, G12, G13, G23, nu12, nu13, nu23
         case eta121, eta122, eta123, eta1323, eta2313
@@ -19,7 +19,7 @@ class MaterialProperty {
     }
 
     let name: Name
-    var nameText: String {
+    var nameLabel: String {
         switch name {
         case .E:
             return "Young's Modulus E"

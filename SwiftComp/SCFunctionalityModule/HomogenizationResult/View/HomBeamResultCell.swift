@@ -89,6 +89,13 @@ class HomBeamResultCell: UITableViewCell {
         return label
     }()
 
+    private lazy var explainButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
     private lazy var effectiveBeamStiffness4by4CollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.layer.borderWidth = 1
@@ -138,7 +145,6 @@ class HomBeamResultCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 // MARK: - private function
@@ -162,6 +168,7 @@ extension HomBeamResultCell {
         }
 
         cellView.addSubview(titleLabel)
+        cellView.addSubview(explainButton)
         cellView.addSubview(effectiveBeamStiffness4by4CollectionView)
         cellView.addSubview(effectiveBeamStiffness6by6CollectionView)
         cellView.addSubview(thermalCoefficientsTableView)
@@ -171,12 +178,17 @@ extension HomBeamResultCell {
             make.height.equalTo(21)
         }
 
+        explainButton.snp.makeConstraints { make in
+            make.top.right.equalToSuperview().inset(16)
+            make.size.equalTo(21)
+        }
+
         effectiveBeamStiffness4by4CollectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.left.right.equalToSuperview().inset(16)
             make.height.equalTo(effectiveBeamStiffness4by4CollectionViewHeight)
         }
-        
+
         effectiveBeamStiffness6by6CollectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.left.right.equalToSuperview().inset(16)
@@ -313,5 +325,66 @@ extension HomBeamResultCell: UITableViewDataSource, UITableViewDelegate {
         default:
             return UITableViewCell()
         }
+    }
+}
+
+// MARK: - action
+
+extension HomBeamResultCell {
+    @objc private func explainButtonTapped() {
+        let title = "Beam Model Result"
+
+        let explainDetialView: UIView = UIView()
+
+        let explainLabel1 = UILabel()
+        explainLabel1.numberOfLines = 0
+        explainLabel1.lineBreakMode = .byWordWrapping
+        explainLabel1.font = UIFont.systemFont(ofSize: 14)
+        explainDetialView.addSubview(explainLabel1)
+        explainLabel1.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+        }
+        explainLabel1.text = """
+        • Effective Beam Stiffness Matrix:
+        The beam constitutive relations of the Euler-Bernoulli beam model using the following four equations and the 4 by 4 matrix is commonly called the beam stiffness matrix.
+        """
+
+        let explainFigure1: UIImageView = UIImageView()
+        explainFigure1.contentMode = .scaleAspectFit
+        explainFigure1.image = UIImage(named: "ImageBundle.bundle/equation_eulerBernoulli_beam_model.png")
+        explainDetialView.addSubview(explainFigure1)
+        explainFigure1.snp.makeConstraints { make in
+            make.top.equalTo(explainLabel1.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(72)
+        }
+
+        let explainLabel2 = UILabel()
+        explainLabel2.numberOfLines = 0
+        explainLabel2.lineBreakMode = .byWordWrapping
+        explainLabel2.font = UIFont.systemFont(ofSize: 14)
+        explainDetialView.addSubview(explainLabel2)
+        explainLabel2.snp.makeConstraints { make in
+            make.top.equalTo(explainFigure1.snp.bottom).offset(16)
+            make.left.right.equalToSuperview()
+        }
+        explainLabel2.text = """
+        • Effective Beam Stiffness Matrix (Refined):
+        The beam constitutive relations of the Timoshenko beam model using the following six equations.
+        """
+
+        let explainFigure2: UIImageView = UIImageView()
+        explainFigure2.contentMode = .scaleAspectFit
+        explainFigure2.image = UIImage(named: "ImageBundle.bundle/equation_timoshenko_beam_model.png")
+        explainDetialView.addSubview(explainFigure2)
+        explainFigure2.snp.makeConstraints { make in
+            make.top.equalTo(explainLabel2.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(96)
+            make.bottom.equalToSuperview()
+        }
+
+        let popupWindow = SCPopupWindow(title: title, customContentView: explainDetialView)
+        popupWindow.show(completion: nil)
     }
 }

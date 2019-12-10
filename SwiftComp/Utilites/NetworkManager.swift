@@ -57,14 +57,14 @@ class NetworkManager: NSObject {
 
     // Network is reachable
     static func isReachable(completed: @escaping (NetworkManager) -> Void) {
-        if NetworkManager.sharedInstance.reachability.connection != .none {
+        if NetworkManager.sharedInstance.reachability.connection != .unavailable {
             completed(NetworkManager.sharedInstance)
         }
     }
 
     // Network is unreachable
     static func isUnreachable(completed: @escaping (NetworkManager) -> Void) {
-        if NetworkManager.sharedInstance.reachability.connection == .none {
+        if NetworkManager.sharedInstance.reachability.connection == .unavailable {
             completed(NetworkManager.sharedInstance)
         }
     }
@@ -82,41 +82,4 @@ class NetworkManager: NSObject {
             completed(NetworkManager.sharedInstance)
         }
     }
-}
-
-
-func fetchSwiftCompHomogenizationResultJSON(API_URL: String, timeoutIntervalForRequest: Double, completion: @escaping (Result<SwiftCompHomogenizationResult, swiftcompCalculationError>) -> Void) {
-    guard let urlString = API_URL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
-
-    guard let url = URL(string: urlString) else { return }
-
-    let sessionConfig = URLSessionConfiguration.default
-    sessionConfig.timeoutIntervalForRequest = timeoutIntervalForRequest
-
-    URLSession(configuration: sessionConfig).dataTask(with: url) { data, _, err in
-
-        if let err = err {
-            if err._code == NSURLErrorTimedOut {
-                print("Time Out: \(err)")
-                completion(.failure(.timeOutError))
-                return
-            }
-
-            print(err)
-            completion(.failure(.networkError))
-            return
-        }
-
-        // successful
-        do {
-            let result = try JSONDecoder().decode(SwiftCompHomogenizationResult.self, from: data!)
-            completion(.success(result))
-
-        } catch let jsonError {
-            print(jsonError)
-            completion(.failure(.parseJSONError))
-            return
-        }
-
-    }.resume()
 }

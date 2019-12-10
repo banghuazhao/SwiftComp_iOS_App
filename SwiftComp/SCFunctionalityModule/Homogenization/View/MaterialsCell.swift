@@ -10,6 +10,8 @@ import UIKit
 
 protocol MaterialCellDelegate: AnyObject {
     func changeSelectedMaterialType(index: Int, materialTitle: String?)
+    func importButtonTapped(sectionTitle: String)
+    func exportButtonTapped(sectionTitle: String)
 }
 
 class MaterialsCell: UITableViewCell {
@@ -69,6 +71,27 @@ class MaterialsCell: UITableViewCell {
         label.textAlignment = .left
         return label
     }()
+    
+    private lazy var explainButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var exportButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "export"), for: .normal)
+        button.addTarget(self, action: #selector(exportButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var importButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "import"), for: .normal)
+        button.addTarget(self, action: #selector(importButtonTapped), for: .touchUpInside)
+        return button
+    }()
 
     private lazy var materialTypeControl: UISegmentedControl = {
         let sc = UISegmentedControl()
@@ -126,6 +149,9 @@ extension MaterialsCell {
         }
 
         cellView.addSubview(titleLabel)
+        cellView.addSubview(explainButton)
+        cellView.addSubview(exportButton)
+        cellView.addSubview(importButton)
         cellView.addSubview(materialTypeControl)
         cellView.addSubview(materialCard)
 
@@ -133,7 +159,20 @@ extension MaterialsCell {
             make.top.left.right.equalToSuperview().inset(16)
             make.height.equalTo(21)
         }
-
+        explainButton.snp.makeConstraints { (make) in
+             make.top.right.equalToSuperview().inset(16)
+             make.size.equalTo(21)
+        }
+        importButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16+21+20)
+            make.size.equalTo(21)
+        }
+        exportButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16+21+20+21+20)
+            make.size.equalTo(21)
+        }
         materialTypeControl.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(16)
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
@@ -155,6 +194,38 @@ extension MaterialsCell {
     @objc private func materialTypeControlChange(_ sender: UISegmentedControl) {
         materials?.selectedIndex = sender.selectedSegmentIndex
         delegate?.changeSelectedMaterialType(index: sender.selectedSegmentIndex, materialTitle: titleLabel.text)
+    }
+    
+    @objc private func explainButtonTapped() {
+        let title = "Material"
+
+        let message = """
+            • Isotropic Material:
+            Elastic: E, nu
+            Thermoelastic: ɑ
+
+            • Transversely Material:
+            Elastic: E1, E2, G12, nu12, nu23
+            Thermoelastic: ɑ11, ɑ22
+
+            • Orthotropic Material:
+            Elastic: E1, E2, E3, G12, G13, G23, nu12, nu13, nu23
+            Thermoelastic: ɑ11, ɑ22, ɑ33
+
+            • Anisotropic Material:
+            Elastic: C11, C12, C13, C14, C15, C16, C22, C23, C24, C25, C26, C33, C34, C35, C36, C44, C45, C46, C55, C56, C66
+            Thermoelastic: ɑ11, ɑ22, ɑ33, ɑ23, ɑ13, ɑ12
+            """
+        let popupWindow = SCPopupWindow(title: title, message: message)
+        popupWindow.show(completion: nil)
+    }
+    
+    @objc private func exportButtonTapped() {
+        delegate?.exportButtonTapped(sectionTitle: materials?.sectionTitle ?? "Material")
+    }
+    
+    @objc private func importButtonTapped() {
+        delegate?.importButtonTapped(sectionTitle: materials?.sectionTitle ?? "Material")
     }
 }
 

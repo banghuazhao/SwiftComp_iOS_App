@@ -12,6 +12,7 @@ let context = CoreDataManager.shared.persistentContainer.viewContext
 
 class CoreDataManager {
     static let shared = CoreDataManager()
+    static let sharedContext = CoreDataManager.shared.persistentContainer.viewContext
 
     // MARK: - Core Data stack
 
@@ -55,6 +56,27 @@ class CoreDataManager {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
+        }
+    }
+}
+
+// MARK: - clearCoreDataStore
+
+func clearCoreDataStore() {
+    let context = CoreDataManager.shared.persistentContainer.viewContext
+
+    for i in 0 ... CoreDataManager.shared.persistentContainer.managedObjectModel.entities.count - 1 {
+        let entity = CoreDataManager.shared.persistentContainer.managedObjectModel.entities[i]
+
+        do {
+            let query = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name!)
+            let deleterequest = NSBatchDeleteRequest(fetchRequest: query)
+            try context.execute(deleterequest)
+            try context.save()
+
+        } catch let error as NSError {
+            print("Error: \(error.localizedDescription)")
+            abort()
         }
     }
 }

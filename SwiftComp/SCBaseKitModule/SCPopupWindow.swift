@@ -9,9 +9,18 @@
 import BZPopupWindow
 
 class SCPopupWindow: BZPopupWindow {
-    override var titleAligment: NSTextAlignment {
+    override var messageAligment: NSTextAlignment {
         get {
             return .left
+        }
+        set {
+            
+        }
+    }
+    
+    override var width: CGFloat {
+        get {
+            return 320
         }
         set {
             

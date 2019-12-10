@@ -55,7 +55,7 @@ class StructuralModelCell: UITableViewCell {
                 }
                 hideSubmodel()
             default:
-                return
+                break
             }
             platek12TextField.text = structuralModel?.plateExtraInput.k12Text
             platek21TextField.text = structuralModel?.plateExtraInput.k21Text
@@ -71,6 +71,96 @@ class StructuralModelCell: UITableViewCell {
             beamk13TextField.textColor = structuralModel?.beamExtraInput.k13 != nil ? .SCTitle : .red
             beamCosAngle1TextField.textColor = structuralModel?.beamExtraInput.cosAngle1 != nil ? .SCTitle : .red
             beamCosAngle2TextField.textColor = structuralModel?.beamExtraInput.cosAngle2 != nil ? .SCTitle : .red
+            
+            // MARK: - explain related didset
+            switch structuralModel?.model {
+            case .beam(.eulerBernoulli):
+                explain1 = """
+                    • Beam Model:
+                    The structure is modeled as a beam. The results will give beam stiffness matrix, which can be used for beam element.
+                    """
+                explainTitle2 = "Beam Submodel"
+                explain2 = """
+                   • Euler-Bernoulli Model:
+                   Euler-Bernoulli model was originally developed based on a set of ad hoc assumptions including the cross section being rigid in plane, perpendicular to the reference line, and uniaxial stress assumption. The result of give 4 by 4 beam stiffenss matrix.
+                   """
+                explainTitle3 = "Beam Initial Twist/Curvatures"
+                explain3 = """
+                    k11, k12, and k13 are defined as the initial twist(k11) and curvatures (k12, k13) of the beam.
+
+                    If the structure is initially straight, zeroes should be provided instead.
+                    """
+                explain4 = """
+                    cos(angle1) and cos(angle2) are two real numbers to specify a SG with oblique cross-sections.
+
+                    The first number is cosine of the angle between normal of the oblique section (y1) and beam axis x1. The second number is cosine of the angle between y2 of the oblique section and beam axis (x1).
+
+                    The summation of the square of these two numbers should not be greater than 1.0 in double precision. The inputs including coordinates, material properties, etc. and the outputs including mass matrix, stiness matrix, etc. are given in the oblique system, the yi coordinate system. For normal cross-sections, we provide 1.0 0.0 on this line instead.
+                    """
+            case .beam(.timoshenko):
+                explain1 = """
+                    • Beam Model:
+                    The structure is modeled as a beam. The results will give beam stiffness matrix, which can be used for beam element.
+                    """
+                explainTitle2 = "Beam Submodel"
+                explain2 = """
+                   • Timoshenko Model:
+                   The refined model for the plate when the thickness of the panel is not very small with respect to the in-plane dimensions. The result of give 6 by 6 beam stiffenss matrix.
+                   """
+                explainTitle3 = "Beam Initial Twist/Curvatures"
+                explain3 = """
+                    k11, k12, and k13 are defined as the initial twist(k11) and curvatures (k12, k13) of the beam.
+
+                    If the structure is initially straight, zeroes should be provided instead.
+                    """
+                explain4 = """
+                    cos(angle1) and cos(angle2) are two real numbers to specify a SG with oblique cross-sections.
+
+                    The first number is cosine of the angle between normal of the oblique section (y1) and beam axis x1. The second number is cosine of the angle between y2 of the oblique section and beam axis (x1).
+
+                    The summation of the square of these two numbers should not be greater than 1.0 in double precision. The inputs including coordinates, material properties, etc. and the outputs including mass matrix, stiness matrix, etc. are given in the oblique system, the yi coordinate system. For normal cross-sections, we provide 1.0 0.0 on this line instead.
+                    """
+            case .plate(.kirchhoffLove):
+                explain1 = """
+                    • Plate Model:
+                    The structure modeled as a plate. The results will give A, B, D matrices, in-plane properties and flexural properties, which can be used for plate element.
+                    """
+                explainTitle2 = "Plate Submodel"
+                explain2 = """
+                   • Kirchho-Love Model:
+                   Classical plate model for flat panels based on a set of ad hoc assumptions including the thickness being rigid in the thickness direction, perpendicular to the reference surface, and plane stress assumption. The result will give A, B, and D matrices
+                   """
+                explainTitle3 = "Plate Initial Curvatures"
+                explain3 = """
+                    k12 and k21 are defined as the initial curvatures of the plate so that the plate is modeled as a shell.
+
+                    If the structure is initially straight, zeroes should be provided instead.
+                    """
+            case .plate(.reissnerMindlin):
+                explain1 = """
+                    • Plate Model:
+                    The structure modeled as a plate. The results will give A, B, D matrices, in-plane properties and flexural properties, which can be used for plate element.
+                    """
+                explainTitle2 = "Plate Submodel"
+                explain2 = """
+                   • Reissner-Mindlin Model:
+                   The refined model for the plate when the thickness of the panel is not very small with respect to the in-plane dimensions. The result will give A, B, and D matrices and transversely sheasr stiffenss matrix.
+                   """
+                explainTitle3 = "Plate Initial Curvatures"
+                explain3 = """
+                    k12 and k21 are defined as the initial curvatures of the plate so that the plate is modeled as a shell.
+
+                    If the structure is initially straight, zeroes should be provided instead.
+                    """
+            case .solid(.cauchyContinuum):
+                explain1 = """
+                    • Solid Model:
+                    The structure is modeled as a solid. The results will give solid stiffness matrix and engineering constants, which can be used for brick element.
+                    """
+            default:
+                break
+            }
+            
         }
     }
 
@@ -83,6 +173,43 @@ class StructuralModelCell: UITableViewCell {
         static let threeSection = twoSection + 1 + parameterSection
         static let fourSection = threeSection + 1 + parameterSection
     }
+
+    // MARK: - explain related
+
+    private var explain1: String = ""
+    private var explain2: String = ""
+    private var explainTitle2: String = ""
+    private var explain3: String = ""
+    private var explainTitle3: String = ""
+    private var explain4: String = ""
+
+    private lazy var explainButton1: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButton1Tapped), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var explainButton2: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButton2Tapped), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var explainButton3: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButton3Tapped), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var explainButton4: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButton4Tapped), for: .touchUpInside)
+        return button
+    }()
 
     // MARK: - first section
 
@@ -395,11 +522,35 @@ extension StructuralModelCell {
         }
 
         cellView.addSubview(titleLabel)
+        cellView.addSubviews(explainButton1, explainButton2, explainButton3, explainButton4)
         cellView.addSubview(analysisButton)
 
         titleLabel.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview().inset(16)
             make.height.equalTo(21)
+        }
+
+        explainButton1.snp.makeConstraints { make in
+            make.top.right.equalToSuperview().inset(16)
+            make.size.equalTo(21)
+        }
+
+        explainButton2.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(CellHeight.oneSection + 17)
+            make.right.equalToSuperview().inset(16)
+            make.size.equalTo(21)
+        }
+
+        explainButton3.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(CellHeight.twoSection + 17)
+            make.right.equalToSuperview().inset(16)
+            make.size.equalTo(21)
+        }
+
+        explainButton4.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(CellHeight.threeSection + 17)
+            make.right.equalToSuperview().inset(16)
+            make.size.equalTo(21)
         }
 
         analysisButton.snp.makeConstraints { make in
@@ -647,6 +798,9 @@ extension StructuralModelCell {
         plateVerticalSeparatror.isHidden = true
         platek21Label.isHidden = true
         platek21TextField.isHidden = true
+        explainButton2.isHidden = true
+        explainButton3.isHidden = true
+        explainButton4.isHidden = true
     }
 
     private func showBeamSubmodel() {
@@ -671,6 +825,9 @@ extension StructuralModelCell {
         beamVerticalSeparatror3.isHidden = false
         beamCosAngle2Label.isHidden = false
         beamCosAngle2TextField.isHidden = false
+        explainButton2.isHidden = false
+        explainButton3.isHidden = false
+        explainButton4.isHidden = false
     }
 
     private func showPlateSubmodel() {
@@ -685,6 +842,8 @@ extension StructuralModelCell {
         plateVerticalSeparatror.isHidden = false
         platek21Label.isHidden = false
         platek21TextField.isHidden = false
+        explainButton2.isHidden = false
+        explainButton3.isHidden = false
     }
 }
 
@@ -747,5 +906,27 @@ extension StructuralModelCell {
         let text = textField.text ?? ""
         structuralModel?.plateExtraInput.k21Text = text
         textField.textColor = Double(text) != nil ? .SCTitle : .red
+    }
+
+    @objc private func explainButton1Tapped() {
+        let title = "Structrual Model"
+        let popupWindow = SCPopupWindow(title: title, message: explain1)
+        popupWindow.show(completion: nil)
+    }
+
+    @objc private func explainButton2Tapped() {
+        let popupWindow = SCPopupWindow(title: explainTitle2, message: explain2)
+        popupWindow.show(completion: nil)
+    }
+
+    @objc private func explainButton3Tapped() {
+        let popupWindow = SCPopupWindow(title: explainTitle3, message: explain3)
+        popupWindow.show(completion: nil)
+    }
+
+    @objc private func explainButton4Tapped() {
+        let title = "Beam Oblique Cross Section"
+        let popupWindow = SCPopupWindow(title: title, message: explain4)
+        popupWindow.show(completion: nil)
     }
 }

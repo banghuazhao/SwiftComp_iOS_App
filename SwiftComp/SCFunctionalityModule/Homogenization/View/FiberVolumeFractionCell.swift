@@ -19,20 +19,20 @@ class FiberVolumeFractionCell: UITableViewCell {
             drawCell()
         }
     }
-    
+
     var structrualModel: StructuralModel? {
         didSet {
             guard let structrualModel = structrualModel else { return }
             switch structrualModel.model {
             case .solid(.cauchyContinuum):
-                cellView.snp.updateConstraints { (make) in
+                cellView.snp.updateConstraints { make in
                     make.height.equalTo(CellHeight.oneSectionWithoutLegnth)
                 }
                 squareLengthLabel.isHidden = true
                 squareLengthTextField.isHidden = true
                 fiberVolumeFraction?.cellLengthText = "1.0"
             default:
-                cellView.snp.updateConstraints { (make) in
+                cellView.snp.updateConstraints { make in
                     make.height.equalTo(CellHeight.oneSectionWithLegnth)
                 }
                 squareLengthLabel.isHidden = false
@@ -71,6 +71,13 @@ class FiberVolumeFractionCell: UITableViewCell {
         return label
     }()
 
+    private lazy var explainButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
     private lazy var volumeFractionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .SCTitle
@@ -89,7 +96,7 @@ class FiberVolumeFractionCell: UITableViewCell {
         slider.addTarget(self, action: #selector(volumeFractionSliderChange(_:)), for: .valueChanged)
         return slider
     }()
-    
+
     private lazy var squareLengthLabel: UILabel = {
         let label = UILabel()
         label.textColor = .SCTitle
@@ -98,7 +105,7 @@ class FiberVolumeFractionCell: UITableViewCell {
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
-    
+
     private lazy var squareLengthTextField: UITextField = {
         let textField = UITextField()
         textField.textAlignment = .right
@@ -174,6 +181,7 @@ extension FiberVolumeFractionCell {
         }
 
         cellView.addSubview(titleLabel)
+        cellView.addSubview(explainButton)
         cellView.addSubview(volumeFractionView)
         cellView.addSubview(volumeFractionLabel)
         cellView.addSubview(volumeFractionSlider)
@@ -183,6 +191,10 @@ extension FiberVolumeFractionCell {
         titleLabel.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview().inset(16)
             make.height.equalTo(21)
+        }
+        explainButton.snp.makeConstraints { (make) in
+             make.top.right.equalToSuperview().inset(16)
+             make.size.equalTo(21)
         }
         volumeFractionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
@@ -219,10 +231,9 @@ extension FiberVolumeFractionCell {
     // MARK: - darw layup
 
     private func drawCell() {
-        
         volumeFractionFigureView.isHidden = false
         wrongLabel.isHidden = true
-        
+
         guard let fraction = fiberVolumeFraction?.value else {
             wrongLabel.text = """
             Wrong Fiber Volume Fraction
@@ -233,16 +244,16 @@ extension FiberVolumeFractionCell {
             wrongLabel.isHidden = false
             return
         }
-        
+
         guard fiberVolumeFraction?.cellLength != nil else {
             wrongLabel.text = "Wrong Square Pack Length"
             volumeFractionFigureView.isHidden = true
             wrongLabel.isHidden = false
             return
         }
-        
+
         volumeFractionView.subviews.forEach { $0.removeFromSuperview() }
-        
+
         volumeFractionView.addSubview(volumeFractionFigureView)
         volumeFractionView.addSubview(wrongLabel)
 
@@ -257,9 +268,8 @@ extension FiberVolumeFractionCell {
             make.center.equalToSuperview()
         }
 
-        
         volumeFractionFigureView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-        
+
         let size: CGFloat = 120
 
         let square = CAShapeLayer()
@@ -279,50 +289,48 @@ extension FiberVolumeFractionCell {
             volumeFractionFigureView.layer.addSublayer(circle)
         } else {
             let length = CGFloat(sqrt(squareArea * fraction))
-            let centerX = ( size - length ) / 2
+            let centerX = (size - length) / 2
             let subsquare = CAShapeLayer()
             let subsquarePath = UIBezierPath(rect: CGRect(x: centerX, y: centerX, width: length, height: length))
             subsquare.path = subsquarePath.cgPath
             subsquare.fillColor = UIColor.black.cgColor
             volumeFractionFigureView.layer.addSublayer(subsquare)
         }
-        
+
         let rightOffset = size + 32
-        
+
         let fiberFigure = CALayer()
         fiberFigure.frame = CGRect(x: rightOffset, y: 0, width: 20, height: 20)
         fiberFigure.cornerRadius = 4
         fiberFigure.backgroundColor = UIColor.black.cgColor
-        
+
         let fiberLabel = UILabel(frame: CGRect(x: rightOffset + 28, y: 0, width: 60, height: 20))
         fiberLabel.text = "Fiber"
         fiberLabel.font = UIFont.systemFont(ofSize: 14)
         fiberLabel.textColor = .SCTitle
-        
+
         let matrixFigure = CALayer()
         matrixFigure.frame = CGRect(x: rightOffset, y: 36, width: 20, height: 20)
         matrixFigure.cornerRadius = 4
         matrixFigure.backgroundColor = UIColor(red: 216 / 255, green: 216 / 255, blue: 216 / 255, alpha: 1.0).cgColor
-       
+
         let matrixLabel = UILabel(frame: CGRect(x: rightOffset + 28, y: 36, width: 60, height: 20))
         matrixLabel.text = "Matrix"
         matrixLabel.font = UIFont.systemFont(ofSize: 14)
         matrixLabel.textColor = .SCTitle
-        
-        
+
         let fractionValueLabel = UILabel(frame: CGRect(x: rightOffset, y: 72, width: 60, height: 20))
         fractionValueLabel.text = String(format: "%.3f", fraction)
         fractionValueLabel.font = UIFont.systemFont(ofSize: 14)
         fractionValueLabel.textColor = .SCTitle
-        
+
         volumeFractionFigureView.layer.addSublayer(fiberFigure)
         volumeFractionFigureView.addSubview(fiberLabel)
-        
+
         volumeFractionFigureView.layer.addSublayer(matrixFigure)
         volumeFractionFigureView.addSubview(matrixLabel)
-        
-        volumeFractionFigureView.addSubview(fractionValueLabel)
 
+        volumeFractionFigureView.addSubview(fractionValueLabel)
     }
 }
 
@@ -333,11 +341,25 @@ extension FiberVolumeFractionCell {
         fiberVolumeFraction?.value = Double(sender.value)
         drawCell()
     }
-    
+
     @objc private func squareLengthTextFieldEditingChanged(_ textField: UITextField) {
         let text = textField.text ?? ""
         fiberVolumeFraction?.cellLengthText = text
         textField.textColor = fiberVolumeFraction?.cellLength != nil ? .SCTitle : .red
         drawCell()
+    }
+
+    @objc private func explainButtonTapped() {
+        let title = "Fiber Volume Fraction"
+
+        let message = """
+        The fiber volume fraction is defined as the fiber volume divided by the total volume of the composite:
+
+        fiber volume fraction = fiber volume / total volume of the composite
+
+        The fiber is the reinforcing phase in a composite. In fiber direction, it is stiff and strong and serves as the main load carrier. The matrix is the supporting phase in a composite, which protects the reinforcing phase and transfers the load to the reinforcing phases.
+        """
+        let popupWindow = SCPopupWindow(title: title, message: message)
+        popupWindow.show(completion: nil)
     }
 }

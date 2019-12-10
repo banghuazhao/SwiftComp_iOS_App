@@ -26,6 +26,13 @@ extension HomogenizationControllerType where Self: UIViewController {
             hideKeyboardWhenTappedAround()
         #endif
     }
+    
+    func showSavedHuD() {
+        SVProgressHUD.setDefaultMaskType(.none)
+        SVProgressHUD.setMinimumSize(CGSize(width: 128, height: 64))
+        SVProgressHUD.showSuccess(withStatus: "Saved")
+        SVProgressHUD.dismiss(withDelay: 0.5)
+    }
 
     func showCalculationHUD() {
         SVProgressHUD.addTapDismissGuesture()

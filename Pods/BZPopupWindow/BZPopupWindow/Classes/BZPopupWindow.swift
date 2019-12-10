@@ -97,7 +97,7 @@ open class BZPopupWindow: UIViewController {
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .bold),
             NSAttributedString.Key.foregroundColor: UIColor.titleColor])
         let message = NSAttributedString(string: message, attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
             NSAttributedString.Key.foregroundColor: UIColor.messageColor,])
         self.init(image: image, imageSize: imageSize, title: title, message: message)
     }

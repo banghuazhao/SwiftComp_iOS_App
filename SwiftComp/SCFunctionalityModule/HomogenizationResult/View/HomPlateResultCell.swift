@@ -68,6 +68,13 @@ class HomPlateResultCell: UITableViewCell {
         return label
     }()
 
+    private lazy var explainButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
     private lazy var plateStiffnessMatrixCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.layer.borderWidth = 1
@@ -146,7 +153,6 @@ class HomPlateResultCell: UITableViewCell {
     }
 }
 
-
 // MARK: - private function
 
 extension HomPlateResultCell {
@@ -168,6 +174,7 @@ extension HomPlateResultCell {
         }
 
         cellView.addSubview(titleLabel)
+        cellView.addSubview(explainButton)
         cellView.addSubview(plateStiffnessMatrixCollectionView)
         cellView.addSubview(transverseShearStiffnessTableView)
         cellView.addSubview(inPlanePropertiesTableView)
@@ -177,6 +184,11 @@ extension HomPlateResultCell {
         titleLabel.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview().inset(16)
             make.height.equalTo(21)
+        }
+        
+        explainButton.snp.makeConstraints { (make) in
+             make.top.right.equalToSuperview().inset(16)
+             make.size.equalTo(21)
         }
 
         plateStiffnessMatrixCollectionView.snp.makeConstraints { make in
@@ -212,39 +224,39 @@ extension HomPlateResultCell {
 }
 
 // MARK: - HomResultControllerDelegate
+
 extension HomPlateResultCell: HomResultControllerDelegate {
     func homResultControllerSizeChange() {
         plateStiffnessMatrixCollectionView.collectionViewLayout.invalidateLayout()
     }
 }
 
-
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
 extension HomPlateResultCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.frame.width - 7 * 8) / 6.0
         return CGSize(width: width, height: 30)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: UIScreen.main.bounds.width, height: 40)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if (kind == UICollectionView.elementKindSectionHeader) {
+        if kind == UICollectionView.elementKindSectionHeader {
             // Create Header
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HomResultCollectionHeaderView", for: indexPath) as! HomResultCollectionHeaderView
 
@@ -253,7 +265,7 @@ extension HomPlateResultCell: UICollectionViewDelegate, UICollectionViewDataSour
         }
         return UICollectionReusableView()
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return homPlateResult?.effectivePlateStiffnessArray.count ?? 0
     }
@@ -323,5 +335,93 @@ extension HomPlateResultCell: UITableViewDataSource, UITableViewDelegate {
         default:
             return UITableViewCell()
         }
+    }
+}
+
+// MARK: - action
+
+extension HomPlateResultCell {
+    @objc private func explainButtonTapped() {
+        let title = "Plate Model Result"
+
+        let explainDetialView: UIView = UIView()
+
+        let explainLabel1 = UILabel()
+        explainLabel1.numberOfLines = 0
+        explainLabel1.lineBreakMode = .byWordWrapping
+        explainLabel1.font = UIFont.systemFont(ofSize: 14)
+        explainDetialView.addSubview(explainLabel1)
+        explainLabel1.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+        }
+        explainLabel1.text = """
+        • Effective Plate Stiffness Matrix:
+        The plate constitutive relations of the Kirchhoff-Love model using the following six equations (A, B, D matrices)
+        """
+
+        let explainFigure1: UIImageView = UIImageView()
+        explainFigure1.contentMode = .scaleAspectFit
+        explainFigure1.image = UIImage(named: "ImageBundle.bundle/equation_kirchhoffLove_plate_model.png")
+        explainDetialView.addSubview(explainFigure1)
+        explainFigure1.snp.makeConstraints { make in
+            make.top.equalTo(explainLabel1.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(88)
+        }
+
+        let explainLabel2 = UILabel()
+        explainLabel2.numberOfLines = 0
+        explainLabel2.lineBreakMode = .byWordWrapping
+        explainLabel2.font = UIFont.systemFont(ofSize: 14)
+        explainDetialView.addSubview(explainLabel2)
+        explainLabel2.snp.makeConstraints { make in
+            make.top.equalTo(explainFigure1.snp.bottom).offset(16)
+            make.left.right.equalToSuperview()
+        }
+        explainLabel2.text = """
+        • Transverse Shear Stiffness:
+        The C Matrix in the plate constitutive relations of the Reissner-Mindlin model as following
+        """
+        
+        let explainFigure2: UIImageView = UIImageView()
+        explainFigure2.contentMode = .scaleAspectFit
+        explainFigure2.image = UIImage(named: "ImageBundle.bundle/equation_reissnerMindlin_plate_model.png")
+        explainDetialView.addSubview(explainFigure2)
+        explainFigure2.snp.makeConstraints { make in
+            make.top.equalTo(explainLabel2.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(96)
+        }
+        
+        let explainLabel3 = UILabel()
+        explainLabel3.numberOfLines = 0
+        explainLabel3.lineBreakMode = .byWordWrapping
+        explainLabel3.font = UIFont.systemFont(ofSize: 14)
+        explainDetialView.addSubview(explainLabel3)
+        explainLabel3.snp.makeConstraints { make in
+            make.top.equalTo(explainFigure2.snp.bottom).offset(16)
+            make.left.right.equalToSuperview()
+        }
+        explainLabel3.text = """
+        • In-Plane Properties:
+        The in-plane properties are computed with the help of A matrix.
+        """
+        
+        let explainLabel4 = UILabel()
+        explainLabel4.numberOfLines = 0
+        explainLabel4.lineBreakMode = .byWordWrapping
+        explainLabel4.font = UIFont.systemFont(ofSize: 14)
+        explainDetialView.addSubview(explainLabel4)
+        explainLabel4.snp.makeConstraints { make in
+            make.top.equalTo(explainLabel3.snp.bottom).offset(16)
+            make.left.right.bottom.equalToSuperview()
+        }
+        explainLabel4.text = """
+        • Flexural Properties:
+        The flexural properties are computed with the help of D matrix.
+        """
+        
+        let popupWindow = SCPopupWindow(title: title, customContentView: explainDetialView)
+        popupWindow.show(completion: nil)
     }
 }

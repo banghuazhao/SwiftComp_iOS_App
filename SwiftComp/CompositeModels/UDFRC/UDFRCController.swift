@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 import Moya
 import SwiftyJSON
@@ -153,7 +154,7 @@ extension UDFRCController {
 
     private func resetCalculationBar() {
         if method == .swiftComp {
-            if NetworkManager.sharedInstance.reachability.connection != .none {
+            if NetworkManager.sharedInstance.reachability.connection != .unavailable {
                 calculationButton.changeStyle(style: .cloud)
                 calculationButton.addTarget(self, action: #selector(swiftCompCalculate), for: .touchUpInside)
             } else {
@@ -520,11 +521,123 @@ extension UDFRCController: TypeOfAnalysisCellDelegate {
 // MARK: - MaterialCellDelegate
 
 extension UDFRCController: MaterialCellDelegate {
+    func importButtonTapped(sectionTitle: String) {
+        if sectionTitle == "Fiber Material" {
+            let ac = UIAlertController(title: "Save Fiber Material", message: "Fiber Material to be saved:\n\(fiberMaterials.selectedMaterial.name)", preferredStyle: UIAlertController.Style.alert)
+            ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            ac.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                let userMaterial = NSEntityDescription.insertNewObject(forEntityName: "UserFiberMaterial", into: CoreDataManager.sharedContext) as! UserFiberMaterial
+                userMaterial.setValue(self.fiberMaterials.selectedMaterial.name, forKey: "name")
+                userMaterial.setValue(self.fiberMaterials.selectedMaterial.getMaterialTypeText(), forKey: "type")
+
+                var materialProperties: [String: String] = [:]
+                self.fiberMaterials.selectedMaterial.materialProperties.forEach {
+                    materialProperties[$0.name.rawValue] = $0.valueText
+                }
+                userMaterial.setValue(materialProperties, forKey: "properties")
+                // perform the save
+                do {
+                    try CoreDataManager.sharedContext.save()
+
+                    // success
+                    self.showSavedHuD()
+
+                } catch let saveErr {
+                    print(saveErr)
+                }
+            }))
+            present(ac, animated: true, completion: nil)
+        } else {
+            let ac = UIAlertController(title: "Save Matrix Material", message: "Matrix Material to be saved:\n\(matrixMaterials.selectedMaterial.name)", preferredStyle: UIAlertController.Style.alert)
+              ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+              ac.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self] _ in
+                  guard let self = self else { return }
+                  let userMaterial = NSEntityDescription.insertNewObject(forEntityName: "UserMatrixMaterial", into: CoreDataManager.sharedContext) as! UserMatrixMaterial
+                  userMaterial.setValue(self.matrixMaterials.selectedMaterial.name, forKey: "name")
+                  userMaterial.setValue(self.matrixMaterials.selectedMaterial.getMaterialTypeText(), forKey: "type")
+
+                  var materialProperties: [String: String] = [:]
+                  self.matrixMaterials.selectedMaterial.materialProperties.forEach {
+                      materialProperties[$0.name.rawValue] = $0.valueText
+                  }
+                  userMaterial.setValue(materialProperties, forKey: "properties")
+                  // perform the save
+                  do {
+                      try CoreDataManager.sharedContext.save()
+
+                      // success
+                      self.showSavedHuD()
+
+                  } catch let saveErr {
+                      print(saveErr)
+                  }
+              }))
+              present(ac, animated: true, completion: nil)
+        }
+    }
+    
+    func exportButtonTapped(sectionTitle: String) {
+        if sectionTitle == "Fiber Material" {
+            let fiberMaterialDataBaseVC = FiberMaterialDataBaseVC()
+            fiberMaterialDataBaseVC.delegate = self
+            let navController = SCNavigationController(rootViewController: fiberMaterialDataBaseVC)
+            present(navController, animated: true, completion: nil)
+        } else {
+            let matrixMaterialDataBaseVC = MatrixMaterialDataBaseVC()
+            matrixMaterialDataBaseVC.delegate = self
+            let navController = SCNavigationController(rootViewController: matrixMaterialDataBaseVC)
+            present(navController, animated: true, completion: nil)
+        }
+    }
+    
     func changeSelectedMaterialType(index: Int, materialTitle: String?) {
         if materialTitle == "Fiber Material" {
             tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .automatic)
         } else {
             tableView.reloadRows(at: [IndexPath(row: 1, section: 2)], with: .automatic)
         }
+    }
+}
+
+// MARK: - FiberMaterialDataBaseVCDelegate
+
+extension UDFRCController: FiberMaterialDataBaseVCDelegate {
+    func didSelectFiberMaterial(material: Material) {
+        material.changeAnalysisType(to: typeOfAnalysis)
+        var newSelectedIndex = 0
+        switch material.materialType {
+        case .isotropic(_):
+            newSelectedIndex = 0
+        case .transverselyIsotropic(_):
+            newSelectedIndex = 1
+        case .orthotropic(_):
+            newSelectedIndex = 2
+        default:
+            break
+        }
+        fiberMaterials.changeSelectedMaterial(newMaterial: material, newSelectedIndex: newSelectedIndex)
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .automatic)
+    }
+}
+
+// MARK: - MatrixMaterialDataBaseVCDelegate
+
+extension UDFRCController: MatrixMaterialDataBaseVCDelegate {
+    func didSelectMatrixMaterial(material: Material) {
+        material.changeAnalysisType(to: typeOfAnalysis)
+        var newSelectedIndex = 0
+        switch material.materialType {
+        case .isotropic(_):
+            newSelectedIndex = 0
+        case .transverselyIsotropic(_):
+            newSelectedIndex = 1
+        case .orthotropic(_):
+            newSelectedIndex = 2
+        default:
+            break
+        }
+        matrixMaterials.changeSelectedMaterial(newMaterial: material, newSelectedIndex: newSelectedIndex)
+        tableView.reloadRows(at: [IndexPath(row: 1, section: 2)], with: .automatic)
     }
 }

@@ -13,7 +13,7 @@ class MaterialPropertyCell: UITableViewCell {
 
     var materialProperty: MaterialProperty? {
         didSet {
-            nameLabel.text = materialProperty?.nameText
+            nameLabel.text = materialProperty?.nameLabel
             valueTextField.text = materialProperty?.valueText
             valueTextField.textColor = materialProperty?.value != nil ? .SCTitle : .red
         }

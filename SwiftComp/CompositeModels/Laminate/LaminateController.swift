@@ -6,6 +6,7 @@
 //  Copyright © 2019 Banghua Zhao. All rights reserved.
 //
 
+import CoreData
 import UIKit
 
 import Moya
@@ -81,21 +82,20 @@ extension LaminateController {
     // MARK: setupView
 
     private func setupView() {
-        
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
+
         let calculationBar = UIView()
         view.addSubview(calculationBar)
-        calculationBar.snp.makeConstraints { (make) in
+        calculationBar.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
         }
         calculationBar.backgroundColor = .SCNavigation
         calculationBar.addSubview(calculationButton)
-        calculationButton.snp.makeConstraints { (make) in
+        calculationButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(8)
         }
@@ -149,7 +149,7 @@ extension LaminateController {
 
     private func resetCalculationBar() {
         if method == .swiftComp {
-            if NetworkManager.sharedInstance.reachability.connection != .none {
+            if NetworkManager.sharedInstance.reachability.connection != .unavailable {
                 calculationButton.changeStyle(style: .cloud)
                 calculationButton.addTarget(self, action: #selector(swiftCompCalculate), for: .touchUpInside)
             } else {
@@ -262,7 +262,7 @@ extension LaminateController {
     @objc func swiftCompCalculateOffline() {
         noNetworkErrorPopover()
     }
-    
+
     @objc func nonSwiftCompCalculate() {
         guard isInputValid() else { return }
         CLPTCalculate()
@@ -341,6 +341,7 @@ extension LaminateController: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "StackingSequenceCell") as? StackingSequenceCell else { return UITableViewCell() }
             cell.stackingSequence = stackingSequence
             cell.structrualModel = structuralModel
+            cell.delegate = self
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MaterialsCell") as? MaterialsCell else { return UITableViewCell() }
@@ -363,13 +364,13 @@ extension LaminateController: MethodCellDelegate {
             guard let self = self else { return }
             self.method = .swiftComp
             self.resetCalculationBar()
-            self.tableView.reloadSections(IndexSet(arrayLiteral: 0,1), with: .automatic)
+            self.tableView.reloadSections(IndexSet(arrayLiteral: 0, 1), with: .automatic)
         })
         let action2 = UIAlertAction(title: Constant.MethodName.NonSwiftComp.clpt, style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
             self.method = .nonSwiftComp(.clpt)
             self.resetCalculationBar()
-            self.tableView.reloadSections(IndexSet(arrayLiteral: 0,1), with: .automatic)
+            self.tableView.reloadSections(IndexSet(arrayLiteral: 0, 1), with: .automatic)
         })
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         actionSheet.addAction(action1)
@@ -481,10 +482,112 @@ extension LaminateController: TypeOfAnalysisCellDelegate {
     }
 }
 
+// MARK: - StackingSequenceCellDelegate
+
+extension LaminateController: StackingSequenceCellDelegate {
+    func importButtonTapped() {
+        let ac = UIAlertController(title: "Save Stacking Sequence", message: "Stacking sequence to be saved:\n\(stackingSequence.stackingSequenceText)", preferredStyle: UIAlertController.Style.alert)
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        ac.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            let userStackingSequence = NSEntityDescription.insertNewObject(forEntityName: "UserStackingSequence", into: CoreDataManager.sharedContext) as! UserStackingSequence
+            userStackingSequence.setValue(self.stackingSequence.stackingSequenceText, forKey: "name")
+            userStackingSequence.setValue(self.stackingSequence.stackingSequenceText, forKey: "stackingSequence")
+            // perform the save
+            do {
+                try CoreDataManager.sharedContext.save()
+
+                // success
+                self.showSavedHuD()
+
+            } catch let saveErr {
+                print("Failed to save stacking sequence:", saveErr)
+            }
+
+        }))
+        present(ac, animated: true, completion: nil)
+    }
+
+    func exportButtonTapped() {
+        let stackingSequenceDataBaseVC = StackingSequenceDataBaseVC()
+
+        stackingSequenceDataBaseVC.delegate = self
+
+        let navController = SCNavigationController(rootViewController: stackingSequenceDataBaseVC)
+
+        present(navController, animated: true, completion: nil)
+    }
+}
+
+// MARK: - StackingSequenceDataBaseVCDelegate
+
+extension LaminateController: StackingSequenceDataBaseVCDelegate {
+    func didSelectStackingSequence(stackingSequence: String) {
+        self.stackingSequence.stackingSequenceText = stackingSequence
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+    }
+}
+
 // MARK: - MaterialCellDelegate
 
 extension LaminateController: MaterialCellDelegate {
+    func importButtonTapped(sectionTitle: String) {
+        let ac = UIAlertController(title: "Save Lamina Material", message: "Lamina Material to be saved:\n\(laminaMaterials.selectedMaterial.name)", preferredStyle: UIAlertController.Style.alert)
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        ac.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            let userLaminaMaterial = NSEntityDescription.insertNewObject(forEntityName: "UserLaminaMaterial", into: CoreDataManager.sharedContext) as! UserLaminaMaterial
+            userLaminaMaterial.setValue(self.laminaMaterials.selectedMaterial.name, forKey: "name")
+            userLaminaMaterial.setValue(self.laminaMaterials.selectedMaterial.getMaterialTypeText(), forKey: "type")
+
+            var materialProperties: [String: String] = [:]
+            self.laminaMaterials.selectedMaterial.materialProperties.forEach {
+                materialProperties[$0.name.rawValue] = $0.valueText
+            }
+            userLaminaMaterial.setValue(materialProperties, forKey: "properties")
+            // perform the save
+            do {
+                try CoreDataManager.sharedContext.save()
+
+                // success
+                self.showSavedHuD()
+
+            } catch let saveErr {
+                print("Failed to save stacking sequence:", saveErr)
+            }
+        }))
+        present(ac, animated: true, completion: nil)
+    }
+
+    func exportButtonTapped(sectionTitle: String) {
+        let laminaMaterialDataBaseVC = LaminaMaterialDataBaseVC()
+        laminaMaterialDataBaseVC.delegate = self
+        let navController = SCNavigationController(rootViewController: laminaMaterialDataBaseVC)
+        present(navController, animated: true, completion: nil)
+    }
+
     func changeSelectedMaterialType(index: Int, materialTitle: String?) {
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .automatic)
+    }
+}
+
+// MARK: - LaminateMaterialDataBaseDelegate
+
+extension LaminateController: LaminaMaterialDataBaseVCDelegate {
+    func didSelectLaminaMaterial(material: Material) {
+        material.changeAnalysisType(to: typeOfAnalysis)
+        var newSelectedIndex = 0
+        switch material.materialType {
+        case .transverselyIsotropic(_):
+            newSelectedIndex = 0
+        case .orthotropic(_):
+            newSelectedIndex = 1
+        case .anisotropic(_):
+            newSelectedIndex = 2
+        default:
+            break
+        }
+        laminaMaterials.changeSelectedMaterial(newMaterial: material, newSelectedIndex: newSelectedIndex)
         tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .automatic)
     }
 }

@@ -8,8 +8,15 @@
 
 import UIKit
 
+protocol StackingSequenceCellDelegate: AnyObject {
+    func importButtonTapped()
+    func exportButtonTapped()
+}
+
 class StackingSequenceCell: UITableViewCell {
     // MARK: - model
+    
+    weak var delegate: StackingSequenceCellDelegate?
 
     var stackingSequence: StackingSequence? {
         didSet {
@@ -70,6 +77,27 @@ class StackingSequenceCell: UITableViewCell {
         label.font = .SCTitle
         label.textAlignment = .left
         return label
+    }()
+    
+    private lazy var explainButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var exportButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "export"), for: .normal)
+        button.addTarget(self, action: #selector(exportButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var importButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "import"), for: .normal)
+        button.addTarget(self, action: #selector(importButtonTapped), for: .touchUpInside)
+        return button
     }()
 
     private lazy var stackingSequenceLabel: UILabel = {
@@ -227,6 +255,9 @@ extension StackingSequenceCell {
         }
 
         cellView.addSubview(titleLabel)
+        cellView.addSubview(explainButton)
+        cellView.addSubview(exportButton)
+        cellView.addSubview(importButton)
         cellView.addSubview(layupView)
         cellView.addSubview(stackingSequenceLabel)
         cellView.addSubview(stackingSequenceTextField)
@@ -236,6 +267,20 @@ extension StackingSequenceCell {
         titleLabel.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview().inset(16)
             make.height.equalTo(21)
+        }
+        explainButton.snp.makeConstraints { (make) in
+             make.top.right.equalToSuperview().inset(16)
+             make.size.equalTo(21)
+        }
+        importButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16+21+20)
+            make.size.equalTo(21)
+        }
+        exportButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16+21+20+21+20)
+            make.size.equalTo(21)
         }
         layupView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
@@ -539,4 +584,38 @@ extension StackingSequenceCell {
         textField.textColor = stackingSequence?.layerThickness != nil ? .SCTitle : .red
         drawLayup()
     }
+    
+    @objc private func explainButtonTapped() {
+        let title = "Stacking Sequence"
+        let message = """
+        The stacking sequence is the layup angles from the bottom surface to the top surface.
+
+        The format of stacking sequence is [xx/xx/xx/xx/..]msn
+        xx: Layup angle
+        m: Number of repetition before symmetry
+        s: Symmetry or not
+        n: Number of repetition after symmetry
+
+        • Examples:
+        Cross-ply laminates: [0/90]
+        Balanced laminates: [45/-45]
+        [0/90]2 : [0/90/0/90]
+        [0/90]s : [0/90/90/0]
+        [30/-30]2s : [30/-30/30/-30/-30/30/-30/30]
+        [30/-30]s2 : [30/-30/-30/30/30/-30/-30/30]
+
+        The layer thickness is the thickness for each lamina. Note, it doesn't need layer thickness information for solid model.
+        """
+        let popupWindow = SCPopupWindow(title: title, message: message)
+        popupWindow.show(completion: nil)
+    }
+    
+    @objc private func exportButtonTapped() {
+        delegate?.exportButtonTapped()
+    }
+    
+    @objc private func importButtonTapped() {
+        delegate?.importButtonTapped()
+    }
+
 }

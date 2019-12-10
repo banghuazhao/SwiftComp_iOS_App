@@ -133,7 +133,7 @@ class TheoryController: UIViewController {
         eulerBernoulliBeamModelImage.heightAnchor.constraint(equalToConstant: 70).isActive = true
         eulerBernoulliBeamModelImage.contentMode = .scaleAspectFit
         eulerBernoulliBeamModelImage.clipsToBounds = true
-        eulerBernoulliBeamModelImage.image = #imageLiteral(resourceName: "theory_eulerBernoulli_beam_model")
+        eulerBernoulliBeamModelImage.image = UIImage(named: "ImageBundle.bundle/equation_eulerBernoulli_beam_model.png")
 
         beamModelText2.translatesAutoresizingMaskIntoConstraints = false
         beamModelText2.topAnchor.constraint(equalTo: eulerBernoulliBeamModelImage.bottomAnchor, constant: 8).isActive = true
@@ -156,7 +156,7 @@ class TheoryController: UIViewController {
         timoshenkoBeamModelImage.heightAnchor.constraint(equalToConstant: 100).isActive = true
         timoshenkoBeamModelImage.contentMode = .scaleAspectFit
         timoshenkoBeamModelImage.clipsToBounds = true
-        timoshenkoBeamModelImage.image = #imageLiteral(resourceName: "theory_timoshenko_beam_model")
+        timoshenkoBeamModelImage.image = UIImage(named: "ImageBundle.bundle/equation_timoshenko_beam_model.png")
 
         // plate model
 
@@ -204,7 +204,7 @@ class TheoryController: UIViewController {
         kirchhoffLovePlateModelImage.heightAnchor.constraint(equalToConstant: 90).isActive = true
         kirchhoffLovePlateModelImage.contentMode = .scaleAspectFit
         kirchhoffLovePlateModelImage.clipsToBounds = true
-        kirchhoffLovePlateModelImage.image = #imageLiteral(resourceName: "theory_kirchhoffLove_plate_model")
+        kirchhoffLovePlateModelImage.image = UIImage(named: "ImageBundle.bundle/equation_kirchhoffLove_plate_model.png")
 
         plateModelText2.translatesAutoresizingMaskIntoConstraints = false
         plateModelText2.topAnchor.constraint(equalTo: kirchhoffLovePlateModelImage.bottomAnchor, constant: 8).isActive = true
@@ -224,10 +224,10 @@ class TheoryController: UIViewController {
         reissnerMindlinPlateModelImage.translatesAutoresizingMaskIntoConstraints = false
         reissnerMindlinPlateModelImage.topAnchor.constraint(equalTo: plateModelText2.bottomAnchor, constant: 8).isActive = true
         reissnerMindlinPlateModelImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        reissnerMindlinPlateModelImage.heightAnchor.constraint(equalToConstant: 105).isActive = true
+        reissnerMindlinPlateModelImage.heightAnchor.constraint(equalToConstant: 110).isActive = true
         reissnerMindlinPlateModelImage.contentMode = .scaleAspectFit
         reissnerMindlinPlateModelImage.clipsToBounds = true
-        reissnerMindlinPlateModelImage.image = #imageLiteral(resourceName: "theory_reissnerMindlin_plate_model")
+        reissnerMindlinPlateModelImage.image = UIImage(named: "ImageBundle.bundle/equation_reissnerMindlin_plate_model.png")
 
         // solid model
 
@@ -268,10 +268,10 @@ class TheoryController: UIViewController {
         cauchyPlateModelImage.translatesAutoresizingMaskIntoConstraints = false
         cauchyPlateModelImage.topAnchor.constraint(equalTo: solidModelText1.bottomAnchor, constant: 8).isActive = true
         cauchyPlateModelImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        cauchyPlateModelImage.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        cauchyPlateModelImage.heightAnchor.constraint(equalToConstant: 100).isActive = true
         cauchyPlateModelImage.contentMode = .scaleAspectFit
         cauchyPlateModelImage.clipsToBounds = true
-        cauchyPlateModelImage.image = #imageLiteral(resourceName: "theory_cauchy_solid_model")
+        cauchyPlateModelImage.image = UIImage(named: "ImageBundle.bundle/equation_cauchy_solid_model.png")
 
         // structure gene
 

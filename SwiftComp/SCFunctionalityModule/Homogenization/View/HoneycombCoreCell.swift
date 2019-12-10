@@ -50,6 +50,13 @@ class HoneycombCoreCell: UITableViewCell {
         label.textAlignment = .left
         return label
     }()
+    
+    private lazy var explainButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
 
     private lazy var coreLengthLabel: UILabel = {
         let label = UILabel()
@@ -173,6 +180,7 @@ extension HoneycombCoreCell {
         }
 
         cellView.addSubview(titleLabel)
+        cellView.addSubview(explainButton)
         cellView.addSubview(coreView)
         cellView.addSubview(coreLengthLabel)
         cellView.addSubview(coreLengthTextField)
@@ -185,6 +193,10 @@ extension HoneycombCoreCell {
             make.top.left.right.equalToSuperview().inset(16)
             make.height.equalTo(21)
         }
+        explainButton.snp.makeConstraints { (make) in
+             make.top.right.equalToSuperview().inset(16)
+             make.size.equalTo(21)
+         }
         coreView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.left.right.equalToSuperview().inset(16)
@@ -373,6 +385,59 @@ extension HoneycombCoreCell {
         honeycombCore?.coreHeightText = text
         textField.textColor = honeycombCore?.coreHeight != nil ? .SCTitle : .red
         drawCore()
+    }
+    @objc private func explainButtonTapped() {
+        let title = "Honeycomb Core"
+        
+        let explainDetialView: UIView = UIView()
+
+        let explainLabel1 = UILabel()
+        explainLabel1.numberOfLines = 0
+        explainLabel1.lineBreakMode = .byWordWrapping
+        explainLabel1.font = UIFont.systemFont(ofSize: 14)
+        
+        explainDetialView.addSubview(explainLabel1)
+        explainLabel1.snp.makeConstraints { (make) in
+            make.top.left.right.equalToSuperview()
+        }
+        explainLabel1.text = """
+        The core is made of a regular hexagonal low density solid with double wall thickness. It is used to mainly provide bending stiffness and shear stiffness to the honeycomb sandwich structure. The geometry of the core is determined by three parameters:
+        1. Core length l1: Length of the oblique wall
+        2. Core thickness tc: thickness of the core wall
+        3. Core height hc: distance between top and bottom facesheets
+        """
+
+        let explainFigure: UIImageView = UIImageView()
+        explainFigure.contentMode = .scaleAspectFit
+        explainFigure.clipsToBounds = true
+        explainFigure.image = #imageLiteral(resourceName: "honeycomb_core")
+        
+        explainDetialView.addSubview(explainFigure)
+        explainFigure.snp.makeConstraints { (make) in
+            make.top.equalTo(explainLabel1.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(160)
+        }
+
+        let explainLabel2 = UILabel()
+        explainLabel2.numberOfLines = 0
+        explainLabel2.lineBreakMode = .byWordWrapping
+        explainLabel2.font = UIFont.systemFont(ofSize: 14)
+        
+        explainDetialView.addSubview(explainLabel2)
+        explainLabel2.snp.makeConstraints { (make) in
+            make.top.equalTo(explainFigure.snp.bottom).offset(8)
+            make.left.right.bottom.equalToSuperview()
+        }
+        explainLabel2.text = """
+        Note, only a quarter of the core is shown in the figure since the core is symmetric with respect to (wrt) three planes.
+        Also, another parameters can be determined since the core is regular hexgonal shape, i.e.
+        l2 = l1/2
+        theta = 60 degree
+        dc/2 = tc+l1*sin(theta)-tc*cos(theta)
+        """
+        let popupWindow = SCPopupWindow(title: title, customContentView: explainDetialView)
+        popupWindow.show(completion: nil)
     }
 }
 

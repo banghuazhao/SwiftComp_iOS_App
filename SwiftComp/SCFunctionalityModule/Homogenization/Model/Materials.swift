@@ -26,4 +26,9 @@ class Materials {
         self.materials = materials
         self.selectedIndex = selectedIndex
     }
+    
+    func changeSelectedMaterial(newMaterial: Material, newSelectedIndex: Int) {
+        materials[newSelectedIndex] = newMaterial
+        selectedIndex = newSelectedIndex
+    }
 }

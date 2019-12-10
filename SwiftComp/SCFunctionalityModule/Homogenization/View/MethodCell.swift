@@ -20,14 +20,36 @@ class MethodCell: UITableViewCell {
             switch method {
             case .swiftComp:
                 analysisButton.changeButtonTitle(title: "SwiftComp")
+                explain = """
+                    • SwiftComp:
+                    General-purpose computational approach for constitutive modeling of composite materials
+                    """
             case .nonSwiftComp(.clpt):
                 analysisButton.changeButtonTitle(title: "Classical Laminated Plate Theory")
+                explain = """
+                    • Classical Laminated Plate Theory (CLPT):
+                    1. Straight lines normal to the mid-surface remain straight after deformation
+                    2. Straight lines normal to the mid-surface remain normal to the mid-surface after deformation
+                    3. The thickness of the plate does not change during a deformation
+                    """
             case .nonSwiftComp(.voigtROM):
                 analysisButton.changeButtonTitle(title: "Voigt Rules of Mixture")
+                explain = """
+                    • Voigt Rules of Mixture:
+                    The strain field within the RVE is constant
+                    """
             case .nonSwiftComp(.reussROM):
                 analysisButton.changeButtonTitle(title: "Reuss Rules of Mixture")
+                explain = """
+                    • Reuss Rules of Mixture:
+                    The stress field within the RVE is constant
+                    """
             case .nonSwiftComp(.hybridROM):
                 analysisButton.changeButtonTitle(title: "Hybrid Rules of Mixture")
+                explain = """
+                    • Hybrid Rules of Mixture:
+                    A subset of local stress components (sigma22, sigma33, sigma23, sigma13, sigma12) along with a complementary subset of local strain components (epsilon11) are constant
+                    """
             default:
                 return
             }
@@ -35,6 +57,8 @@ class MethodCell: UITableViewCell {
     }
     
     weak var delegate: MethodCellDelegate?
+    
+    private var explain: String = ""
     
     private let cellHeight = 16 + 21 + 16 + 36 + 16
     
@@ -93,10 +117,8 @@ extension MethodCell {
     }
     
     @objc private func explainButtonTapped() {
-        let title = "TitleTitleTitle"
-        let message = "MessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessageMessage"
-        let popupWindow = SCPopupWindow(title: title, message: message)
-        popupWindow.titleAligment = .right
+        let title = "Method"
+        let popupWindow = SCPopupWindow(title: title, message: explain)
         popupWindow.show(completion: nil)
     }
 }

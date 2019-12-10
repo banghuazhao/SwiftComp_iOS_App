@@ -45,18 +45,16 @@ class Material {
             }
         }
     }
-    
+
     var isValid: Bool {
-        get {
-            guard materialProperties.count > 0 else { return false }
-            return materialProperties.filter { $0.value == nil }.count > 0 ? false : true
-        }
+        guard materialProperties.count > 0 else { return false }
+        return materialProperties.filter { $0.value == nil }.count > 0 ? false : true
     }
 
     init(name: String, materialType: MaterialType) {
         self.name = name
         self.materialType = materialType
-        self.materialProperties = []
+        materialProperties = []
         initMaterialProperties()
     }
 
@@ -64,6 +62,118 @@ class Material {
         self.name = name
         self.materialType = materialType
         self.materialProperties = materialProperties
+    }
+
+    // MARK: - init(userLaminaMaterial: UserLaminaMaterial)
+
+    init(userLaminaMaterial: UserLaminaMaterial) {
+        name = userLaminaMaterial.name ?? "Undefined"
+        switch userLaminaMaterial.type {
+        case "Isotropic":
+            materialType = .isotropic(.thermoElastic)
+        case "Transversely":
+            materialType = .transverselyIsotropic(.thermoElastic)
+        case "Orthotropic":
+            materialType = .orthotropic(.thermoElastic)
+        case "Monoclinic":
+            materialType = .monoclinic(.thermoElastic)
+        case "Anisotropic":
+            materialType = .anisotropic(.thermoElastic)
+        default:
+            materialType = .orthotropic(.thermoElastic)
+        }
+        materialProperties = []
+        initMaterialProperties()
+        guard userLaminaMaterial.properties != nil, let userMaterialProperties = userLaminaMaterial.properties as? [String: String] else { return }
+        for userMaterialProperty in userMaterialProperties {
+            materialProperties.filter {
+                $0.name.rawValue == userMaterialProperty.key
+            }.first?.valueText = userMaterialProperty.value
+        }
+    }
+
+    // MARK: - init(userFiberMaterial: UserFiberaMaterial)
+
+    init(userFiberMaterial: UserFiberMaterial) {
+        name = userFiberMaterial.name ?? "Undefined"
+        switch userFiberMaterial.type {
+        case "Isotropic":
+            materialType = .isotropic(.thermoElastic)
+        case "Transversely":
+            materialType = .transverselyIsotropic(.thermoElastic)
+        case "Orthotropic":
+            materialType = .orthotropic(.thermoElastic)
+        case "Monoclinic":
+            materialType = .monoclinic(.thermoElastic)
+        case "Anisotropic":
+            materialType = .anisotropic(.thermoElastic)
+        default:
+            materialType = .orthotropic(.thermoElastic)
+        }
+        materialProperties = []
+        initMaterialProperties()
+        guard userFiberMaterial.properties != nil, let userMaterialProperties = userFiberMaterial.properties as? [String: String] else { return }
+        for userMaterialProperty in userMaterialProperties {
+            materialProperties.filter {
+                $0.name.rawValue == userMaterialProperty.key
+            }.first?.valueText = userMaterialProperty.value
+        }
+    }
+
+    // MARK: - init(userMatrixMaterial: UserMatrixMaterial)
+
+    init(userMatrixMaterial: UserMatrixMaterial) {
+        name = userMatrixMaterial.name ?? "Undefined"
+        switch userMatrixMaterial.type {
+        case "Isotropic":
+            materialType = .isotropic(.thermoElastic)
+        case "Transversely":
+            materialType = .transverselyIsotropic(.thermoElastic)
+        case "Orthotropic":
+            materialType = .orthotropic(.thermoElastic)
+        case "Monoclinic":
+            materialType = .monoclinic(.thermoElastic)
+        case "Anisotropic":
+            materialType = .anisotropic(.thermoElastic)
+        default:
+            materialType = .orthotropic(.thermoElastic)
+        }
+        materialProperties = []
+        initMaterialProperties()
+        guard userMatrixMaterial.properties != nil, let userMaterialProperties = userMatrixMaterial.properties as? [String: String] else { return }
+        for userMaterialProperty in userMaterialProperties {
+            materialProperties.filter {
+                $0.name.rawValue == userMaterialProperty.key
+            }.first?.valueText = userMaterialProperty.value
+        }
+    }
+
+    // MARK: - init(userCoreMaterial: UserCoreMaterial)
+
+    init(userCoreMaterial: UserCoreMaterial) {
+        name = userCoreMaterial.name ?? "Undefined"
+        switch userCoreMaterial.type {
+        case "Isotropic":
+            materialType = .isotropic(.thermoElastic)
+        case "Transversely":
+            materialType = .transverselyIsotropic(.thermoElastic)
+        case "Orthotropic":
+            materialType = .orthotropic(.thermoElastic)
+        case "Monoclinic":
+            materialType = .monoclinic(.thermoElastic)
+        case "Anisotropic":
+            materialType = .anisotropic(.thermoElastic)
+        default:
+            materialType = .orthotropic(.thermoElastic)
+        }
+        materialProperties = []
+        initMaterialProperties()
+        guard userCoreMaterial.properties != nil, let userMaterialProperties = userCoreMaterial.properties as? [String: String] else { return }
+        for userMaterialProperty in userMaterialProperties {
+            materialProperties.filter {
+                $0.name.rawValue == userMaterialProperty.key
+            }.first?.valueText = userMaterialProperty.value
+        }
     }
 }
 
@@ -286,15 +396,14 @@ extension Material {
         } else if analysisType == .thermoElastic, newTypeOfAnalysis == .elastic {
             materialProperties = materialProperties.filter {
                 $0.name != .alpha &&
-                $0.name != .alpha11 &&
-                $0.name != .alpha22 &&
-                $0.name != .alpha33 &&
-                $0.name != .alpha23 &&
-                $0.name != .alpha13 &&
-                $0.name != .alpha12
+                    $0.name != .alpha11 &&
+                    $0.name != .alpha22 &&
+                    $0.name != .alpha33 &&
+                    $0.name != .alpha23 &&
+                    $0.name != .alpha13 &&
+                    $0.name != .alpha12
             }
         }
         analysisType = newTypeOfAnalysis
     }
-    
 }

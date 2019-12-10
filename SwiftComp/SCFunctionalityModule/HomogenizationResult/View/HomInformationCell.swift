@@ -42,7 +42,7 @@ class HomInformationCell: UITableViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .SCTitle
-        label.text = "SwiftComp Calculation Infomration"
+        label.text = "SwiftComp Calculation Information"
         label.font = .SCTitle
         label.textAlignment = .left
         return label

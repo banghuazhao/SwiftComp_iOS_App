@@ -18,8 +18,16 @@ class TypeOfAnalysisCell: UITableViewCell {
             switch typeOfAnalysis {
             case .elastic:
                 analysisButton.changeButtonTitle(title: Constant.TypeOfAnalysisName.elastic)
+                explain = """
+                    • Elastic Analysis:
+                    You need to provide elastic properites to do the analysis. The elastic properties are Young's modulus, shear modlulus, Poisson's ratio, or elastic constants (Cij).
+                    """
             case .thermoElastic:
                 analysisButton.changeButtonTitle(title: Constant.TypeOfAnalysisName.thermoElastic)
+                explain = """
+                    • Thermoelastic Analysis:
+                    In addtional to elastic properties (Young's modulus, shear modlulus, Poisson's ratio, or elastic constants), you also need to provide CTEs (Coefficients of Thermal Expansion) to do the analysis.
+                    """
             default:
                 return
             }
@@ -27,6 +35,8 @@ class TypeOfAnalysisCell: UITableViewCell {
     }
 
     weak var delegate: TypeOfAnalysisCellDelegate?
+    
+    private var explain: String = ""
 
     private let cellHeight = 16 + 21 + 16 + 36 + 16
 
@@ -53,6 +63,13 @@ class TypeOfAnalysisCell: UITableViewCell {
         return label
     }()
 
+    private lazy var explainButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "explain"), for: .normal)
+        button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
     lazy var analysisButton = SCAnalysisButton()
 
     // MARK: - life cycle
@@ -91,6 +108,7 @@ extension TypeOfAnalysisCell {
         }
 
         cellView.addSubview(titleLabel)
+        cellView.addSubview(explainButton)
         cellView.addSubview(analysisButton)
 
         titleLabel.snp.makeConstraints { make in
@@ -98,6 +116,11 @@ extension TypeOfAnalysisCell {
             make.height.equalTo(21)
         }
 
+        explainButton.snp.makeConstraints { (make) in
+            make.top.right.equalToSuperview().inset(16)
+            make.size.equalTo(21)
+        }
+        
         analysisButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(16)
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
@@ -110,5 +133,11 @@ extension TypeOfAnalysisCell {
 extension TypeOfAnalysisCell {
     @objc private func analysisButtonTapped(button: SCAnalysisButton) {
         delegate?.changeTypeOfAnalysis(button: button)
+    }
+    
+    @objc private func explainButtonTapped() {
+        let title = "Type of Analysis"
+        let popupWindow = SCPopupWindow(title: title, message: explain)
+        popupWindow.show(completion: nil)
     }
 }
