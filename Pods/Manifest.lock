@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (4.9.1)
+  - Bugly (2.5.2)
   - BZPopupWindow (1.0.0):
     - SnapKit (~> 5.0)
   - IQKeyboardManager (6.2.1)
@@ -15,6 +16,7 @@ PODS:
   - SwiftyJSON (4.3.0)
 
 DEPENDENCIES:
+  - Bugly
   - BZPopupWindow
   - IQKeyboardManager (~> 6.2.1)
   - Moya (~> 13.0)
@@ -26,6 +28,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - Bugly
     - BZPopupWindow
     - IQKeyboardManager
     - Moya
@@ -37,6 +40,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  Bugly: dbac48b55ad469a97cc4321045cd50df8f63d44f
   BZPopupWindow: 9bf895b0721b511bb250c4bc89a1b7244d8914cf
   IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
   Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
@@ -46,6 +50,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: d2bcc3e156a303a0a55553ade9d4dfbfa2f0d0ff
+PODFILE CHECKSUM: 46838604e93e4a8204025998f3e0864dcde8c7a3
 
 COCOAPODS: 1.8.3

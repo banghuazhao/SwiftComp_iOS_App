@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol HomSolidResultCellDelegate: class {
+    func solidShareButtonTapped()
+}
+
 class HomSolidResultCell: UITableViewCell {
     // MARK: - model
 
@@ -29,6 +33,8 @@ class HomSolidResultCell: UITableViewCell {
             }
         }
     }
+    
+    weak var delegate: HomSolidResultCellDelegate?
 
     private let tableViewHeaderHeight: CGFloat = 40
     private let tableViewCellHeight: CGFloat = 36
@@ -68,6 +74,13 @@ class HomSolidResultCell: UITableViewCell {
         let button = UIButton()
         button.setImage(UIImage(named: "explain"), for: .normal)
         button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var shareButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "share"), for: .normal)
+        button.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -173,6 +186,10 @@ extension HomSolidResultCell {
         let popupWindow = SCPopupWindow(title: title, customContentView: explainDetialView)
         popupWindow.show(completion: nil)
     }
+    
+    @objc private func shareButtonTapped() {
+        delegate?.solidShareButtonTapped()
+    }
 }
 
 // MARK: - private function
@@ -197,6 +214,7 @@ extension HomSolidResultCell {
 
         cellView.addSubview(titleLabel)
         cellView.addSubview(explainButton)
+        cellView.addSubview(shareButton)
         cellView.addSubview(solidStiffnessMatrixCollectionView)
         cellView.addSubview(engineeringConstantsTableView)
         cellView.addSubview(thermalCoefficientsTableView)
@@ -209,6 +227,12 @@ extension HomSolidResultCell {
         explainButton.snp.makeConstraints { (make) in
              make.top.right.equalToSuperview().inset(16)
              make.size.equalTo(21)
+        }
+        
+        shareButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16+21+20)
+            make.size.equalTo(21)
         }
 
         solidStiffnessMatrixCollectionView.snp.makeConstraints { make in

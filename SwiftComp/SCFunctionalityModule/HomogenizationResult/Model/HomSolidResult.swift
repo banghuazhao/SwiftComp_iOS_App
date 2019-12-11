@@ -115,3 +115,38 @@ class HomSolidResult {
         ]
     }
 }
+
+// MARK: - public function
+
+extension HomSolidResult {
+    func getSharedResultText() -> String {
+        var result = ""
+        if effectiveSolidStiffness != nil {
+            for i in 0...5 {
+                result += effectiveSolidStiffnessArray[i * 6].valueText + "\t" +
+                    effectiveSolidStiffnessArray[i * 6 + 1].valueText + "\t" +
+                    effectiveSolidStiffnessArray[i * 6 + 2].valueText + "\t" +
+                    effectiveSolidStiffnessArray[i * 6 + 3].valueText + "\t" +
+                    effectiveSolidStiffnessArray[i * 6 + 4].valueText + "\t" +
+                    effectiveSolidStiffnessArray[i * 6 + 5].valueText + "\n"
+            }
+        }
+        
+        if engineeringConstants != nil {
+            result += "\n"
+            result += "Engineering Constants:\n"
+            for i in 0...engineeringConstantsArray.count-1 {
+                result += "\(engineeringConstantsArray[i].name): \t\(engineeringConstantsArray[i].valueText)\n"
+            }
+        }
+
+        if thermalCoefficients != nil {
+            result += "\n"
+            result += "Thermal Coefficients:\n"
+            for i in 0...thermalCoefficientsArray.count-1 {
+                result += "\(thermalCoefficientsArray[i].name): \t\(thermalCoefficientsArray[i].valueText)\n"
+            }
+        }
+        return result
+    }
+}

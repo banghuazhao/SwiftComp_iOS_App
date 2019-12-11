@@ -118,7 +118,7 @@ class HomPlateResult {
             HomResultProperty(name: "Shear Modulus G₁₂", valueText: inPlaneProperties["G12"] ?? ""),
             HomResultProperty(name: "Poisson's Ratio ν₁₂", valueText: inPlaneProperties["nu12"] ?? ""),
             HomResultProperty(name: "Mutual Influence η₁₂‚₁", valueText: inPlaneProperties["eta121"] ?? ""),
-            HomResultProperty(name: "Mutual Influencet η₁₂‚₂", valueText: inPlaneProperties["eta122"] ?? ""),
+            HomResultProperty(name: "Mutual Influence η₁₂‚₂", valueText: inPlaneProperties["eta122"] ?? ""),
         ]
     }
 
@@ -130,7 +130,7 @@ class HomPlateResult {
             HomResultProperty(name: "Shear Modulus G₁₂", valueText: flexuralProperties["G12"] ?? ""),
             HomResultProperty(name: "Poisson's Ratio ν₁₂", valueText: flexuralProperties["nu12"] ?? ""),
             HomResultProperty(name: "Mutual Influence η₁₂‚₁", valueText: flexuralProperties["eta121"] ?? ""),
-            HomResultProperty(name: "Mutual Influencet η₁₂‚₂", valueText: flexuralProperties["eta122"] ?? ""),
+            HomResultProperty(name: "Mutual Influence η₁₂‚₂", valueText: flexuralProperties["eta122"] ?? ""),
         ]
     }
 
@@ -144,5 +144,57 @@ class HomPlateResult {
             HomResultProperty(name: "CTE α₁₃", valueText: thermalCoefficients["alpha13"] ?? ""),
             HomResultProperty(name: "CTE α₁₂", valueText: thermalCoefficients["alpha12"] ?? ""),
         ]
+    }
+}
+
+// MARK: - public function
+
+extension HomPlateResult {
+    func getSharedResultText() -> String {
+        var result = ""
+        if effectivePlateStiffness != nil {
+            result += "Effetive Plate Stiffness Matrix:\n"
+            for i in 0...5 {
+                result += effectivePlateStiffnessArray[i * 6].valueText + "\t" +
+                    effectivePlateStiffnessArray[i * 6 + 1].valueText + "\t" +
+                    effectivePlateStiffnessArray[i * 6 + 2].valueText + "\t" +
+                    effectivePlateStiffnessArray[i * 6 + 3].valueText + "\t" +
+                    effectivePlateStiffnessArray[i * 6 + 4].valueText + "\t" +
+                    effectivePlateStiffnessArray[i * 6 + 5].valueText + "\n"
+            }
+        }
+        
+        if effectivePlateStiffnessRefined != nil {
+            result += "\n"
+            result += "Transverse Shear Stiffness Matrix:\n"
+            for i in 0...effectivePlateStiffnessRefinedArray.count-1 {
+                result += "\(effectivePlateStiffnessRefinedArray[i].name): \t\(effectivePlateStiffnessRefinedArray[i].valueText)\n"
+            }
+        }
+        
+        if inPlaneProperties != nil {
+            result += "\n"
+            result += "In-Plane Properties:\n"
+            for i in 0...inPlanePropertiesArray.count-1 {
+                result += "\(inPlanePropertiesArray[i].name): \t\(inPlanePropertiesArray[i].valueText)\n"
+            }
+        }
+        
+        if flexuralProperties != nil {
+            result += "\n"
+            result += "Flexural Properties:\n"
+            for i in 0...flexuralPropertiesArray.count-1 {
+                result += "\(flexuralPropertiesArray[i].name): \t\(flexuralPropertiesArray[i].valueText)\n"
+            }
+        }
+
+        if thermalCoefficients != nil {
+            result += "\n"
+            result += "Thermal Coefficients:\n"
+            for i in 0...thermalCoefficientsArray.count-1 {
+                result += "\(thermalCoefficientsArray[i].name): \t\(thermalCoefficientsArray[i].valueText)\n"
+            }
+        }
+        return result
     }
 }

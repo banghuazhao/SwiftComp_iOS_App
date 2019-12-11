@@ -11,6 +11,7 @@ import UIKit
 
 import IQKeyboardManager
 import SnapKit
+import Bugly
 
 
 @UIApplicationMain
@@ -18,6 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        #if !targetEnvironment(macCatalyst)
+            Bugly.start(withAppId: "2591b56667")
+        #endif
+        
         IQKeyboardManager.shared().isEnabled = true
 
         window = UIWindow(frame: UIScreen.main.bounds)

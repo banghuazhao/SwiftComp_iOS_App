@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol HomBeamResultCellDelegate: class {
+    func beamShareButtonTapped()
+}
+
 class HomBeamResultCell: UITableViewCell {
     // MARK: - model
 
@@ -53,6 +57,8 @@ class HomBeamResultCell: UITableViewCell {
         }
     }
 
+    weak var delegate: HomBeamResultCellDelegate?
+
     private let tableViewHeaderHeight: CGFloat = 40
     private let tableViewCellHeight: CGFloat = 36
     private let collectionViewCellHeight: CGFloat = 30
@@ -93,6 +99,13 @@ class HomBeamResultCell: UITableViewCell {
         let button = UIButton()
         button.setImage(UIImage(named: "explain"), for: .normal)
         button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var shareButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "share"), for: .normal)
+        button.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -169,6 +182,7 @@ extension HomBeamResultCell {
 
         cellView.addSubview(titleLabel)
         cellView.addSubview(explainButton)
+        cellView.addSubview(shareButton)
         cellView.addSubview(effectiveBeamStiffness4by4CollectionView)
         cellView.addSubview(effectiveBeamStiffness6by6CollectionView)
         cellView.addSubview(thermalCoefficientsTableView)
@@ -180,6 +194,12 @@ extension HomBeamResultCell {
 
         explainButton.snp.makeConstraints { make in
             make.top.right.equalToSuperview().inset(16)
+            make.size.equalTo(21)
+        }
+        
+        shareButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16+21+20)
             make.size.equalTo(21)
         }
 
@@ -386,5 +406,9 @@ extension HomBeamResultCell {
 
         let popupWindow = SCPopupWindow(title: title, customContentView: explainDetialView)
         popupWindow.show(completion: nil)
+    }
+    
+    @objc private func shareButtonTapped() {
+        delegate?.beamShareButtonTapped()
     }
 }

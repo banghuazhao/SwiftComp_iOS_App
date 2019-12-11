@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol HomMeshImageCellDelegate: class {
+    func shareMeshImage()
+}
+
 class HomMeshImageCell: UITableViewCell {
     // MARK: - model
 
@@ -31,7 +35,7 @@ class HomMeshImageCell: UITableViewCell {
         }
     }
 
-    weak var delegate: MethodCellDelegate?
+    weak var delegate: HomMeshImageCellDelegate?
 
     private let cellHeight = 16 + 21 + 16 + 256 + 16
 
@@ -62,6 +66,13 @@ class HomMeshImageCell: UITableViewCell {
         let button = UIButton()
         button.setImage(UIImage(named: "explain"), for: .normal)
         button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var shareButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "share"), for: .normal)
+        button.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -117,6 +128,7 @@ extension HomMeshImageCell {
 
         cellView.addSubview(titleLabel)
         cellView.addSubview(explainButton)
+        cellView.addSubview(shareButton)
         cellView.addSubview(meshImageView)
 
         titleLabel.snp.makeConstraints { make in
@@ -126,6 +138,12 @@ extension HomMeshImageCell {
         
         explainButton.snp.makeConstraints { (make) in
             make.top.right.equalToSuperview().inset(16)
+            make.size.equalTo(21)
+        }
+        
+        shareButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16+21+20)
             make.size.equalTo(21)
         }
 
@@ -177,5 +195,9 @@ extension HomMeshImageCell {
         
         let popupWindow = SCPopupWindow(title: attributedTitle, message: attributedMessage)
         popupWindow.show(completion: nil)
+    }
+    
+    @objc private func shareButtonTapped() {
+        delegate?.shareMeshImage()
     }
 }

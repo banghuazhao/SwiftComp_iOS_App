@@ -14,5 +14,20 @@ target 'SwiftComp' do
   pod 'SwiftyJSON', '~> 4.0'
   pod 'SVProgressHUD'
   pod 'BZPopupWindow'
+  pod 'Bugly'
 
+end
+
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        if target.name.start_with?("Pods")
+            puts "Updating #{target.name} OTHER_LDFLAGS to OTHER_LDFLAGS[sdk=iphone*]"
+            target.build_configurations.each do |config|
+                xcconfig_path = config.base_configuration_reference.real_path
+                xcconfig = File.read(xcconfig_path)
+                new_xcconfig = xcconfig.sub('OTHER_LDFLAGS =', 'OTHER_LDFLAGS[sdk=iphone*] =')
+                File.open(xcconfig_path, "w") { |file| file << new_xcconfig }
+            end
+        end
+    end
 end

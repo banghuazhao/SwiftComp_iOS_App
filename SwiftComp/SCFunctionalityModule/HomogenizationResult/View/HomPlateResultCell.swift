@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol HomPlateResultCellDelegate: class {
+    func plateShareButtonTapped()
+}
+
 class HomPlateResultCell: UITableViewCell {
     // MARK: - model
 
@@ -31,6 +35,8 @@ class HomPlateResultCell: UITableViewCell {
             }
         }
     }
+    
+    weak var delegate: HomPlateResultCellDelegate?
 
     private let tableViewHeaderHeight: CGFloat = 40
     private let tableViewCellHeight: CGFloat = 36
@@ -72,6 +78,13 @@ class HomPlateResultCell: UITableViewCell {
         let button = UIButton()
         button.setImage(UIImage(named: "explain"), for: .normal)
         button.addTarget(self, action: #selector(explainButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var shareButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "share"), for: .normal)
+        button.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -175,6 +188,7 @@ extension HomPlateResultCell {
 
         cellView.addSubview(titleLabel)
         cellView.addSubview(explainButton)
+        cellView.addSubview(shareButton)
         cellView.addSubview(plateStiffnessMatrixCollectionView)
         cellView.addSubview(transverseShearStiffnessTableView)
         cellView.addSubview(inPlanePropertiesTableView)
@@ -189,6 +203,12 @@ extension HomPlateResultCell {
         explainButton.snp.makeConstraints { (make) in
              make.top.right.equalToSuperview().inset(16)
              make.size.equalTo(21)
+        }
+        
+        shareButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16+21+20)
+            make.size.equalTo(21)
         }
 
         plateStiffnessMatrixCollectionView.snp.makeConstraints { make in
@@ -423,5 +443,9 @@ extension HomPlateResultCell {
         
         let popupWindow = SCPopupWindow(title: title, customContentView: explainDetialView)
         popupWindow.show(completion: nil)
+    }
+    
+    @objc private func shareButtonTapped() {
+        delegate?.plateShareButtonTapped()
     }
 }

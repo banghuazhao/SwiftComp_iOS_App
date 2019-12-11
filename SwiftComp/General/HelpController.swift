@@ -35,7 +35,6 @@ class HelpController: UIViewController {
     var runModel: UITextView = UITextView()
     var runModelImage: UIImageView = UIImageView()
     var runModel2: UITextView = UITextView()
-    var runModelImage2: UIImageView = UIImageView()
 
     var shareResultTitle: UITextView = UITextView()
     var shareResult: UITextView = UITextView()
@@ -57,7 +56,6 @@ class HelpController: UIViewController {
         scrollView.addSubview(runModel)
         scrollView.addSubview(runModelImage)
         scrollView.addSubview(runModel2)
-        scrollView.addSubview(runModelImage2)
         scrollView.addSubview(shareResultTitle)
         scrollView.addSubview(shareResult)
         scrollView.addSubview(shareResultImage)
@@ -93,7 +91,7 @@ class HelpController: UIViewController {
         selectModelImage.translatesAutoresizingMaskIntoConstraints = false
         selectModelImage.topAnchor.constraint(equalTo: selectModel.bottomAnchor, constant: 8).isActive = true
         selectModelImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        selectModelImage.heightAnchor.constraint(equalToConstant: 96).isActive = true
+        selectModelImage.heightAnchor.constraint(equalToConstant: 128).isActive = true
         selectModelImage.contentMode = .scaleAspectFit
         selectModelImage.clipsToBounds = true
         selectModelImage.image = #imageLiteral(resourceName: "help_select_model")
@@ -121,7 +119,7 @@ class HelpController: UIViewController {
         getSectionHelpImage.translatesAutoresizingMaskIntoConstraints = false
         getSectionHelpImage.topAnchor.constraint(equalTo: getSectionHelp.bottomAnchor, constant: 8).isActive = true
         getSectionHelpImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        getSectionHelpImage.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        getSectionHelpImage.heightAnchor.constraint(equalToConstant: 110).isActive = true
         getSectionHelpImage.contentMode = .scaleAspectFit
         getSectionHelpImage.clipsToBounds = true
         getSectionHelpImage.image = #imageLiteral(resourceName: "help_section_help")
@@ -149,7 +147,7 @@ class HelpController: UIViewController {
         runModelImage.translatesAutoresizingMaskIntoConstraints = false
         runModelImage.topAnchor.constraint(equalTo: runModel.bottomAnchor, constant: 8).isActive = true
         runModelImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        runModelImage.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        runModelImage.heightAnchor.constraint(equalToConstant: 52).isActive = true
         runModelImage.contentMode = .scaleAspectFit
         runModelImage.clipsToBounds = true
         runModelImage.image = #imageLiteral(resourceName: "help_calculate")
@@ -159,23 +157,15 @@ class HelpController: UIViewController {
         runModel2.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 10).isActive = true
         runModel2.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -20).isActive = true
         runModel2.text = """
-        Note, to use SwiftComp, internect connection is needed. If you are offline, the color of calculation button will become grey and calculation is not available as shown in the figure below.
+        Note, to use SwiftComp, internect connection is needed. If you are offline, the color of calculation button will become grey and calculation is not available.
         """
         runModel2.isScrollEnabled = false
         runModel2.isEditable = false
         runModel2.font = UIFont.systemFont(ofSize: 14)
         runModel2.textAlignment = .justified
 
-        runModelImage2.translatesAutoresizingMaskIntoConstraints = false
-        runModelImage2.topAnchor.constraint(equalTo: runModel2.bottomAnchor, constant: 8).isActive = true
-        runModelImage2.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        runModelImage2.heightAnchor.constraint(equalToConstant: 42).isActive = true
-        runModelImage2.contentMode = .scaleAspectFit
-        runModelImage2.clipsToBounds = true
-        runModelImage2.image = #imageLiteral(resourceName: "help_calculate_grey")
-
         shareResultTitle.translatesAutoresizingMaskIntoConstraints = false
-        shareResultTitle.topAnchor.constraint(equalTo: runModelImage2.bottomAnchor, constant: 24).isActive = true
+        shareResultTitle.topAnchor.constraint(equalTo: runModel2.bottomAnchor, constant: 24).isActive = true
         shareResultTitle.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 10).isActive = true
         shareResultTitle.text = "Share Result"
         shareResultTitle.font = UIFont.boldSystemFont(ofSize: 15)
@@ -197,7 +187,7 @@ class HelpController: UIViewController {
         shareResultImage.translatesAutoresizingMaskIntoConstraints = false
         shareResultImage.topAnchor.constraint(equalTo: shareResult.bottomAnchor, constant: 8).isActive = true
         shareResultImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0).isActive = true
-        shareResultImage.heightAnchor.constraint(equalToConstant: 130).isActive = true
+        shareResultImage.heightAnchor.constraint(equalToConstant: 150).isActive = true
         shareResultImage.contentMode = .scaleAspectFit
         shareResultImage.clipsToBounds = true
         shareResultImage.image = #imageLiteral(resourceName: "help_result_share")

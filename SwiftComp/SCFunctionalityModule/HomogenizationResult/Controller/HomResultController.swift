@@ -47,6 +47,7 @@ class HomResultController: UIViewController {
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         delegate?.homResultControllerSizeChange()
     }
     
@@ -133,22 +134,26 @@ extension HomResultController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row == 0 && homBeamResult != nil {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomBeamResultCell") as? HomBeamResultCell else { return UITableViewCell() }
             cell.homBeamResult = homBeamResult
+            cell.delegate = self
             delegate = cell
             return cell
         } else if indexPath.row == 0 && homPlateResult != nil {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomPlateResultCell") as? HomPlateResultCell else { return UITableViewCell() }
             cell.homPlateResult = homPlateResult
+            cell.delegate = self
             delegate = cell
             return cell
         } else if indexPath.row == 0 && homSolidResult != nil {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomSolidResultCell") as? HomSolidResultCell else { return UITableViewCell() }
             cell.homSolidResult = homSolidResult
+            cell.delegate = self
             delegate = cell
             return cell
         } else if indexPath.row == 1 && homMeshImage != nil {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomMeshImageCell") as? HomMeshImageCell else { return UITableViewCell() }
             cell.indicator.startAnimating()
             cell.homMeshImage = homMeshImage
+            cell.delegate = self
             return cell
         } else if indexPath.row == 1 && homMeshImage == nil && homInformation != nil {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomInformationCell") as? HomInformationCell else { return UITableViewCell() }
@@ -162,6 +167,107 @@ extension HomResultController: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
         return UITableViewCell()
+    }
+}
+
+// MARK: - HomBeamResultCellDelegate
+
+extension HomResultController: HomBeamResultCellDelegate {
+    func beamShareButtonTapped() {
+        guard let homBeamResult = homBeamResult else { return }
+        let shareText: String = homBeamResult.getSharedResultText()
+        let file = getDocumentsDirectory().appendingPathComponent("HomogenizationResult.txt")
+        do {
+            try shareText.write(to: file, atomically: true, encoding: String.Encoding.utf8)
+        } catch {
+            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+        }
+        let activityVC = UIActivityViewController(activityItems: [file], applicationActivities: nil)
+        if let popoverController = activityVC.popoverPresentationController {
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.sourceView = self.view
+            popoverController.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
+        }
+        present(activityVC, animated: true, completion: nil)
+    }
+}
+
+// MARK: - HomPlateResultCellDelegate
+
+extension HomResultController: HomPlateResultCellDelegate {
+    func plateShareButtonTapped() {
+        guard let homPlateResult = homPlateResult else { return }
+        let shareText: String = homPlateResult.getSharedResultText()
+        let file = getDocumentsDirectory().appendingPathComponent("HomogenizationResult.txt")
+        do {
+            try shareText.write(to: file, atomically: true, encoding: String.Encoding.utf8)
+        } catch {
+            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+        }
+        let activityVC = UIActivityViewController(activityItems: [file], applicationActivities: nil)
+        if let popoverController = activityVC.popoverPresentationController {
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.sourceView = self.view
+            popoverController.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
+        }
+        present(activityVC, animated: true, completion: nil)
+    }
+}
+
+// MARK: - HomSolidResultCellDelegate
+
+extension HomResultController: HomSolidResultCellDelegate {
+    func solidShareButtonTapped() {
+        guard let homSolidResult = homSolidResult else { return }
+        let shareText: String = homSolidResult.getSharedResultText()
+        let file = getDocumentsDirectory().appendingPathComponent("HomogenizationResult.txt")
+        do {
+            try shareText.write(to: file, atomically: true, encoding: String.Encoding.utf8)
+        } catch {
+            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+        }
+        let activityVC = UIActivityViewController(activityItems: [file], applicationActivities: nil)
+        if let popoverController = activityVC.popoverPresentationController {
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.sourceView = self.view
+            popoverController.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
+        }
+        present(activityVC, animated: true, completion: nil)
+    }
+}
+
+// MARK: - HomMeshImageCellDelegate
+
+extension HomResultController: HomMeshImageCellDelegate {
+    func shareMeshImage() {
+        switch homMeshImage?.status {
+        case .success:
+            guard let imageData = homMeshImage?.imageData else { return }
+            guard let meshImage = UIImage(data: imageData) else { return }
+            
+            // set up activity view controller
+            let imageToShare = [meshImage]
+            let activityVC = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
+            
+            if let popoverController = activityVC.popoverPresentationController {
+                popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+                popoverController.sourceView = self.view
+                popoverController.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
+            }
+
+            // present the view controller
+            present(activityVC, animated: true, completion: nil)
+        case .getting:
+            let ac = UIAlertController(title: "Image Loading", message: "Please wait", preferredStyle: UIAlertController.Style.alert)
+            ac.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            present(ac, animated: true, completion: nil)
+        case .failed:
+            let ac = UIAlertController(title: "Failed to Load Image", message: "", preferredStyle: UIAlertController.Style.alert)
+            ac.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            present(ac, animated: true, completion: nil)
+        case .none:
+            break
+        }
     }
 }
 
